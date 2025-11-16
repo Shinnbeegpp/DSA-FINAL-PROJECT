@@ -17,11 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+<<<<<<< Updated upstream
 from users.views import homepage
 from users.views import find_job
+=======
+from users.views import homepage, registration
+>>>>>>> Stashed changes
 
 urlpatterns = [
     path('', homepage, name="homepage"),
     path('find_job/', find_job, name='find_job'),
     path('admin/', admin.site.urls),
+    path('sign-in/', registration, name="registration"),
 ]
