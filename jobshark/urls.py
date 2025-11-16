@@ -25,5 +25,5 @@ urlpatterns = [
     path('', homepage, name="homepage"),
     path('find_job/', find_job, name='find_job'),
     path('admin/', admin.site.urls),
-    path('sign-in/', registration, name="registration"),
+    path('registration/', registration, name="registration"),
 ]
