@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobShark - Find Job</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        /* --- BASE AND HOMEPAGE STYLES --- */
+        :root {
+            --brand-purple: #6c47ff; /* Adjusted from image */
+            --brand-dark-blue: #1e1b4b; /* For footer */
+            --brand-teal-light: #00c6ff;
+            --brand-teal-dark: #0072ff;
+            --how-card-1: #6930C3; /* Purple - UPDATED */
+            --how-card-2: #00C6FF; /* Teal - UPDATED */
+            --how-card-3: #66E0FF; /* Light Teal - UPDATED */
+            --bg-light-gray: #f8f9fa;
+            
+            /* --- ADDED FOR FIND JOB PAGE --- */
+            --header-bg: #e0f7fa; /* Light teal from image */
+            --text-dark: #1F2937;
+            --text-muted: #6B7280;
+            --gradient-start: #00C6FF;
+            --gradient-end: #6930C3;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light-gray);
+        }
+
+        /* --- Re-used Nav Styles --- */
+        #navbar-header {
+            background-color: var(--brand-purple);
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+
+        .navbar-brand img {
+            max-height: 50px;
+        }
+
+        #navbar-header .nav-link {
+            color: white;
+            font-weight: 500;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        #navbar-header .nav-link:hover,
+        #navbar-header .nav-link.active {
+            color: #e0e0e0;
+        }
+
+        /* Mobile Nav Link Fixes */
+        #navbar-mobile .nav-link {
+            color: var(--text-dark) !important;
+            font-weight: 500;
+        }
+        #navbar-mobile .nav-link.active {
+            color: var(--brand-purple) !important;
+            font-weight: 600;
+        }
+
+
+        .navbar .btn-search:hover {
+            background-color: #f8f9fa;
+        }
+
+        .navbar-signin {
+            margin-left: auto;
+        }
+
+        .btn-brand-primary {
+            background-color: var(--brand-purple);
+            border-color: var(--brand-purple);
+            color: #fff;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .btn-brand-primary:hover {
+            background-color: #5a3ad9;
+            border-color: #5a3ad9;
+            color: #fff;
+        }
+
+        /* --- Re-used Footer Styles --- */
+        .footer {
+            background-color: var(--brand-dark-blue);
+            color: #adb5bd;
+            padding: 2rem 0;
+            font-size: 0.9rem;
+        }
+
+        .footer .social-icons a {
+            color: #adb5bd;
+            font-size: 1.25rem;
+            margin-left: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-icons a:hover {
+            color: white;
+        }
+
+
+        /* --- STYLES ADDED FOR FIND JOB PAGE --- */
+
+        /* --- Search Header --- */
+        .search-header {
+            background-color: var(--header-bg);
+            padding: 2.5rem 0;
+            /* This margin-top is critical to push content below the fixed navbar */
+            margin-top: 94px; /* Adjust this value based on your exact nav height */
+        }
+
+        /* Offset for mobile nav */
+        @media (max-width: 991.98px) {
+            .search-header {
+                margin-top: 66px; /* Height of mobile nav */
+            }
+        }
+
+
+        .search-header h2 {
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .search-header .breadcrumb-item a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .search-header .breadcrumb-item.active {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .search-bar {
+            background-color: #fff;
+            border-radius: 0.75rem;
+            padding: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-bar .form-control,
+        .search-bar .form-select {
+            border: none;
+            box-shadow: none !important;
+            font-size: 0.95rem;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .search-bar .input-group-text {
+            background-color: transparent;
+            border: none;
+            color: var(--text-muted);
+        }
+
+        .search-bar .dropdown-toggle {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .search-bar .btn-find-job {
+            padding: 0.75rem 1.5rem;
+            /* Use the existing brand button class */
+        }
+
+        /* --- Job Listings --- */
+        .job-listings-section {
+            padding: 3rem 0;
+            /* Gradient background from image */
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+        }
+
+        .job-card {
+            background-color: #fff;
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-card-body {
+            padding: 1.5rem 2rem;
+        }
+
+        .job-title {
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 1.25rem;
+        }
+
+        .mode-of-work {
+            color: var(--brand-purple);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-left: 0.75rem;
+        }
+
+        .job-location {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        .job-location i {
+            margin-right: 0.5rem;
+            color: var(--brand-purple); /* Match mode-of-work color */
+        }
+
+        .btn-bookmark {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            background: none;
+            border: none;
+            padding: 0;
+            transition: color 0.2s;
+        }
+
+        .btn-bookmark:hover {
+            color: var(--brand-purple);
+        }
+
+        .btn-bookmark .bi-bookmark-fill {
+            color: var(--brand-purple);
+        }
+
+        .btn-apply-now {
+            color: var(--brand-purple);
+            font-weight: 600;
+            text-decoration: none;
+            padding: 0.5rem 0;
+            transition: color 0.2s;
+        }
+
+        .btn-apply-now:hover {
+            color: #5a3ad9; /* Darker purple */
+        }
+
+        .btn-apply-now i {
+            margin-left: 0.25rem;
+            transition: transform 0.2s;
+        }
+
+        .btn-apply-now:hover i {
+            transform: translateX(3px);
+        }
+
+        /* --- Pagination --- */
+        .pagination-wrapper {
+            padding: 2rem 0 1rem 0;
+        }
+
+        .pagination .page-item .page-link {
+            border: none;
+            border-radius: 50%; /* Circular page numbers */
+            margin: 0 0.3rem;
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .pagination .page-item .page-link:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--brand-purple);
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(108, 71, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="fixed-top shadow-sm">
+        
+        <!-- Desktop Top Nav -->
+        <nav class="navbar navbar-expand-lg d-none d-lg-block" id="navbar-header">
+            <div class="container">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a> 
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Find Job</a> 
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Desktop Main Nav -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white d-none d-lg-block" id="navbar-top">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo" 
+                    onerror="this.src='https://placehold.co/150x40/6c63ff/ffffff?text=JobShark&font=inter'; this.onerror=null;">
+                </a>
+
+                <ul class="navbar-nav ms-auto"> 
+                    <li class="nav-item">
+                        <a href="#" class="btn btn-brand-primary">SIGN IN</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Mobile Nav (Added for responsiveness) -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white d-lg-none" id="navbar-mobile">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo"
+                    onerror="this.src='https://placehold.co/150x40/6c63ff/ffffff?text=JobShark&font=inter'; this.onerror=null;">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNavCollapse" aria-controls="mobileNavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mobileNavCollapse">
+                    <ul class="navbar-nav mt-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Find Job</a>
+                        </li>
+                        <li class="nav-item mt-2">
+                            <a href="#" class="btn btn-brand-primary w-100">SIGN IN</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- --- Search Header (New Content) --- -->
+    <header class="search-header">
+        <div class="container">
+            <!-- Title and Breadcrumbs -->
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                <h2 class="h3 mb-2 mb-md-0">Find Job</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 bg-transparent p-0">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Find job</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar input-group p-2">
+                <span class="input-group-text ps-3">
+                    <i class="bi bi-search fs-5"></i>
+                </span>
+                <input type="text" class="form-control form-control-lg" placeholder="Job title, Keyword..." aria-label="Job title, Keyword...">
+                
+                <span class="input-group-text d-none d-md-flex" style="color: #E5E7EB;">|</span>
+                
+                <div class="dropdown d-none d-md-block">
+                    <button class="btn dropdown-toggle form-control-lg" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Advance Filter
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="#">Full-time</a></li>
+                        <li><a class="dropdown-item" href="#">Part-time</a></li>
+                        <li><a class="dropdown-item" href="#">Remote</a></li>
+                        <li><a class="dropdown-item" href="#">Internship</a></li>
+                    </ul>
+                </div>
+
+                <button class="btn btn-brand-primary btn-find-job" type="button">Find Job</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- --- Job Listings Section (New Content) --- -->
+    <main class="job-listings-section">
+        <div class="container">
+
+            <!-- Job Card 1 -->
+            <div class="job-card">
+                <div class="job-card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-7 col-lg-8">
+                            <h5 class="job-title mb-0">Marketing Manager</h5>
+                            <span class="mode-of-work">Mode of Work</span>
+                            <p class="job-location mb-md-0">
+                                <i class="bi bi-geo-alt-fill"></i>
+                                Location | $50K-$60K/month
+                            </p>
+                        </div>
+                        <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
+                            <button class="btn btn-bookmark me-4">
+                                <i class="bi bi-bookmark"></i>
+                            </button>
+                            <a href="#" class="btn-apply-now">
+                                Apply Now <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Card 2 -->
+            <div class="job-card">
+                <div class="job-card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-7 col-lg-8">
+                            <h5 class="job-title mb-0">Technical Support Specialist</h5>
+                            <span class="mode-of-work">Mode of Work</span>
+                            <p class="job-location mb-md-0">
+                                <i class="bi bi-geo-alt-fill"></i>
+                                Location | $30K-$35K
+                            </p>
+                        </div>
+                        <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
+                            <button class="btn btn-bookmark me-4">
+                                <i class="bi bi-bookmark-fill"></i> <!-- Example of a saved one -->
+                            </button>
+                            <a href="#" class="btn-apply-now">
+                                Apply Now <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Card 3 -->
+            <div class="job-card">
+                <div class="job-card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-7 col-lg-8">
+                            <h5 class="job-title mb-0">Visual Designer</h5>
+                            <span class="mode-of-work">Mode of Work</span>
+                            <p class="job-location mb-md-0">
+                                <i class="bi bi-geo-alt-fill"></i>
+                                Location | $30K-$35K
+                            </p>
+                        </div>
+                        <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
+                            <button class="btn btn-bookmark me-4">
+                                <i class="bi bi-bookmark"></i>
+                            </button>
+                            <a href="#" class="btn-apply-now">
+                                Apply Now <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Card 4 -->
+            <div class="job-card">
+                <div class="job-card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-7 col-lg-8">
+                            <h5 class="job-title mb-0">Marketing Officer</h5>
+                            <span class="mode-of-work">Mode of Work</span>
+                            <p class="job-location mb-md-0">
+                                <i class="bi bi-geo-alt-fill"></i>
+                                Location | $30K-$35K
+                            </p>
+                        </div>
+                        <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
+                            <button class="btn btn-bookmark me-4">
+                                <i class="bi bi-bookmark"></i>
+                            </button>
+                            <a href="#" class="btn-apply-now">
+                                Apply Now <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Job Card 5 -->
+            <div class="job-card">
+                <div class="job-card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-7 col-lg-8">
+                            <h5 class="job-title mb-0">Senior UX Designer</h5>
+                            <span class="mode-of-work">Mode of Work</span>
+                            <p class="job-location mb-md-0">
+                                <i class="bi bi-geo-alt-fill"></i>
+                                Location | $50K-$60K/month
+                            </p>
+                        </div>
+                        <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
+                            <button class="btn btn-bookmark me-4">
+                                <i class="bi bi-bookmark"></i>
+                            </button>
+                            <a href="#" class="btn-apply-now">
+                                Apply Now <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- --- Pagination --- -->
+            <nav class="pagination-wrapper" aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                    <li class="page-item"><a class="page-link" href="#">02</a></li>
+                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                    <li class="page-item"><a class="page-link" href="#">04</a></li>
+                    <li class="page-item"><a class="page-link" href="#">05</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </main>
+
+    <!-- --- FOOTER (Re-used from homepage) --- -->
+    <footer class="footer">
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <div class="text-center text-md-start mb-3 mb-md-0">
+                &copy; 2025 JobShark - Job Portal. All Rights Reserved.
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-linkedin"></i></a> 
+                <a href="#"><i class="bi bi-twitter-x"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.urls import path
 
 from users.views import homepage
+from users.views import find_job
 
 urlpatterns = [
     path('', homepage, name="homepage"),
+    path('find_job/', find_job, name='find_job'),
     path('admin/', admin.site.urls),
 ]
