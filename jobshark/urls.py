@@ -17,10 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from users.views import homepage, find_job
+
+from users.views import homepage, registration, find_job
+
 
 urlpatterns = [
     path('', homepage, name="homepage"),
     path('find_job/', find_job, name='find_job'),
     path('admin/', admin.site.urls),
+    path('registration/', registration, name="registration"),
 ]
