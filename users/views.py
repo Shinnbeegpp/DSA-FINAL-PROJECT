@@ -10,5 +10,7 @@ def find_job(request):
     return render(request, 'find_job.html')
 
 def registration(request):
-    return render(request,'createAccount.html')
+    return render(request,'registration.html')
 
+def sign_in(request):
+    return render(request,'signin.html')
