@@ -75,10 +75,16 @@ body, html {
         <h2 class="mb-3 text-purple">Create Account.</h2>
         <p class="mb-4">Already have an account? <a href="{% url 'sign_in' %}" class="text-decoration-none">Log In</a></p>
         
-        <form>
+        <form action="registration" method="post">
+        {% csrf_token %}
           <div class="mb-3">
             <input type="text" class="form-control" placeholder="Full Name">
           </div>
+
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Username">
+          </div>
+
 
           <div class="mb-3">
             <select class="form-select">
