@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+from dotenv import load_dotenv
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,13 +24,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
+load_dotenv(BASE_DIR / '.env')
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%n0pz_-+7nd2c5c%0*-2m80_n#!=+mn04&*kzg3=eld8v_8hp-'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -75,8 +83,17 @@ WSGI_APPLICATION = 'jobshark.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('AIVEN_DB_NAME'),
+        'USER': os.environ.get('AIVEN_USER'),
+        'PASSWORD': os.environ.get('AIVEN_PASSWORD'),
+        'HOST': os.environ.get('AIVEN_HOST'),
+        'PORT': os.environ.get('AIVEN_PORT'),
+        'OPTIONS': {
+            'ssl':{
+                'ca': os.path.join(BASE_DIR, 'ca.pem')
+            }
+        }
     }
 }
 
