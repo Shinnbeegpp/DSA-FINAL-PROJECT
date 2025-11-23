@@ -336,7 +336,7 @@
 
                 <ul class="navbar-nav ms-auto"> 
                     <li class="nav-item">
-                        <a href="#" class="btn btn-brand-primary">SIGN IN</a>
+                        <a href="{% url 'sign_in' %}" class="btn btn-brand-primarasy">SIGN IN</a>
                     </li>
                 </ul>
             </div>
@@ -355,13 +355,13 @@
                 <div class="collapse navbar-collapse" id="mobileNavCollapse">
                     <ul class="navbar-nav mt-3">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Home</a>
+                            <a class="nav-link" href="{% url 'homepage' %}">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="#">Find Job</a>
                         </li>
                         <li class="nav-item mt-2">
-                            <a href="#" class="btn btn-brand-primary w-100">SIGN IN</a>
+                            <a href="{% url 'sign_in' %}" class="btn btn-brand-primary w-100">SIGN IN</a>
                         </li>
                     </ul>
                 </div>
@@ -377,7 +377,7 @@
                 <h2 class="h3 mb-2 mb-md-0">Find Job</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 bg-transparent p-0">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'homepage' %}">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Find job</li>
                     </ol>
                 </nav>
