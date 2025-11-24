@@ -72,9 +72,23 @@ def sign_in(request):
       
         user = authenticate(request, username=username, password=password)
 
-        if user is not None:
+        if user is not None and user.is_active:
             login(request, user)
-            return redirect('success') 
+            try:
+                profile = UserProfile.objects.get(user=user)
+            
+                if profile.account_type == 'commissionee':
+                    return redirect('find_job_commissionee') 
+                
+                elif profile.account_type == 'commissioner':
+                    return redirect('myjobs')
+                
+                else:
+                    return redirect('homepage') 
+
+            except UserProfile.DoesNotExist:
+                messages.error(request, "Account setup incomplete. Please contact support.")
+                return redirect('sign_in')
         else:
             return render(request, 'signin.html', {
                 'error_login': "Invalid username or password.",
@@ -83,5 +97,8 @@ def sign_in(request):
 
     return render(request,'signin.html')
 
-def success(request):
-    return render(request,'success.html')
+def myjobs(request):
+    return render(request, "myjobs.html")
+
+def find_job_commissionee(request):
+    return render(request, "find_job_commissionee.html")
