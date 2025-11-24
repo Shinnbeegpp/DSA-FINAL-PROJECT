@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobShark - Settings</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #6930C3;
+            --primary-hover: #5626a3;
+            --secondary-bg: #F5F6FA;
+            --text-color: #111827;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+            --sidebar-width: 280px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fff;
+            color: var(--text-color);
+        }
+
+        /* Top Utility Bar */
+        #navbar-header {
+            background-color: #6930C3;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+        #navbar-header .nav-link {
+            color: white;
+            font-weight: 500;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+        #navbar-header .nav-link:hover,
+        #navbar-header .nav-link.active {
+            color: #e0e0e0;
+        }
+
+        /* Main Header */
+        .main-header {
+            padding: 1rem 0;
+            border-bottom: 1px solid transparent;
+        }
+        .navbar-brand img {
+            max-height: 50px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-avatar {
+            width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+        }
+        .user-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Layout */
+        .dashboard-container {
+            margin-top: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        /* Sidebar */
+        .sidebar-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            letter-spacing: 0.5px;
+        }
+        .nav-pills .nav-link {
+            color: var(--text-muted);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .nav-pills .nav-link:hover {
+            color: var(--primary-color);
+            background-color: rgba(123, 97, 255, 0.05);
+        }
+        .nav-pills .nav-link.active {
+            background-color: rgba(123, 97, 255, 0.1);
+            color: var(--primary-color);
+            border-left: 3px solid var(--primary-color);
+        }
+        .nav-pills .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+        .logout-link {
+            margin-top: 15rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 1.5rem;
+            font-weight: 500;
+        }
+        .logout-link:hover { color: #dc3545; }
+
+        /* Content Area */
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Tabs */
+        .custom-tabs {
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+        .custom-tabs .nav-link {
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            padding: 1rem 0;
+            margin-right: 2rem;
+            font-weight: 500;
+            position: relative;
+        }
+        .custom-tabs .nav-link.active {
+            color: var(--primary-color);
+        }
+        .custom-tabs .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        /* Forms */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            margin-top: 1rem;
+        }
+        .form-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .form-control, .form-select {
+            border-color: var(--border-color);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            color: #374151;
+        }
+        .form-control::placeholder { color: #9CA3AF; font-size: 0.9rem; }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(105, 48, 195, 0.15);
+        }
+        
+        /* Date Picker Icon Fix */
+        .input-group-text {
+            background-color: #fff;
+            border-color: var(--border-color);
+            color: #6B7280;
+            font-size: 0.9rem;
+        }
+
+        /* Profile Picture Upload */
+        .profile-upload-box {
+            border: 2px dashed #E5E7EB;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile-upload-box:hover {
+            border-color: var(--primary-color);
+            background-color: #fafafa;
+        }
+        .upload-icon-circle {
+            width: 48px;
+            height: 48px;
+            background-color: #F3F4F6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }
+        .upload-text {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        .upload-subtext {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Buttons */
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            border-radius: 6px;
+        }
+        .btn-primary-custom:hover {
+            background-color: var(--primary-hover);
+            color: white;
+        }
+
+        /* Biography Editor */
+        .bio-editor-container {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .bio-textarea {
+            border: none;
+            width: 100%;
+            padding: 1rem;
+            resize: none;
+            min-height: 150px;
+            outline: none;
+            font-size: 0.9rem;
+            color: #374151;
+        }
+        .editor-toolbar {
+            padding: 0.5rem 1rem;
+            border-top: 1px solid var(--border-color);
+            background-color: #F9FAFB;
+            display: flex;
+            gap: 1rem;
+            color: var(--text-muted);
+        }
+        .editor-toolbar i {
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .editor-toolbar i:hover { color: #1F2937; }
+
+        /* Footer */
+        .main-footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #9CA3AF;
+            font-size: 0.85rem;
+            border-top: 1px solid #F3F4F6;
+            margin-top: 4rem;
+        }
+
+        /* --- MODAL STYLES --- */
+        .modal-content {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .modal-header {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .modal-footer {
+            border-top: none;
+            justify-content: flex-start;
+            gap: 10px;
+            padding-top: 0;
+            padding-bottom: 1.5rem;
+        }
+        .modal-upload-box {
+            border: 2px dashed #E5E7EB;
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            background-color: #fff;
+            transition: border-color 0.2s;
+        }
+        .modal-upload-box:hover {
+            border-color: var(--primary-color);
+            background-color: #fafafa;
+        }
+        .btn-cancel {
+            background-color: #EFEFEF;
+            color: #333;
+            font-weight: 500;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+        }
+        .btn-cancel:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Responsive */
+        @media (max-width: 991.98px) {
+            .sidebar-container { margin-bottom: 2rem; }
+            .logout-link { margin-top: 2rem; }
+            .nav-pills .nav-link.active {
+                border-left: none;
+                border-bottom: 3px solid var(--primary-color);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Utility Bar -->
+    <nav class="navbar navbar-expand-lg d-none d-lg-block" id="navbar-header">
+        <div class="container">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a> 
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <!-- Logo -->
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="images/logo_name.png" alt="JobShark Logo" 
+                    onerror="this.src='https://placehold.co/150x40/6930C3/ffffff?text=JobShark&font=inter'; this.onerror=null;">
+                </a>
+
+                <div class="d-flex align-items-center gap-4">
+                    <a href="#" class="btn-outline-primary-custom" style="border: 1px solid var(--primary-color); color: var(--primary-color); padding: 0.5rem 1.5rem; border-radius: 6px; text-decoration: none;">Post A Job</a>
+                    
+                    <div class="user-profile">
+                        <span class="user-name d-none d-md-block">Esther Howard</span>
+                        <img src="https://i.pravatar.cc/150?img=12" alt="Profile" class="user-avatar">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container dashboard-container">
+        <div class="row">
+            
+            <!-- Sidebar -->
+            <div class="col-lg-3 sidebar-container">
+                <div class="sidebar-title">COMMISSIONER DASHBOARD</div>
+                <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link" href="#" role="tab">
+                        <i class="fa-solid fa-circle-plus"></i> Post a Job
+                    </a>
+                    <a class="nav-link" href="#" role="tab">
+                        <i class="fa-solid fa-briefcase"></i> My Jobs
+                    </a>
+                    <a class="nav-link" href="#" role="tab">
+                        <i class="fa-regular fa-bookmark"></i> Saved Candidate
+                    </a>
+                    <a class="nav-link active" href="#" role="tab">
+                        <i class="fa-solid fa-gear"></i> Profile
+                    </a>
+                </div>
+
+                <a href="#" class="logout-link">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
+                </a>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <h2 class="page-title">Setting</h2>
+
+                <!-- Tabs -->
+                <ul class="nav custom-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">
+                            <i class="fa-regular fa-user me-2"></i> Profile
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Basic Information -->
+                <section class="mb-5">
+                    <h5 class="section-title">Basic Information</h5>
+                    <div class="row g-4">
+                        <!-- Photo Upload -->
+                        <div class="col-md-4">
+                            <label class="form-label">Profile Picture</label>
+                            <!-- ADDED DATA TOGGLE FOR MODAL HERE -->
+                            <div class="profile-upload-box" data-bs-toggle="modal" data-bs-target="#addPhotoModal">
+                                <div class="upload-icon-circle"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                                <div class="fw-bold mb-1">Browse photo <span class="fw-normal text-muted">or drop here</span></div>
+                                <div class="upload-subtext mt-2">A photo larger than 400 pixels work best. Max photo size 5 MB.</div>
+                            </div>
+                        </div>
+                        <!-- Full Name Input -->
+                        <div class="col-md-8">
+                            <div class="mb-4">
+                                <label for="fullName" class="form-label">Full name</label>
+                                <input type="text" class="form-control" id="fullName" placeholder="">
+                            </div>
+                            <!-- Save Button aligned to mimic design -->
+                            <button class="btn btn-primary-custom">Save Changes</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Additional Fields -->
+                <section class="mb-5">
+                    <div class="row g-3">
+                        <!-- Campus -->
+                        <div class="col-md-4">
+                            <label class="form-label">Campus / Institution</label>
+                            <select class="form-select" id="campusSelect" onchange="toggleInput('campusSelect')">
+                                <option selected disabled>Select Campus...</option>
+                                
+                                <!-- BatStateU Campuses -->
+                                <option value="BatStateU - Pablo Borbon">BatStateU - Pablo Borbon (Main I)</option>
+                                <option value="BatStateU - Alangilan">BatStateU - Alangilan (Main II)</option>
+                                <option value="BatStateU - Nasugbu">BatStateU - ARASOF Nasugbu</option>
+                                <option value="BatStateU - Lipa">BatStateU - Lipa</option>
+                                <option value="BatStateU - Malvar">BatStateU - Malvar (JPLPC)</option>
+                                <option value="BatStateU - Balayan">BatStateU - Balayan</option>
+                                <option value="BatStateU - Lemery">BatStateU - Lemery</option>
+                                <option value="BatStateU - Rosario">BatStateU - Rosario</option>
+                                <option value="BatStateU - San Juan">BatStateU - San Juan</option>
+                                <option value="BatStateU - Lobo">BatStateU - Lobo</option>
+                                <option value="BatStateU - Mabini">BatStateU - Mabini</option>
+                                <option value="BatStateU - Lima">BatStateU - Lima</option>
+                            </select>
+                        </div>
+
+                        <!-- Student Classification & DOB -->
+                        <div class="col-md-6">
+                            <label class="form-label">Student Classification</label>
+                                <select class="form-select">
+                                    <option selected disabled>Select Classification...</option>
+                                    
+                                    <!-- 1. Standard student with fixed block schedule -->
+                                    <option value="Regular">Regular Student (Full Load)</option>
+                                    
+                                    <!-- 2. Often has a broken schedule, might be more flexible -->
+                                    <option value="Irregular">Irregular Student (Flexible Schedule)</option>
+                                    
+                                    <!-- 3. Already knows how to balance work/study -->
+                                    <option value="Working">Working Student</option>
+                                    
+                                    <!-- 4. Busy with major requirements -->
+                                    <option value="Graduating">Graduating / Thesis Year</option>
+                                    
+                                    <!-- 5. Fully available professional -->
+                                    <option value="Alumni">Alumni / Graduate</option>
+                                </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Date of Birth</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="dd/mm/yyyy">
+                                <span class="input-group-text"><i class="fa-regular fa-calendar"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- Gender & Marital -->
+                        <div class="col-md-6">
+                            <label class="form-label">Gender</label>
+                            <select class="form-select">
+                                <option selected disabled>Select...</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Marital Status</label>
+                            <select class="form-select">
+                                <option selected disabled>Select...</option>
+                                <option>Single</option>
+                                <option>Married</option>
+                            </select>
+                        </div>
+
+                        <!-- Education & Experience -->
+                        <div class="col-md-6">
+                            <label class="form-label">Education</label>
+                            <select class="form-select">
+                                <option selected disabled>Select Level...</option>
+
+                                <optgroup label="Undergraduate (College)">
+                                    <option>1st Year</option>
+                                    <option>2nd Year</option>
+                                    <option>3rd Year</option>
+                                    <option>4th Year</option>
+                                    <option>5th Year</option>
+                                </optgroup>
+
+                                <optgroup label="Post-Graduate">
+                                    <option>Master's Degree</option>
+                                    <option>Doctorate / PhD</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Experience Level</label>
+                            <select class="form-select">
+                                <option selected disabled>Select Experience...</option>
+                                
+                                <!-- 1. For those just starting out -->
+                                <option value="Beginner">Beginner (No paid experience)</option>
+                                
+                                <!-- 2. For students who have done Thesis/Capstone/Plates -->
+                                <option value="Academic">Academic Projects Only (Thesis/Capstone)</option>
+                                
+                                <!-- 3. For those who take commissions on the side -->
+                                <option value="Freelance">Freelancing / Commissions</option>
+                                
+                                <!-- 4. For those who have finished their OJT -->
+                                <option value="Internship">Internship / OJT Experience</option>
+                                
+                                <!-- 5. For Working Students or Alumni -->
+                                <option value="Professional">Professional / Industry Work</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Biography -->
+                <section class="mb-5">
+                    <label class="form-label">Biography</label>
+                    <div class="bio-editor-container">
+                        <textarea class="bio-textarea" placeholder="Write down your biography here. Let the employers know who you are..."></textarea>
+                        <div class="editor-toolbar">
+                            <i class="fa-solid fa-bold"></i>
+                            <i class="fa-solid fa-italic"></i>
+                            <i class="fa-solid fa-underline"></i>
+                            <i class="fa-solid fa-strikethrough"></i>
+                            <div class="border-end mx-1"></div>
+                            <i class="fa-solid fa-link"></i>
+                            <div class="border-end mx-1"></div>
+                            <i class="fa-solid fa-list-ul"></i>
+                            <i class="fa-solid fa-list-ol"></i>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary-custom mt-3">Save Changes</button>
+                </section>
+
+                <!-- Contact Information -->
+                <section>
+                    <h5 class="section-title">Contact Information</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Social Link</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Empty for layout matching -->
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Phone</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Email Address</label>
+                            <input type="email" class="form-control">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary-custom mt-4">Save Changes</button>
+                </section>
+
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <p class="mb-0">&copy; 2024 MyJob - Job Portal. All rights Reserved</p>
+        </footer>
+    </div>
+
+    <!-- === ADD PROFILE PICTURE MODAL (New!) === -->
+    <div class="modal fade" id="addPhotoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content p-3">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Update Profile Picture</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="modal-upload-box">
+                            <div class="upload-icon-circle"><i class="fa-regular fa-image"></i></div>
+                            <div class="fw-bold mb-1">Browse Photo <span class="fw-normal text-muted">or drop here</span></div>
+                            <div class="upload-subtext mt-2">Supports JPG, PNG. Max size 5 MB.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary-custom text-white">Save Photo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

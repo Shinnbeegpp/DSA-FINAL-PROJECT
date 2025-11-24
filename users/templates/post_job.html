@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobShark - Post a Job</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- COPIED STYLES FROM YOUR SETTINGS PAGE --- */
+        :root {
+            --primary-color: #6930C3; /* UPDATED to match your code */
+            --primary-hover: #5626a3;
+            --secondary-bg: #F5F6FA;
+            --text-color: #111827;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+            --sidebar-width: 280px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fff;
+            color: var(--text-color);
+        }
+
+        /* Top Utility Bar (Navbar Style) */
+        #navbar-header {
+            background-color: #6930C3;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+        #navbar-header .nav-link {
+            color: white;
+            font-weight: 500;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+        #navbar-header .nav-link:hover,
+        #navbar-header .nav-link.active {
+            color: #e0e0e0;
+        }
+
+        /* Main Header */
+        .main-header {
+            padding: 1rem 0;
+            border-bottom: 1px solid transparent; /* Matches your transparent border style */
+        }
+        .navbar-brand img {
+            max-height: 50px;
+        }
+        
+        /* User Profile */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-avatar {
+            width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+        }
+        .user-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Layout */
+        .dashboard-container {
+            margin-top: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        /* Sidebar (Exact match to your code) */
+        .sidebar-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            letter-spacing: 0.5px;
+        }
+        .nav-pills .nav-link {
+            color: var(--text-muted);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .nav-pills .nav-link:hover {
+            color: var(--primary-color);
+            background-color: rgba(123, 97, 255, 0.05);
+        }
+        .nav-pills .nav-link.active {
+            background-color: rgba(123, 97, 255, 0.1);
+            color: var(--primary-color);
+            border-left: 3px solid var(--primary-color);
+        }
+        .nav-pills .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+        .logout-link {
+            margin-top: 15rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 1.5rem;
+            font-weight: 500;
+        }
+        .logout-link:hover { color: #dc3545; }
+
+        /* Content Area */
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Form Elements (Standardized) */
+        .section-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            margin-top: 1rem;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control, .form-select {
+            border-color: var(--border-color);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            color: #374151;
+        }
+        
+        .form-control::placeholder { color: #9CA3AF; font-size: 0.9rem; }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(105, 48, 195, 0.15); /* Adjusted shadow color */
+        }
+
+        .input-group-text {
+            background-color: #fff;
+            border-color: var(--border-color);
+            color: #6B7280;
+            font-size: 0.9rem;
+        }
+
+        /* Rich Text Editor (Matches your Biography style) */
+        .rich-editor-box {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .rich-textarea {
+            border: none;
+            width: 100%;
+            padding: 1rem;
+            resize: vertical;
+            min-height: 150px;
+            outline: none;
+            font-size: 0.9rem;
+            color: #374151;
+        }
+        .editor-toolbar {
+            padding: 0.5rem 1rem;
+            border-top: 1px solid var(--border-color);
+            background-color: #F9FAFB;
+            display: flex;
+            gap: 1rem;
+            color: var(--text-muted);
+        }
+        .editor-toolbar i {
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .editor-toolbar i:hover { color: #1F2937; }
+
+        
+
+        /* Post Job Submit Button */
+        .btn-post-job {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+        .btn-post-job:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Footer */
+        .main-footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #9CA3AF;
+            font-size: 0.85rem;
+            border-top: 1px solid #F3F4F6;
+            margin-top: 4rem;
+        }
+
+        /* --- SUCCESS MODAL STYLES (NEW) --- */
+        .modal-custom-content {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            padding: 2rem;
+            position: relative;
+        }
+        
+        /* Floating Close Button */
+        .btn-close-floating {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background-color: #fff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: none;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 10;
+        }
+        .btn-close-floating:hover {
+            transform: scale(1.1);
+            background-color: #f3f0ff;
+        }
+
+        .modal-icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .modal-title-custom {
+            font-weight: 700;
+            color: #1F2937;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-subtitle-custom {
+            color: #6B7280;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-view-jobs-modal {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+            font-weight: 600;
+            padding: 0.6rem 1.5rem;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-view-jobs-modal:hover {
+            background-color: #f3f0ff;
+            color: var(--primary-hover);
+        }
+
+        /* Responsive */
+        @media (max-width: 991.98px) {
+            .sidebar-container { margin-bottom: 2rem; }
+            .logout-link { margin-top: 2rem; }
+            .nav-pills .nav-link.active {
+                border-left: none;
+                border-bottom: 3px solid var(--primary-color);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Utility Bar -->
+    <nav class="navbar navbar-expand-lg d-none d-lg-block" id="navbar-header">
+        <div class="container">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a> 
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <!-- Logo -->
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="images/logo_name.png" alt="JobShark Logo" 
+                    onerror="this.src='https://placehold.co/150x40/6930C3/ffffff?text=JobShark&font=inter'; this.onerror=null;">
+                </a>
+
+                <div class="d-flex align-items-center gap-4">
+                    
+                    <div class="user-profile">
+                        <span class="user-name d-none d-md-block">Esther Howard</span>
+                        <img src="https://i.pravatar.cc/150?img=12" alt="Profile" class="user-avatar">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container dashboard-container">
+        <div class="row">
+            
+            <!-- Sidebar -->
+            <div class="col-lg-3 sidebar-container">
+                <div class="sidebar-title">EMPLOYERS DASHBOARD</div>
+                <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" href="#" role="tab">
+                        <i class="fa-solid fa-circle-plus"></i> Post a Job
+                    </a>
+                    <a class="nav-link" href="#" role="tab">
+                        <i class="fa-solid fa-briefcase"></i> My Jobs
+                    </a>
+                    <a class="nav-link" href="#" role="tab">
+                        <i class="fa-regular fa-bookmark"></i> Saved Candidate
+                    </a>
+                    <a class="nav-link" href="#" role="tab">
+                        <i class="fa-solid fa-gear"></i> Profile
+                    </a>
+                </div>
+
+                <a href="#" class="logout-link">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
+                </a>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <h2 class="page-title">Post a job</h2>
+
+                <!-- Added ID to form for JS selector -->
+                <form id="postJobForm">
+                    <!-- Job / Task Title -->
+                    <div class="mb-4">
+                        <label class="form-label">Job / Task Title</label>
+                        <input type="text" class="form-control" placeholder="e.g., Need help with Thesis Chapter 2, Logo Design, Python Debugging...">
+                    </div>
+
+                    <!-- Category with 'Others' Toggle -->
+                    <div class="mb-4">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" id="categorySelect" onchange="toggleInput('categorySelect', 'otherCategoryInput')">
+                            <option selected disabled>Select...</option>
+                            <option value="Academic Assistance">Academic Assistance</option>
+                            <option value="Graphic Design">Graphic Design</option>
+                            <option value="Programming">Programming</option>
+                            <option value="Video Editing">Video Editing</option>
+                            <option value="Others">Others</option>
+                        </select>
+                        <input type="text" class="form-control mt-2" id="otherCategoryInput" placeholder="Please specify category..." style="display: none;">
+                    </div>
+
+                    <!-- Service Rate -->
+                    <h5 class="section-label">Service Rate</h5>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label">Budget</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control">
+                                <span class="input-group-text">₱</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advance Information -->
+                    <h5 class="section-label">Advance Information</h5>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label">Campus / Institution</label>
+                            <select class="form-select" id="campusSelect" onchange="toggleInput('campusSelect')">
+                                <option selected disabled>Select Campus...</option>
+                                
+                                <!-- BatStateU Campuses -->
+                                <option value="BatStateU - Pablo Borbon">BatStateU - Pablo Borbon (Main I)</option>
+                                <option value="BatStateU - Alangilan">BatStateU - Alangilan (Main II)</option>
+                                <option value="BatStateU - Nasugbu">BatStateU - ARASOF Nasugbu</option>
+                                <option value="BatStateU - Lipa">BatStateU - Lipa</option>
+                                <option value="BatStateU - Malvar">BatStateU - Malvar (JPLPC)</option>
+                                <option value="BatStateU - Balayan">BatStateU - Balayan</option>
+                                <option value="BatStateU - Lemery">BatStateU - Lemery</option>
+                                <option value="BatStateU - Rosario">BatStateU - Rosario</option>
+                                <option value="BatStateU - San Juan">BatStateU - San Juan</option>
+                                <option value="BatStateU - Lobo">BatStateU - Lobo</option>
+                                <option value="BatStateU - Mabini">BatStateU - Mabini</option>
+                                <option value="BatStateU - Lima">BatStateU - Lima</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Department / Major</label>
+                            <select class="form-select" id="deptSelect" onchange="toggleInput('deptSelect', 'otherDeptInput')">
+                                <option selected disabled>Select College / Department...</option>
+                                
+                                <!-- CICS -->
+                                <option value="CICS">College of Informatics & Computing Sciences (CICS)</option>
+                                
+                                <!-- CEAFA -->
+                                <option value="CEAFA">College of Engineering, Architecture & Fine Arts (CEAFA)</option>
+                                
+                                <!-- CABEIHM -->
+                                <option value="CABEIHM">College of Accountancy, Business, Economics & IHM (CABEIHM)</option>
+                                
+                                <!-- CAS -->
+                                <option value="CAS">College of Arts & Sciences (CAS)</option>
+                                
+                                <!-- CTE -->
+                                <option value="CTE">College of Teacher Education (CTE)</option>
+                                
+                                <!-- CIT -->
+                                <option value="CIT">College of Industrial Technology (CIT)</option>
+                                
+                                <!-- CONAHS -->
+                                <option value="CONAHS">College of Nursing & Allied Health Sciences (CONAHS)</option>
+                                
+                                <!-- OTHERS -->
+                                <option value="Agri">College of Agriculture & Forestry</option>
+                                <option value="Others">Others / Not Listed</option>
+                            </select>
+                            <input type="text" class="form-control mt-2" id="otherDeptInput" placeholder="Specify Department..." style="display: none;">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Academic Level</label>
+                            <select class="form-select">
+                                <option selected disabled>Select Level...</option>
+
+                                <optgroup label="Undergraduate (College)">
+                                    <option>1st Year</option>
+                                    <option>2nd Year</option>
+                                    <option>3rd Year</option>
+                                    <option>4th Year</option>
+                                    <option>5th Year</option>
+                                </optgroup>
+
+                                <optgroup label="Post-Graduate">
+                                    <option>Master's Degree</option>
+                                    <option>Doctorate / PhD</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Description & Responsibility -->
+                    <h5 class="section-label">Description & Deliverables</h5>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Job Description & Instructions</label>
+                        <div class="rich-editor-box">
+                            <textarea class="rich-textarea" placeholder="Describe the project. If this is a research paper, what is the topic? If this is a novel, what is the genre?"></textarea>
+                            <div class="editor-toolbar">
+                                <i class="fa-solid fa-bold"></i>
+                                <i class="fa-solid fa-italic"></i>
+                                <i class="fa-solid fa-underline"></i>
+                                <i class="fa-solid fa-strikethrough"></i>
+                                <div class="border-end mx-1"></div>
+                                <i class="fa-solid fa-link"></i>
+                                <div class="border-end mx-1"></div>
+                                <i class="fa-solid fa-list-ul"></i>
+                                <i class="fa-solid fa-list-ol"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Required Deliverables</label>
+                        <div class="rich-editor-box">
+                            <textarea class="rich-textarea" placeholder="What exactly do you need submitted? (e.g., A .docx file, a working link, a source code file)."></textarea>
+                            <div class="editor-toolbar">
+                                <i class="fa-solid fa-bold"></i>
+                                <i class="fa-solid fa-italic"></i>
+                                <i class="fa-solid fa-underline"></i>
+                                <i class="fa-solid fa-strikethrough"></i>
+                                <div class="border-end mx-1"></div>
+                                <i class="fa-solid fa-link"></i>
+                                <div class="border-end mx-1"></div>
+                                <i class="fa-solid fa-list-ul"></i>
+                                <i class="fa-solid fa-list-ol"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <!-- Changed to type button to prevent submission for demo, triggers JS -->
+                    <button type="button" class="btn-post-job" id="triggerSuccessModal">
+                        Post Job <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                </form>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <p class="mb-0">&copy; 2024 JobShark - Job Portal. All rights Reserved</p>
+        </footer>
+    </div>
+
+    <!-- SUCCESS MODAL (Hidden by Default) -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 700px;">
+        <div class="modal-content modal-custom-content bg-white">
+          
+          <!-- Close Button -->
+          <button type="button" class="btn-close-floating" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+
+          <div class="modal-body p-0">
+            <!-- Title -->
+            <div class="modal-title-custom">
+                <span class="modal-icon">🎉</span> Congratulation, Your Job is successfully posted!
+            </div>
+            
+            <!-- Subtitle -->
+            <p class="modal-subtitle-custom">
+                You can manage your form my-jobs section in your dashboard
+            </p>
+
+            <!-- Action Button -->
+            <a href="#" class="btn-view-jobs-modal">
+                View Jobs <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Reusable Script for 'Others' Toggle -->
+    <script>
+        function toggleInput(selectId, inputId) {
+            var select = document.getElementById(selectId);
+            var input = document.getElementById(inputId);
+            
+            if (select.value === "Others") {
+                input.style.display = "block";
+                input.focus();
+            } else {
+                input.style.display = "none";
+                input.value = ""; 
+            }
+        }
+
+        // Script to Trigger the Success Modal
+        document.addEventListener("DOMContentLoaded", function() {
+            const postBtn = document.getElementById('triggerSuccessModal');
+            const myModal = new bootstrap.Modal(document.getElementById('successModal'));
+
+            postBtn.addEventListener('click', function(e) {
+                // Prevent default form submit if it was a submit button
+                e.preventDefault();
+                
+                // Show the modal
+                myModal.show();
+            });
+        });
+    </script>
+</body>
+</html>

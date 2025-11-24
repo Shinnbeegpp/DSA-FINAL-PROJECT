@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobShark - Job Applications</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #6930C3;
+            --primary-hover: #5626a3;
+            --secondary-bg: #F5F6FA;
+            --text-color: #111827;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+            --sidebar-width: 280px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            background: url('images/bgshark.png'), linear-gradient(135deg, #a5f3fc 0%, #c4b5fd 50%, #bae6fd 100%);
+            background-size: 600px auto, cover; 
+            background-position: center top, center;
+            background-attachment: fixed, fixed;
+            background-repeat: no-repeat, no-repeat;
+            min-height: 100vh;
+        }
+
+        /* Top Utility Bar */
+        #navbar-header {
+            background-color: #6930C3;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+        #navbar-header .nav-link {
+            color: white;
+            font-weight: 500;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+        #navbar-header .nav-link:hover,
+        #navbar-header .nav-link.active {
+            color: #e0e0e0;
+        }
+
+        /* Main Header */
+        .main-header {
+            padding: 1rem 0;
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 20;
+        }
+        .navbar-brand img {
+            max-height: 50px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-avatar {
+            width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+        }
+        .user-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Layout */
+        .dashboard-container {
+            margin-top: 0; 
+            padding-bottom: 4rem;
+        }
+
+        /* Sidebar */
+        .sidebar-container {
+            background: #fff;
+            padding: 2rem 1rem;
+            border-radius: 0 0 12px 12px;
+            height: 100%;
+            min-height: calc(100vh - 130px);
+            border-right: 1px solid rgba(0,0,0,0.03);
+        }
+        .sidebar-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            letter-spacing: 0.5px;
+        }
+        .nav-pills .nav-link {
+            color: var(--text-muted);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .nav-pills .nav-link:hover {
+            color: var(--primary-color);
+            background-color: rgba(123, 97, 255, 0.05);
+        }
+        .nav-pills .nav-link.active {
+            background-color: rgba(123, 97, 255, 0.1);
+            color: var(--primary-color);
+            border-left: 3px solid var(--primary-color);
+        }
+        .nav-pills .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .logout-link {
+            margin-top: auto;
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 1.5rem;
+            font-weight: 500;
+            padding-bottom: 1rem;
+            padding-top: 2rem;
+        }
+        .logout-link:hover { color: #dc3545; }
+
+        /* Content Area */
+        .col-content {
+            padding-top: 2rem;
+        }
+
+        .page-label {
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #1e293b;
+        }
+
+        /* Back Button Style */
+        .btn-back {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+            transition: color 0.2s;
+        }
+        .btn-back:hover {
+            color: var(--primary-color);
+        }
+
+        /* Sorting Dropdown Button */
+        .btn-sort {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .btn-sort:hover {
+            background-color: var(--primary-hover);
+            color: white;
+        }
+        .sort-dropdown-menu {
+            padding: 1rem;
+            border: none;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            min-width: 200px;
+        }
+        .sort-header {
+            font-size: 0.7rem;
+            color: #9CA3AF;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .custom-radio {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 0;
+            cursor: pointer;
+        }
+        .custom-radio input[type="radio"] {
+            accent-color: var(--primary-color);
+            transform: scale(1.2);
+        }
+        .custom-radio label {
+            font-size: 0.9rem;
+            color: #4B5563;
+            cursor: pointer;
+        }
+
+        /* --- APPLICATION CARD STYLES --- */
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .app-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(105, 48, 195, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer; /* NEW: Shows it's clickable */
+        }
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #6930C3;
+            width: 80%;
+        }
+        
+        .app-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #6B7280;
+            object-fit: cover;
+        }
+
+        .app-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #1F2937;
+            margin: 0;
+        }
+        .app-campus {
+            font-size: 0.8rem;
+            color: #6B7280;
+        }
+
+        .app-details-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem 0;
+        }
+        .app-details-list li {
+            font-size: 0.85rem;
+            color: #4B5563;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .app-details-list li::before {
+            content: "•";
+            color: #9CA3AF;
+            font-weight: bold;
+        }
+
+        .download-link {
+            color: var(--primary-color);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .download-link:hover {
+            text-decoration: underline;
+            color: var(--primary-hover);
+        }
+
+        .content-bg {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-outline-primary-custom {
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        .btn-outline-primary-custom:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .main-footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #9CA3AF;
+            font-size: 0.85rem;
+            margin-top: 4rem;
+        }
+
+        /* --- CANDIDATE MODAL STYLES --- */
+        .modal-candidate-content {
+            border-radius: 16px;
+            border: none;
+            overflow: hidden;
+        }
+        .modal-candidate-header {
+            padding: 2rem 2rem 1rem 2rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+        .candidate-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .candidate-modal-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #9CA3AF;
+        }
+        .candidate-role {
+            color: #6B7280;
+            font-size: 0.9rem;
+        }
+        .btn-icon-square {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #F3F4F6;
+            border-radius: 8px;
+            color: var(--primary-color);
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-icon-square:hover { background-color: #e5e7eb; }
+        
+        .btn-send-mail {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-send-mail:hover { background-color: var(--primary-hover); color: white;}
+
+        .section-header-line {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #1F2937;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .info-grid-box {
+            background-color: #fff;
+            border: 1px solid #F3F4F6;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .info-item {
+            margin-bottom: 1.5rem;
+        }
+        .info-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #9CA3AF;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+        .info-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1F2937;
+        }
+        .info-icon {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Resume Download Box in Modal */
+        .resume-download-box {
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .resume-icon-box {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(105, 48, 195, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        .btn-download-icon {
+            margin-left: auto;
+            width: 32px;
+            height: 32px;
+            background-color: #F3F4F6;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        /* Contact Info List */
+        .contact-list {
+            list-style: none;
+            padding: 0;
+        }
+        .contact-li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .contact-icon {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            min-width: 24px;
+        }
+        .contact-label {
+            font-size: 0.7rem;
+            color: #9CA3AF;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .contact-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1F2937;
+        }
+
+        .btn-close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #F3F4F6;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            color: #4B5563;
+            z-index: 10;
+        }
+        .btn-close-modal:hover { background: #e5e7eb; }
+
+        /* Responsive */
+        @media (max-width: 991.98px) {
+            .sidebar-container { margin-bottom: 2rem; border-radius: 12px; }
+            .dashboard-container { margin-top: 1rem; }
+            .nav-pills .nav-link.active {
+                border-left: none;
+                border-bottom: 3px solid var(--primary-color);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Utility Bar -->
+    <nav class="navbar navbar-expand-lg d-none d-lg-block" id="navbar-header">
+        <div class="container">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a> 
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <!-- Logo -->
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="images/logo_name.png" alt="JobShark Logo" 
+                    onerror="this.src='https://placehold.co/150x40/6930C3/ffffff?text=JobShark&font=inter'; this.onerror=null;">
+                </a>
+
+                <div class="d-flex align-items-center gap-4">
+                    <a href="#" class="btn-outline-primary-custom">Post A Job</a>
+                    
+                    <div class="user-profile">
+                        <span class="user-name d-none d-md-block">Esther Howard</span>
+                        <img src="https://i.pravatar.cc/150?img=12" alt="Profile" class="user-avatar">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container dashboard-container">
+        <div class="row">
+            
+            <!-- Sidebar -->
+            <div class="col-lg-3 d-flex flex-column">
+                <div class="sidebar-container d-flex flex-column flex-grow-1">
+                    <div class="sidebar-title">COMMISSIONER DASHBOARD</div>
+                    <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link" href="#" role="tab"><i class="fa-solid fa-circle-plus"></i> Post a Job</a>
+                        <a class="nav-link active" href="#" role="tab"><i class="fa-solid fa-briefcase"></i> My Jobs</a>
+                        <a class="nav-link" href="#" role="tab"><i class="fa-regular fa-bookmark"></i> Saved Candidate</a>
+                        <a class="nav-link" href="#" role="tab"><i class="fa-solid fa-gear"></i> Profile</a>
+                    </div>
+                    <a href="#" class="logout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out</a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9 col-content">
+                
+                <div class="content-bg">
+                    <!-- Back Button -->
+                    <a href="#" class="btn-back">
+                        <i class="fa-solid fa-arrow-left"></i> Back to My Jobs
+                    </a>
+
+                    <!-- Breadcrumb/Label -->
+                    <div class="page-label">Applications</div>
+                    
+                    <!-- Title & Filter Row -->
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <h2 class="page-title mb-0">Job Applications (213)</h2>
+                        
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="text-muted small fw-bold">Filter</span>
+                            
+                            <!-- Sort Dropdown -->
+                            <div class="dropdown">
+                                <button class="btn-sort dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Sort
+                                </button>
+                                <div class="dropdown-menu sort-dropdown-menu dropdown-menu-end">
+                                    <div class="sort-header">SORT APPLICATION</div>
+                                    <div class="custom-radio">
+                                        <input type="radio" id="sortNewest" name="sortApp" checked>
+                                        <label for="sortNewest">Newest</label>
+                                    </div>
+                                    <div class="custom-radio">
+                                        <input type="radio" id="sortOldest" name="sortApp">
+                                        <label for="sortOldest">Oldest</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Applications Grid -->
+                    <div class="applications-grid">
+                        
+                        <!-- Card 1 - Added data-bs-toggle to open modal -->
+                        <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
+                            <div class="app-header">
+                                <img src="https://i.pravatar.cc/150?img=32" alt="User" class="app-avatar">
+                                <div>
+                                    <h5 class="app-name">Jane Cooper</h5>
+                                    <span class="app-campus">BatStateU - Alangilan</span>
+                                </div>
+                            </div>
+                            <ul class="app-details-list">
+                                <li>Experience Level: Beginner</li>
+                                <li>Education: Bachelor's Degree</li>
+                                <li>Student Classification: Regular</li>
+                            </ul>
+                            <a href="#" class="download-link">
+                                <i class="fa-solid fa-download"></i> Download Curriculum Vitae / Resume
+                            </a>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
+                            <div class="app-header">
+                                <img src="https://i.pravatar.cc/150?img=11" alt="User" class="app-avatar">
+                                <div>
+                                    <h5 class="app-name">Wade Warren</h5>
+                                    <span class="app-campus">LPU - Batangas</span>
+                                </div>
+                            </div>
+                            <ul class="app-details-list">
+                                <li>Experience Level: Academic Projects</li>
+                                <li>Education: Bachelor's Degree</li>
+                                <li>Student Classification: Graduating</li>
+                            </ul>
+                            <a href="#" class="download-link">
+                                <i class="fa-solid fa-download"></i> Download Curriculum Vitae / Resume
+                            </a>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
+                            <div class="app-header">
+                                <img src="https://i.pravatar.cc/150?img=59" alt="User" class="app-avatar">
+                                <div>
+                                    <h5 class="app-name">Esther Howard</h5>
+                                    <span class="app-campus">BatStateU - Pablo Borbon</span>
+                                </div>
+                            </div>
+                            <ul class="app-details-list">
+                                <li>Experience Level: Freelance</li>
+                                <li>Education: Bachelor's Degree</li>
+                                <li>Student Classification: Irregular</li>
+                            </ul>
+                            <a href="#" class="download-link">
+                                <i class="fa-solid fa-download"></i> Download Curriculum Vitae / Resume
+                            </a>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
+                            <div class="app-header">
+                                <img src="https://i.pravatar.cc/150?img=68" alt="User" class="app-avatar">
+                                <div>
+                                    <h5 class="app-name">Cameron Williamson</h5>
+                                    <span class="app-campus">De La Salle Lipa</span>
+                                </div>
+                            </div>
+                            <ul class="app-details-list">
+                                <li>Experience Level: Beginner</li>
+                                <li>Education: Senior High School</li>
+                                <li>Student Classification: Regular</li>
+                            </ul>
+                            <a href="#" class="download-link">
+                                <i class="fa-solid fa-download"></i> Download Curriculum Vitae / Resume
+                            </a>
+                        </div>
+
+                        <!-- Card 5 -->
+                        <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
+                            <div class="app-header">
+                                <img src="https://i.pravatar.cc/150?img=44" alt="User" class="app-avatar">
+                                <div>
+                                    <h5 class="app-name">Brooklyn Simmons</h5>
+                                    <span class="app-campus">University of Batangas</span>
+                                </div>
+                            </div>
+                            <ul class="app-details-list">
+                                <li>Experience Level: Internship</li>
+                                <li>Education: Bachelor's Degree</li>
+                                <li>Student Classification: Working</li>
+                            </ul>
+                            <a href="#" class="download-link">
+                                <i class="fa-solid fa-download"></i> Download Curriculum Vitae / Resume
+                            </a>
+                        </div>
+
+                        <!-- Card 6 -->
+                        <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
+                            <div class="app-header">
+                                <img src="https://i.pravatar.cc/150?img=12" alt="User" class="app-avatar">
+                                <div>
+                                    <h5 class="app-name">Leslie Alexander</h5>
+                                    <span class="app-campus">BatStateU - Nasugbu</span>
+                                </div>
+                            </div>
+                            <ul class="app-details-list">
+                                <li>Experience Level: Academic Projects</li>
+                                <li>Education: Bachelor's Degree</li>
+                                <li>Student Classification: Regular</li>
+                            </ul>
+                            <a href="#" class="download-link">
+                                <i class="fa-solid fa-download"></i> Download Curriculum Vitae / Resume
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <p class="mb-0">&copy; 2024 MyJob - Job Portal. All rights Reserved</p>
+        </footer>
+    </div>
+
+    <!-- === CANDIDATE DETAILS MODAL === -->
+    <div class="modal fade" id="candidateModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content modal-candidate-content">
+          
+          <button type="button" class="btn-close-modal" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+
+          <div class="modal-body p-0">
+            
+            <!-- Header Section -->
+            <div class="modal-candidate-header">
+                <div class="candidate-profile-header">
+                    <img src="https://i.pravatar.cc/150?img=59" alt="Esther" class="candidate-modal-avatar">
+                    <div>
+                        <h4 class="fw-bold mb-1" style="color: #1F2937;">Esther Howard</h4>
+                        <span class="candidate-role">BatStateU - Alangilan</span>
+                    </div>
+                </div>
+                <div class="d-flex gap-3">
+                    <button class="btn-icon-square">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </button>
+                    <button class="btn-send-mail">
+                        <i class="fa-regular fa-envelope"></i> Send Mail
+                    </button>
+                </div>
+            </div>
+
+            <hr class="m-0" style="border-color: #E5E7EB;">
+
+            <!-- Layout Grid -->
+            <div class="row g-0">
+                
+                <!-- Left Column: Bio & Cover Letter -->
+                <div class="col-lg-8 p-4" style="border-right: 1px solid #E5E7EB;">
+                    <div class="mb-5">
+                        <h6 class="section-header-line">BIOGRAPHY</h6>
+                        <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6;">
+                            I've been passionate about graphic design and digital art from an early age with a keen interest in Website and Mobile Application User Interfaces. I can create high-quality and aesthetically pleasing designs in a quick turnaround time. Check out the portfolio section of my profile to see samples of my work and feel free to discuss your designing needs. I mostly use Adobe Photoshop, Illustrator, XD and Figma. *Website User Experience and Interface (UI/UX) Design - for all kinds of Professional and Personal websites. *Mobile Application User Experience and Interface Design - for all kinds of IOS/Android and Hybrid Mobile Applications. *Wireframe Designs.
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6 class="section-header-line">COVER LETTER</h6>
+                        <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6;">
+                            Dear Sir,<br><br>
+                            I am writing to express my interest in the fourth grade instructional position that is currently available in the Fort Wayne Community School System. I learned of the opening through a notice posted on JobZone, IPFW's job database. I am confident that my academic background and curriculum development skills would be successfully utilized in this teaching position.<br><br>
+                            I have just completed my Bachelor of Science degree in Elementary Education and have successfully completed Praxis I and Praxis II. During my student teaching experience, I developed and initiated a three-week curriculum sequence on animal species and earth resources.<br><br>
+                            Sincerely,<br><br>
+                            Esther Howard
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right Column: Stats, Resume, Contact -->
+                <div class="col-lg-4 p-4 bg-light">
+                    
+                    <!-- Stats Grid -->
+                    <div class="info-grid-box">
+                        <div class="row">
+                            <div class="col-6 info-item">
+                                <div class="info-icon"><i class="fa-solid fa-cake-candles"></i></div>
+                                <span class="info-label">DATE OF BIRTH</span>
+                                <div class="info-value">14 June, 2021</div>
+                            </div>
+                            <div class="col-6 info-item">
+                                <div class="info-icon"><i class="fa-regular fa-map"></i></div>
+                                <span class="info-label">Student Classification</span>
+                                <div class="info-value">Regular Student (Full Load)</div>
+                            </div>
+                            <div class="col-6 info-item">
+                                <div class="info-icon"><i class="fa-solid fa-ring"></i></div>
+                                <span class="info-label">MARITAL STATUS</span>
+                                <div class="info-value">Single</div>
+                            </div>
+                            <div class="col-6 info-item">
+                                <div class="info-icon"><i class="fa-regular fa-user"></i></div>
+                                <span class="info-label">GENDER</span>
+                                <div class="info-value">Male</div>
+                            </div>
+                            <div class="col-6 info-item">
+                                <div class="info-icon"><i class="fa-solid fa-layer-group"></i></div>
+                                <span class="info-label">EXPERIENCE</span>
+                                <div class="info-value">Beginner (No paid experience)</div>
+                            </div>
+                            <div class="col-6 info-item">
+                                <div class="info-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                                <span class="info-label">EDUCATION</span>
+                                <div class="info-value">1st Year</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Download Resume -->
+                    <div class="info-grid-box">
+                        <h6 class="section-header-line mb-3">Download My Resume</h6>
+                        <div class="resume-download-box">
+                            <div class="resume-icon-box">
+                                <i class="fa-regular fa-file-lines"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Esther Howard</div>
+                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">PDF</div>
+                            </div>
+                            <a href="#" class="btn-download-icon">
+                                <i class="fa-solid fa-download"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="info-grid-box">
+                        <h6 class="section-header-line mb-3">Contact Information</h6>
+                        <ul class="contact-list">
+                            <li class="contact-li">
+                                <i class="fa-solid fa-globe contact-icon"></i>
+                                <div>
+                                    <span class="contact-label">SOCIAL LINK</span>
+                                    <div class="contact-value">www.estherhoward.com</div>
+                                </div>
+                            </li>
+                            <li class="contact-li">
+                                <i class="fa-solid fa-phone contact-icon"></i>
+                                <div>
+                                    <span class="contact-label">PHONE</span>
+                                    <div class="contact-value">+1-202-555-0141</div>
+                                </div>
+                            </li>
+                            <li class="contact-li">
+                                <i class="fa-regular fa-envelope contact-icon"></i>
+                                <div>
+                                    <span class="contact-label">EMAIL ADDRESS</span>
+                                    <div class="contact-value">esther.howard@gmail.com</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
