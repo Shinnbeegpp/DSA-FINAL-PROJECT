@@ -18,12 +18,12 @@ from django.contrib import admin
 from django.urls import path
 
 
-from users.views import homepage, sign_in, find_job, registration, success, myjobs, find_job_candidate
+from users.views import homepage, sign_in, find_job_notsigned, registration, success, myjobs, find_job_candidate
 
 
 urlpatterns = [
     path('', homepage, name="homepage"),
-    path('find_job/', find_job, name='find_job'),
+    path('find_job/', find_job_notsigned, name='find_job_notsigned'),
     path('admin/', admin.site.urls),
     path('sign_in/', sign_in, name="sign_in"),
     path('registration/', registration, name="registration"),
