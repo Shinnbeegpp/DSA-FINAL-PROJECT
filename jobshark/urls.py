@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 
-from users.views import homepage, sign_in, find_job, registration
+from users.views import homepage, sign_in, find_job, registration, success
 
 
 urlpatterns = [
@@ -27,4 +27,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('sign_in/', sign_in, name="sign_in"),
     path('registration/', registration, name="registration"),
+    path('success/', success, name="success"),
 ]
