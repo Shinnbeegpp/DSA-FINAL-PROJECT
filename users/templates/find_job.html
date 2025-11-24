@@ -394,8 +394,9 @@
 
         <nav class="navbar navbar-expand-lg navbar-light bg-white d-none d-lg-block" id="navbar-top">
             <div class="container">
-                <a class="navbar-brand d-flex align-items-center" href="#">
-                    <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo" style="max-height: 50px;">
+                <a class="navbar-brand d-flex align-items-center" href="{% url 'homepage' %}">
+                    <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo" 
+                    onerror="this.src='https://placehold.co/150x40/6c63ff/ffffff?text=JobShark&font=inter'; this.onerror=null;">
                 </a>
 
                 <div class="navbar-signin">
