@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from .models import UserProfile
 
+# Create your views here.\
 # Create your views here.
 
 def homepage(request):
