@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -353,7 +354,7 @@
                     
                     <!-- User Profile -->
                     <div class="user-profile">
-                        <span class="user-name d-none d-md-block">Esther Howard</span>
+                        <span class="user-name d-none d-md-block">{{user.username}}</span>
                         <img src="images/cris.jpg" alt="Profile" class="user-avatar">
                     </div>
                 </div>
