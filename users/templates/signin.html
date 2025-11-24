@@ -13,6 +13,24 @@
   <!-- Custom CSS -->
    <link rel="stylesheet" href="..static/signin.css">
 </head>
+<style>
+/* -------------------- Buttons -------------------- */
+.btn-purple {
+    background-color: #6f42c1;
+    color: white;
+    border: none;
+}
+
+.btn-purple:hover {
+    background-color: #5a33a6;
+    color: white;
+}
+
+/* -------------------- Text Colors -------------------- */
+.text-purple {
+    color: #6f42c1;
+}
+</style>
 <body>
 
 <div class="container-fluid">
@@ -30,25 +48,24 @@
         <h2 class="mb-3 text-purple">Sign In</h2>
         <p class="mb-4">Don't have an account? <a href="{% url 'registration' %}" class="text-decoration-none">Sign Up</a></p>
         
-        <form action="sign_in/" method="post">
-        {% csrf_token %}
+        <form method="post" action="{% url 'sign_in' %}"> 
+          {% csrf_token %}
+          
           <div class="mb-3">
-            <select class="form-select">
-              <option selected disabled>Select Account Type</option>
-              <option value="commissioner">Commissioner</option>
-              <option value="commissionee">Commissionee</option>
-            </select>
-          </div>
-
-          <div class="mb-3">
-            <input type="text" class="form-control" placeholder="Username">
+            <input type="text" name="username" class="form-control" placeholder="Username" value="{{ values.username }}" required>
           </div>
 
           <div class="mb-3 position-relative">
-            <input type="password" class="form-control" placeholder="Password">
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
           </div>
 
-          <button type="submit" class="btn btn-purple w-100" >Sign in</button>
+          {% if error_login %}
+              <div class="text-danger" style="font-size: 13px; margin-top: -10px; margin-bottom: 15px;">
+                  {{ error_login }}
+              </div>
+          {% endif %}
+
+          <button type="submit" class="btn btn-purple w-100">Sign in</button>
         </form>
       </div>
     </div>
@@ -74,4 +91,21 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            Swal.fire({
+                title: "Success!",
+                text: "{{ message }}",
+                icon: "success",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#6f42c1" // Matches your purple theme
+            });
+        </script>
+    {% endfor %}
+{% endif %}
+
 </html>

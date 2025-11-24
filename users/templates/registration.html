@@ -75,35 +75,63 @@ body, html {
         <h2 class="mb-3 text-purple">Create Account.</h2>
         <p class="mb-4">Already have an account? <a href="{% url 'sign_in' %}" class="text-decoration-none">Log In</a></p>
         
-        <form action="registration" method="post">
+        <form action="" method="post">
         {% csrf_token %}
+        
           <div class="mb-3">
-            <input type="text" class="form-control" placeholder="Full Name">
+            <input type="text" name ="first_name" class="form-control" placeholder="First Name">
           </div>
 
           <div class="mb-3">
-            <input type="text" class="form-control" placeholder="Username">
+            <input type="text" name ="last_name" class="form-control" placeholder="Last Name">
+          </div>
+
+          <div class="mb-3">
+            <input type="text" name="username" class="form-control" placeholder="Username" value="{{ values.username }}"> {% if error_username %}
+              <div class="text-danger" style="font-size: 12px; margin-top: 5px;">
+                {{ error_username }}
+              </div>
+            {% endif %}
+
+            
           </div>
 
 
           <div class="mb-3">
-            <select class="form-select">
-              <option selected disabled>Select Account Type</option>
-              <option value="commissioner">Commissioner</option>
-              <option value="commissionee">Commissionee</option>
+            <select name ="account_type" class="form-select" **required** >
+              <option value="" selected disabled>Select Account Type</option>
+              <option value="commissioner" {% if values.account_type == "commissioner" %}selected{% endif %} >Commissioner</option>
+              <option value="commissionee" {% if values.account_type == "commissionee" %}selected{% endif %} >Commissionee</option>
             </select>
+            {% if error_account_type %}
+              <div class="text-danger" style="font-size: 13px; margin-top: 5px;">
+                {{ error_account_type }}
+              </div>
+            {% endif %}
           </div>
 
           <div class="mb-3">
-            <input type="email" class="form-control" placeholder="Email address">
+            <input type="email" name ="email" class="form-control" placeholder="Email address" value="{{ values.email }}">
+
+            {% if error_email %}
+              <div class="text-danger" style="font-size: 12px; margin-top: 5px;">
+                {{ error_email }}
+              </div>
+            {% endif %}
           </div>
 
           <div class="mb-3 position-relative">
-            <input type="password" class="form-control" placeholder="Password">
+            <input type="password" name ="password1" class="form-control" placeholder="Password">
           </div>
 
           <div class="mb-4 position-relative">
-            <input type="password" class="form-control" placeholder="Confirm Password">
+            <input type="password"  name ="password2" class="form-control" placeholder="Confirm Password">
+
+            {% if error_password %}
+              <div class="text-danger" style="font-size: 12px; margin-top: 5px;">
+                {{ error_password }}
+              </div>
+            {% endif %}
           </div>
 
           <button type="submit" class="btn btn-purple w-100">Create Account</button>
