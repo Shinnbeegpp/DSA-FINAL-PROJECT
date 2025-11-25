@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobShark - Commission Overview</title>
+    <!-- Load Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Inter font family -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        :root {
+            /* Custom Colors based on the image (image_92dfdd.jpg) */
+            --primary-purple: #6A3BB8; 
+            --secondary-purple: #A586F8; /* Lighter purple/lavender for backgrounds/accents */
+            --dark-blue-text: #1F2937; /* Dark text/headers */
+            --light-bg-gray: #F9FAFB;
+            --white: #FFFFFF;
+            --text-gray: #4B5563;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg-gray);
+            color: var(--dark-blue-text);
+        }
+
+        /* Utility classes to match the design */
+        .btn-primary {
+            background-color: var(--primary-purple);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #552EA8; /* Slightly darker on hover */
+        }
+        
+        .card {
+            background-color: var(--white);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+        }
+
+        /* Custom Modal Styles */
+        .modal {
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: 10vh auto; /* 10% from the top */
+            border-radius: 1rem;
+            position: relative;
+            padding: 2rem;
+            max-width: 90%;
+        }
+
+        /* Specific style for the close button, matching the images */
+        .modal-close-btn {
+            background-color: var(--light-bg-gray);
+            color: var(--dark-blue-text);
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .modal-close-btn:hover {
+            background-color: #E5E7EB;
+        }
+
+        /* Table/Data List styling */
+        .data-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        .data-list-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Navbar/Header - Fixed, Two-Tier Structure -->
+    <header class="fixed top-0 left-0 right-0 z-50 shadow-lg">
+
+        <!-- 1. Top Bar (Purple) - Desktop Only -->
+        <nav class="bg-primary-purple hidden lg:block">
+            <div style="background-color: #6a3bb8;">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-center space-x-6 text-white text-sm font-medium py-2">
+                        <a href="#" class="hover:text-secondary-purple transition duration-150">Find Job</a>
+                        <a href="#" class="hover:text-secondary-purple transition duration-150">Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 2. Bottom Bar (White) - Desktop/Tablet View -->
+        <nav class="bg-white shadow-sm hidden lg:block">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+                <!-- Logo -->
+                <a class="flex items-center space-x-2" href="#">
+                    <!-- Placeholder for Logo/Site Name -->
+                    <svg class="w-8 h-8 text-primary-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <!-- DJANGO PLACEHOLDER: {% static 'images/logo_name.png' %} -->
+                    <span class="text-xl font-bold text-dark-blue-text">JobShark</span>
+                </a>
+
+                <!-- User Profile -->
+                <div class="flex items-center space-x-3">
+                    <span class="text-gray-700 font-medium">Esther Howard</span>
+                    <!-- Placeholder for User Avatar -->
+                    <img src="https://placehold.co/40x40/6A3BB8/FFFFFF?text=EH" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-primary-purple">
+                </div>
+            </div>
+        </nav>
+
+        <!-- 3. Mobile Navigation -->
+        <nav class="bg-white shadow-sm lg:hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+                <!-- Logo -->
+                <a class="flex items-center space-x-2" href="#">
+                    <svg class="w-8 h-8 text-primary-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <span class="text-xl font-bold text-dark-blue-text">JobShark</span>
+                </a>
+                
+                <!-- Simple Mobile Nav Placeholder -->
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-700 text-sm font-medium hidden sm:block">Esther Howard</span>
+                    <img src="https://placehold.co/40x40/6A3BB8/FFFFFF?text=EH" alt="User Avatar" class="w-8 h-8 rounded-full border-2 border-primary-purple">
+                    <!-- Hamburger Icon -->
+                    <button class="text-gray-500 hover:text-gray-700 p-2 rounded-md transition" onclick="toggleMobileMenu()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="menu-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobileMenu" class="hidden absolute top-full left-0 right-0 bg-white shadow-md border-t border-gray-200 py-2">
+                <!-- DJANGO PLACEHOLDER: {% url 'find_job_page' %} -->
+                <a href="#" class="block px-4 py-2 text-dark-blue-text hover:bg-gray-50">Find Job</a>
+                <!-- DJANGO PLACEHOLDER: {% url 'dashboard_page' %} -->
+                <a href="#" class="block px-4 py-2 text-dark-blue-text hover:bg-gray-50">Dashboard</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Area - Margin adjusted for fixed header (approx 100-112px height) -->
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 mt-28 lg:mt-24">
+        
+        <!-- Commission Overview Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+            <h1 class="text-3xl font-extrabold text-dark-blue-text">Commission Overview</h1>
+            <button id="applyJobBtnTop" class="btn-primary flex items-center mt-4 md:mt-0" onclick="openApplyModal()">
+                Apply Now 
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+            </button>
+        </div>
+
+        <!-- Main Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left Column: Job Details & Requirements -->
+            <div class="lg:col-span-2 space-y-8">
+                
+                <!-- Project Title & Category -->
+                <div class="card p-6 border-l-4 border-primary-purple">
+                    <h2 class="text-xl font-semibold text-gray-500 mb-1">Project Title</h2>
+                    <!-- DJANGO PLACEHOLDER: {{ job.title }} -->
+                    <h3 class="text-3xl font-bold text-dark-blue-text" id="job-title-display">Project Title Placeholder (Design & Web)</h3>
+                    <!-- DJANGO PLACEHOLDER: {{ job.category }} -->
+                    <p class="text-lg text-primary-purple font-medium mt-1">
+                        <span class="bg-primary-purple/10 text-primary-purple text-sm font-semibold px-3 py-1 rounded-full">
+                            Category Placeholder
+                        </span>
+                    </p>
+                </div>
+
+                <!-- Job Description & Instructions -->
+                <div class="card">
+                    <h4 class="text-xl font-bold mb-4 border-b pb-2">Job Description & Instructions</h4>
+                    <!-- DJANGO PLACEHOLDER: {{ job.description|linebreaks }} -->
+                    <div id="job-description-content" class="text-base text-text-gray leading-relaxed">
+                        <p class="mb-4">Integer aliquet pretium consequat. Donec et sapien id leo accumsan pellentesque eget maximus tellus. Duis et est ac leo rhoncus tincidunt vitae vehicula augue. Donec in suscipit diam. Pellentesque quis justo sit amet arcu commodo sollicitudin. Integer finibus blandit condimentum. Vivamus sit amet ligula ullamcorper, pulvinar ante id, tristique erat. Quisque sit amet aliquam urna. Maecenas blandit felis id massa sodales finibus. Integer bibendum eu nulla eu sollicitudin. Sed lobortis diam tincidunt accumsan faucibus. Quisque blandit augue quis turpis auctor, dapibus euismod ante ultricies. Ut non felis lacinia turpis feugiat euismod at id magna. Sed ut orci arcu. Suspendisse sollicitudin faucibus aliquet.</p>
+                        <p>Integer aliquet pretium consequat. Donec et sapien id leo accumsan pellentesque eget maximus tellus. Duis et est ac leo rhoncus tincidunt vitae vehicula augue. Donec in suscipit diam. Pellentesque quis justo sit amet arcu commodo sollicitudin. Integer finibus blandit condimentum.</p>
+                    </div>
+                </div>
+
+                <!-- Required Deliverables & Specifications -->
+                <div class="card">
+                    <h4 class="text-xl font-bold mb-4 border-b pb-2">Required Deliverables & Specifications</h4>
+                    <!-- DJANGO PLACEHOLDER: {{ job.deliverables|linebreaks }} -->
+                    <div id="job-deliverables-content" class="text-base text-text-gray leading-relaxed">
+                        <ul class="list-disc list-inside space-y-2 pl-4">
+                            <li>Complete front-end website code (HTML/Tailwind/JS)</li>
+                            <li>Mobile-responsive design for all major breakpoints.</li>
+                            <li>Source files (Figma or Sketch) provided upon completion.</li>
+                            <li>All assets (images, icons) optimized and included.</li>
+                            <li>A brief documentation explaining the codebase structure.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Overview & Commissioner Info -->
+            <div class="lg:col-span-1 space-y-6">
+                
+                <!-- Job Overview Card -->
+                <div class="card">
+                    <h4 class="text-xl font-bold mb-4">Job Overview:</h4>
+                    <div class="space-y-3">
+                        <div class="data-list-item">
+                            <span class="text-gray-500 font-medium">Job Title:</span>
+                            <!-- DJANGO PLACEHOLDER: {{ job.short_title }} -->
+                            <span class="font-semibold">Web Design & Development</span>
+                        </div>
+                        <div class="data-list-item">
+                            <span class="text-gray-500 font-medium">Category:</span>
+                            <!-- DJANGO PLACEHOLDER: {{ job.category }} -->
+                            <span class="font-semibold">Programming & IT</span>
+                        </div>
+                        <div class="data-list-item">
+                            <span class="text-gray-500 font-medium">Service Rate:</span>
+                            <!-- DJANGO PLACEHOLDER: ${{ job.rate }} -->
+                            <span class="font-semibold text-green-600">€500 - €800 (Placeholder)</span>
+                        </div>
+                        <div class="data-list-item">
+                            <span class="text-gray-500 font-medium">Posted Date:</span>
+                            <!-- DJANGO PLACEHOLDER: {{ job.posted_date|date:"M d, Y" }} -->
+                            <span class="font-semibold">Jan 15, 2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commissioner Information Card (Limited View) -->
+                <div class="card">
+                    <h4 class="text-xl font-bold mb-4">Commissioner Information:</h4>
+                    <div class="space-y-3 text-sm">
+                        <div class="data-list-item">
+                            <span class="text-gray-500">Name:</span>
+                            <!-- DJANGO PLACEHOLDER: {{ commissioner.name }} -->
+                            <span class="font-medium">J. Smith (Placeholder)</span>
+                        </div>
+                        <div class="data-list-item">
+                            <span class="text-gray-500">Campus / Institution:</span>
+                            <!-- DJANGO PLACEHOLDER: {{ commissioner.institution }} -->
+                            <span class="font-medium">UniTech - Engineering</span>
+                        </div>
+                        <div class="data-list-item">
+                            <span class="text-gray-500">Education Level:</span>
+                            <!-- DJANGO PLACEHOLDER: {{ commissioner.education_level }} -->
+                            <span class="font-medium">3rd Year</span>
+                        </div>
+                        <div class="data-list-item">
+                            <span class="text-gray-500">Past Commissions:</span>
+                            <!-- DJANGO PLACEHOLDER: {{ commissioner.completed_commissions }} -->
+                            <span class="font-medium text-primary-purple">12 Completed</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary w-full mt-6 flex items-center justify-center" onclick="openCommissionerModal()">
+                        More Info 
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- 1. Commissioner Information Modal (More Info) -->
+    <div id="commissionerModal" class="modal">
+        <div class="modal-content lg:max-w-4xl max-w-lg">
+            <button class="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center modal-close-btn" onclick="closeCommissionerModal()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <!-- Content structure based on image_92eb9f.png -->
+            <div class="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-8">
+                
+                <!-- Left: Profile & Bio -->
+                <div class="w-full md:w-2/3">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <!-- Placeholder for Profile Picture -->
+                        <img src="https://placehold.co/80x80/A586F8/FFFFFF?text=JS" alt="Profile Picture" class="w-20 h-20 rounded-full border-4 border-secondary-purple">
+                        <div>
+                            <!-- DJANGO PLACEHOLDER: {{ commissioner.full_name }} -->
+                            <h3 class="text-2xl font-bold">John Smith (Placeholder)</h3>
+                            <!-- DJANGO PLACEHOLDER: {{ commissioner.job_title }} -->
+                            <p class="text-gray-500">Research & Design Lead</p>
+                        </div>
+                        <div class="ml-auto flex space-x-2">
+                             <!-- Action Buttons Placeholder -->
+                            
+                        <!--<button class="btn-primary flex items-center px-4 py-2 text-sm">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                Send Message
+                            </button>-->
+                        </div>
+                    </div>
+
+                    <!-- Biography/Details -->
+                    <h4 class="text-xl font-bold mb-3 border-b pb-2">BIOGRAPHY</h4>
+                    <!-- DJANGO PLACEHOLDER: {{ commissioner.biography|linebreaks }} -->
+                    <p class="text-text-gray mb-6">I've been passionate about academic research and design since my first year. I enjoy creating detailed and well-structured reports. I mostly use LaTeX and advanced data analysis tools. I am seeking a talented collaborator for my current project. Check out my recent commissions below.</p>
+
+                    <!-- Recent Commissions Placeholder -->
+                    <h4 class="text-xl font-bold mb-4 border-b pb-2">RECENT COMMISSIONS</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <!-- DJANGO PLACEHOLDER: {% for commission in recent_commissions %} -->
+                        <div class="bg-secondary-purple/20 rounded-lg p-3 text-center">
+                            <p class="font-semibold text-primary-purple">Data Analysis Report</p>
+                            <p class="text-xs text-gray-600">Completed: Oct 2024</p>
+                        </div>
+                        <div class="bg-secondary-purple/20 rounded-lg p-3 text-center">
+                            <p class="font-semibold text-primary-purple">Thesis Chapter Draft</p>
+                            <p class="text-xs text-gray-600">Completed: Sep 2024</p>
+                        </div>
+                        <div class="bg-secondary-purple/20 rounded-lg p-3 text-center">
+                            <p class="font-semibold text-primary-purple">Infographic Design</p>
+                            <p class="text-xs text-gray-600">Completed: Aug 2024</p>
+                        </div>
+                        <!-- DJANGO PLACEHOLDER: {% endfor %} -->
+                    </div>
+                </div>
+
+                <!-- Right: Contact Information -->
+                <div class="w-full md:w-1/3 p-4 rounded-lg bg-light-bg-gray">
+                    <h4 class="text-lg font-bold mb-4">Contact Information</h4>
+                    <div class="space-y-4">
+                        <!-- Social Link -->
+                        <div class="border-b pb-2">
+                            <p class="text-xs text-gray-500">SOCIAL LINK</p>
+                            <!-- DJANGO PLACEHOLDER: {{ commissioner.social_link }} -->
+                            <div class="flex items-center mt-1">
+                                <svg class="w-5 h-5 text-primary-purple mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                <a href="#" class="text-sm text-dark-blue-text truncate">https://linked.com/johnsmith</a>
+                            </div>
+                        </div>
+                        <!-- Phone -->
+                        <div class="border-b pb-2">
+                            <p class="text-xs text-gray-500">PHONE</p>
+                            <!-- DJANGO PLACEHOLDER: {{ commissioner.phone }} -->
+                            <div class="flex items-center mt-1">
+                                <svg class="w-5 h-5 text-primary-purple mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                                <span class="text-sm text-dark-blue-text">+1-202-555-0141 (Placeholder)</span>
+                            </div>
+                        </div>
+                        <!-- Email -->
+                        <div class="border-b pb-2">
+                            <p class="text-xs text-gray-500">EMAIL ADDRESS</p>
+                            <!-- DJANGO PLACEHOLDER: {{ commissioner.email }} -->
+                            <div class="flex items-center mt-1">
+                                <svg class="w-5 h-5 text-primary-purple mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-16.5v1.5"></path></svg>
+                                <span class="text-sm text-dark-blue-text truncate">john.smith@university.edu</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 2. Apply Job Modal -->
+    <div id="applyModal" class="modal">
+        <div class="modal-content max-w-2xl">
+            <button class="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center modal-close-btn" onclick="closeApplyModal()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <h3 class="text-2xl font-bold mb-6">Apply for: <span id="modal-job-title" class="text-primary-purple">Research Chapter 1-3 (Placeholder)</span></h3>
+            
+            <!-- Application Form based on image_92eb79.png -->
+            <form id="applicationForm" onsubmit="submitApplication(event)">
+                <div class="mb-6 relative">
+                    <label for="resumeSelect" class="block text-sm font-medium text-gray-700 mb-2">Choose Resume</label>
+                    <select id="resumeSelect" name="resume" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary-purple focus:border-primary-purple appearance-none bg-white">
+                        <!-- DJANGO PLACEHOLDERS: Your resumes -->
+                        <option value="" disabled selected>Select...</option>
+                        <option value="cv1">My Standard CV (Latest)</option>
+                        <option value="cv2">Technical Portfolio Resume</option>
+                        <option value="cv3">Academic CV - (PDF)</option>
+                    </select>
+                    <!-- Custom Arrow for appearance-none select -->
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 top-9 mr-2">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label for="coverLetter" class="block text-sm font-medium text-gray-700 mb-2">Cover Letter</label>
+                    <!-- Text Area with basic formatting options (Visual Placeholder) -->
+                    <div class="border border-gray-300 rounded-lg overflow-hidden">
+                        <textarea id="coverLetter" name="cover_letter" rows="8" placeholder="Write down your biography here. Let the employers know who you are..." required class="w-full p-4 focus:ring-0 focus:outline-none resize-y text-sm"></textarea>
+                        <!-- Toolbar Placeholder -->
+                        <div class="p-2 bg-gray-50 border-t border-gray-300 flex space-x-3">
+                            <button type="button" class="text-gray-500 hover:text-gray-700 font-bold" title="Bold">B</button>
+                            <button type="button" class="text-gray-500 hover:text-gray-700 italic" title="Italic">I</button>
+                            <button type="button" class="text-gray-500 hover:text-gray-700 underline" title="Underline">U</button>
+                            <button type="button" class="text-gray-500 hover:text-gray-700 line-through" title="Strikethrough">S</button>
+                            <span class="text-gray-300">|</span>
+                            <button type="button" class="text-gray-500 hover:text-gray-700" title="Link">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.828a2 2 0 00-2.83 0l-4.5 4.5a2 2 0 002.83 2.83l4.5-4.5a2 2 0 000-2.83zM10.828 13.828a2 2 0 002.83 0l4.5-4.5a2 2 0 10-2.83-2.83l-4.5 4.5a2 2 0 000 2.83z"></path></svg>
+                            </button>
+                            <button type="button" class="text-gray-500 hover:text-gray-700" title="Image">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-9-4h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            </button>
+                            <span class="text-gray-300">|</span>
+                            <button type="button" class="text-gray-500 hover:text-gray-700" title="List (Bullet)">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                            </button>
+                            <button type="button" class="text-gray-500 hover:text-gray-700" title="List (Numbered)">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h11m-11 6h7m-11-2h11M3 6h11"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-4 pt-4">
+                    <button type="button" onclick="closeApplyModal()" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn-primary flex items-center">
+                        Apply Now 
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. Application Successful Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content max-w-xl text-center p-12">
+            <button class="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center modal-close-btn" onclick="closeSuccessModal()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <!-- Success Icon -->
+            <div class="flex justify-center mb-6">
+                <svg class="w-20 h-20 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+
+            <h3 class="text-3xl font-extrabold mb-4">Your application has been submitted successfully.</h3>
+            <p class="text-lg text-text-gray mb-8">
+                The commissioner will review your details and contact you once your application has been approved.
+            </p>
+
+            <button class="btn-primary flex items-center justify-center mx-auto" onclick="window.location.reload()">
+                View Jobs 
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        // --- Modal Functionality ---
+
+        const commissionerModal = document.getElementById('commissionerModal');
+        const applyModal = document.getElementById('applyModal');
+        const successModal = document.getElementById('successModal');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        // General function to open a modal
+        function openModal(modal) {
+            modal.style.display = 'block';
+            document.body.classList.add('overflow-hidden');
+        }
+
+        // General function to close a modal
+        function closeModal(modal) {
+            modal.style.display = 'none';
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                menuIcon.setAttribute('d', 'M6 18L18 6M6 6l12 12'); // X icon
+            } else {
+                mobileMenu.classList.add('hidden');
+                menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16'); // Hamburger icon
+            }
+        }
+
+        // Open Commissioner Modal (More Info)
+        function openCommissionerModal() {
+            openModal(commissionerModal);
+        }
+
+        // Close Commissioner Modal
+        function closeCommissionerModal() {
+            closeModal(commissionerModal);
+        }
+
+        // Open Apply Modal
+        function openApplyModal() {
+            // Set the job title in the modal header
+            const jobTitle = document.getElementById('job-title-display').textContent;
+            document.getElementById('modal-job-title').textContent = jobTitle;
+            openModal(applyModal);
+        }
+
+        // Close Apply Modal
+        function closeApplyModal() {
+            closeModal(applyModal);
+        }
+
+        // Open Success Modal
+        function openSuccessModal() {
+            openModal(successModal);
+        }
+
+        // Close Success Modal
+        function closeSuccessModal() {
+            closeModal(successModal);
+        }
+
+        // Handle Application Submission
+        function submitApplication(event) {
+            event.preventDefault();
+            // SIMULATION: Close the application modal and open the success modal
+            setTimeout(() => {
+                closeApplyModal();
+                openSuccessModal();
+            }, 500); // Small delay to simulate network latency
+        }
+
+        // Close modals when clicking outside of them
+        window.onclick = function(event) {
+            if (event.target === commissionerModal) {
+                closeCommissionerModal();
+            } else if (event.target === applyModal) {
+                closeApplyModal();
+            } else if (event.target === successModal) {
+                closeSuccessModal();
+            }
+        }
+    </script>
+</body>
+</html>
