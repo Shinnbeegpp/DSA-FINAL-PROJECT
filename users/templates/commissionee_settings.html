@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobShark - Candidate Profile Setting</title>
+    <title>JobShark - Commissionee Profile Setting</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -431,7 +431,6 @@
                 border-left: none;
                 border-bottom: 3px solid var(--primary-color);
             }
-        }
     </style>
 </head>
 <body>
@@ -461,7 +460,7 @@
                 </a>
                 <!-- User Profile -->
                 <div class="user-profile">
-                    <span class="user-name d-none d-md-block">Lorenz Batumbakal</span>
+                    <span class="user-name d-none d-md-block">{{ user.first_name }} {{ user.last_name }}</span>
                     <img src="images/cris.jpg" alt="Profile" class="user-avatar">
                 </div>
             </div>
@@ -476,31 +475,31 @@
                 <div class="sidebar-title">Commissionee Dashboard</div>
                 <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
                     <a class="nav-link" href="#" role="tab">
+                        <i class="fa-solid fa-user"></i> My Profile
+                    </a>
+                    <a class="nav-link" href="#" role="tab">
                         <i class="fa-solid fa-briefcase"></i> Applied Jobs
                     </a>
                     <a class="nav-link" href="#" role="tab">
-                        <i class="fa-regular fa-bookmark"></i> Favorite Jobs
+                        <i class="fa-solid fa-heart"></i> Favorite Jobs
                     </a>
                     <a class="nav-link active" href="#" role="tab">
-                        <i class="fa-solid fa-gear"></i> Account
+                        <i class="fa-solid fa-gear"></i> Manage Account
+                    </a>
+                    <a class="nav-link" href="#" role="tab"  class="logout-link" 
+                        data-bs-toggle="modal" data-bs-target="#logoutModal">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
                     </a>
                 </div>
-
-                <a href="#" class="logout-link">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
-                </a>
             </div>
 
             <!-- Main Content -->
             <div class="col-lg-9">
-                <h2 class="page-title">Setting</h2>
+                <h2 class="page-title">Profile Settings</h2>
 
                 <!-- Tabs -->
                 <ul class="nav custom-tabs">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">
-                            <i class="fa-regular fa-user me-2"></i> Profile
-                        </a>
                     </li>
                 </ul>
 
@@ -521,8 +520,12 @@
                         <!-- Full Name Input -->
                         <div class="col-md-8">
                             <div class="mb-4">
-                                <label for="fullName" class="form-label">Full name</label>
-                                <input type="text" class="form-control" id="fullName" placeholder="">
+                                <label for="firstname" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstname" placeholder="e.g Juan">
+                            </div>
+                            <div class="mb-4">
+                                <label for="lastname" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastname" placeholder="e.g Dela Cruz">
                             </div>
                             <!-- Save Button aligned to mimic design -->
                             <button class="btn btn-primary-custom text-white">Save Changes</button>
@@ -532,7 +535,7 @@
 
                 <!-- CV/Resume Section -->
                 <section class="mb-5">
-                    <h5 class="section-title">Your Curriculum Vitae/Resume</h5>
+                    <h5 class="section-title">Your Curriculum Vitae / Resume</h5>
                     <div class="row g-3">
                         <!-- Resume Card 1 -->
                         <div class="col-md-4">
@@ -589,7 +592,7 @@
                 <section class="mb-5">
                     <div class="row g-3">
                         <!-- Campus -->
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label class="form-label">Campus / Institution</label>
                             <select class="form-select" id="campusSelect" onchange="toggleInput('campusSelect')">
                                 <option selected disabled>Select Campus...</option>
@@ -635,8 +638,7 @@
                         <div class="col-md-6">
                             <label class="form-label">Date of Birth</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="dd/mm/yyyy">
-                                <span class="input-group-text"><i class="fa-regular fa-calendar"></i></span>
+                                <input type="date" class="form-control">
                             </div>
                         </div>
 
@@ -647,14 +649,6 @@
                                 <option selected disabled>Select...</option>
                                 <option>Male</option>
                                 <option>Female</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Marital Status</label>
-                            <select class="form-select">
-                                <option selected disabled>Select...</option>
-                                <option>Single</option>
-                                <option>Married</option>
                             </select>
                         </div>
 
@@ -706,7 +700,7 @@
                 <section class="mb-5">
                     <label class="form-label">Biography</label>
                     <div class="bio-editor-container">
-                        <textarea class="bio-textarea" placeholder="Write down your biography here. Let the employers know who you are..."></textarea>
+                        <textarea class="bio-textarea" placeholder="Write down your biography here. Let the commissioner know who you are..."></textarea>
                         <div class="editor-toolbar">
                             <i class="fa-solid fa-bold"></i>
                             <i class="fa-solid fa-italic"></i>
@@ -724,16 +718,16 @@
                             <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Social Link</label>
                             <input type="text" class="form-control">
                         </div>
-                        <div class="col-md-6"></div> 
-
-                        <div class="col-md-6">
-                            <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Phone</label>
-                            <input type="text" class="form-control">
-                        </div>
                         <div class="col-md-6">
                             <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Email Address</label>
                             <input type="email" class="form-control">
                         </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Contact Number</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        
                     </div>
                     <button class="btn btn-primary-custom text-white mt-4">Save Changes</button>
                 </section>
@@ -798,6 +792,38 @@
                     <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary-custom text-white">Add</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    <!-- === END MODAL === -->
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 text-center">
+                
+                <div class="modal-header border-0 p-0">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3 text-muted">
+                        <i class="fa-solid fa-arrow-right-from-bracket fa-3x"></i>
+                    </div>
+                    
+                    <h4 class="fw-bold mb-2">Log Out?</h4>
+                    <p class="text-muted">Are you sure you want to end your session?</p>
+                </div>
+
+                <div class="modal-footer border-0 justify-content-center gap-2">
+                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
+                    
+                    <form action="{% url 'logout' %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger px-4 text-white">Yes, Log Out</button>
+                    </form>
+                </div>
+
             </div>
         </div>
     </div>
