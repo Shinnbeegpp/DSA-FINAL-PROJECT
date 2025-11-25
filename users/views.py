@@ -142,3 +142,8 @@ def applied_jobs(request):
 @login_required    # <--- Ensures they must be logged in to see it
 def favorite_jobs(request):
     return render(request,'favorite_jobs.html')
+
+@never_cache       # <--- Prevents the "Back Button" issue
+@login_required    # <--- Ensures they must be logged in to see it
+def view_details(request):
+    return render(request,'view_details.html')

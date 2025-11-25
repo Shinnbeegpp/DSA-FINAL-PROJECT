@@ -1,2 +1,3 @@
 .env
 /jobshark/__pycache__
+*.pyc

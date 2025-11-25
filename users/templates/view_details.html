@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -151,9 +153,9 @@
             
             <!-- Mobile Menu Dropdown -->
             <div id="mobileMenu" class="hidden absolute top-full left-0 right-0 bg-white shadow-md border-t border-gray-200 py-2">
-                <!-- DJANGO PLACEHOLDER: {% url 'find_job_page' %} -->
+                <!-- DJANGO PLACEHOLDER: % url 'find_job_page' % -->
                 <a href="#" class="block px-4 py-2 text-dark-blue-text hover:bg-gray-50">Find Job</a>
-                <!-- DJANGO PLACEHOLDER: {% url 'dashboard_page' %} -->
+                <!-- DJANGO PLACEHOLDER: % url 'dashboard_page' % -->
                 <a href="#" class="block px-4 py-2 text-dark-blue-text hover:bg-gray-50">Dashboard</a>
             </div>
         </nav>
