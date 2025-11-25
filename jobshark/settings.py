@@ -145,3 +145,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 print("LOADED HOST =", os.environ.get("AIVEN_HOST"))
+
+LOGIN_URL = 'sign_in'
