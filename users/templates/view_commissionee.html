@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -553,7 +554,7 @@
                     
                     <div class="user-profile">
                         <span class="user-name d-none d-md-block">Esther Howard</span>
-                        <img src="https://i.pravatar.cc/150?img=12" alt="Profile" class="user-avatar">
+                        <img src={% static "images/cris.jpg" %} alt="Profile" class="user-avatar">
                     </div>
                 </div>
             </div>
@@ -622,7 +623,7 @@
                         <!-- Card 1 - Added data-bs-toggle to open modal -->
                         <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
                             <div class="app-header">
-                                <img src="https://i.pravatar.cc/150?img=32" alt="User" class="app-avatar">
+                                <img src={% static "images/cris.jpg" %} alt="User" class="app-avatar">
                                 <div>
                                     <h5 class="app-name">Jane Cooper</h5>
                                     <span class="app-campus">BatStateU - Alangilan</span>
@@ -632,35 +633,31 @@
                                 <li>Experience Level: Beginner</li>
                                 <li>Education: Bachelor's Degree</li>
                                 <li>Student Classification: Regular</li>
+                                <li id="date-applied-display">Date Applied: Loading...</li>
                             </ul>
-                            <a href="#" class="download-link">
-                                <i class="fa-solid fa-download"></i> Download Curriculum Vitae / Resume
-                            </a>
                         </div>
 
                         <!-- Card 2 -->
                         <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
                             <div class="app-header">
-                                <img src="https://i.pravatar.cc/150?img=11" alt="User" class="app-avatar">
+                                <img src={% static "images/cris.jpg" %} alt="User" class="app-avatar">
                                 <div>
                                     <h5 class="app-name">Wade Warren</h5>
-                                    <span class="app-campus">LPU - Batangas</span>
+                                    <span class="app-campus">BatStateU - Alangilan</span>
                                 </div>
                             </div>
                             <ul class="app-details-list">
                                 <li>Experience Level: Academic Projects</li>
                                 <li>Education: Bachelor's Degree</li>
                                 <li>Student Classification: Graduating</li>
+                                <li id="date-applied-display">Date Applied: Loading...</li>
                             </ul>
-                            <a href="#" class="download-link">
-                                <i class="fa-solid fa-download"></i> Download Curriculum Vitae / Resume
-                            </a>
                         </div>
 
                         <!-- Card 3 -->
                         <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
                             <div class="app-header">
-                                <img src="https://i.pravatar.cc/150?img=59" alt="User" class="app-avatar">
+                                <img src={% static "images/cris.jpg" %} alt="User" class="app-avatar">
                                 <div>
                                     <h5 class="app-name">Esther Howard</h5>
                                     <span class="app-campus">BatStateU - Pablo Borbon</span>
@@ -670,54 +667,48 @@
                                 <li>Experience Level: Freelance</li>
                                 <li>Education: Bachelor's Degree</li>
                                 <li>Student Classification: Irregular</li>
+                                <li id="date-applied-display">Date Applied: Loading...</li>
                             </ul>
-                            <a href="#" class="download-link">
-                                <i class="fa-solid fa-download"></i> Download Curriculum Vitae / Resume
-                            </a>
                         </div>
 
                         <!-- Card 4 -->
                         <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
                             <div class="app-header">
-                                <img src="https://i.pravatar.cc/150?img=68" alt="User" class="app-avatar">
+                                <img src={% static "images/cris.jpg" %} alt="User" class="app-avatar">
                                 <div>
                                     <h5 class="app-name">Cameron Williamson</h5>
-                                    <span class="app-campus">De La Salle Lipa</span>
+                                    <span class="app-campus">BatStateU - Alangilan</span>
                                 </div>
                             </div>
                             <ul class="app-details-list">
                                 <li>Experience Level: Beginner</li>
                                 <li>Education: Senior High School</li>
                                 <li>Student Classification: Regular</li>
+                                <li id="date-applied-display">Date Applied: Loading...</li>
                             </ul>
-                            <a href="#" class="download-link">
-                                <i class="fa-solid fa-download"></i> Download Curriculum Vitae / Resume
-                            </a>
                         </div>
 
                         <!-- Card 5 -->
                         <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
                             <div class="app-header">
-                                <img src="https://i.pravatar.cc/150?img=44" alt="User" class="app-avatar">
+                                <img src={% static "images/cris.jpg" %} alt="User" class="app-avatar">
                                 <div>
                                     <h5 class="app-name">Brooklyn Simmons</h5>
-                                    <span class="app-campus">University of Batangas</span>
+                                    <span class="app-campus">BatStateU - Alangilan</span>
                                 </div>
                             </div>
                             <ul class="app-details-list">
                                 <li>Experience Level: Internship</li>
                                 <li>Education: Bachelor's Degree</li>
                                 <li>Student Classification: Working</li>
+                                <li id="date-applied-display">Date Applied: Loading...</li>
                             </ul>
-                            <a href="#" class="download-link">
-                                <i class="fa-solid fa-download"></i> Download Curriculum Vitae / Resume
-                            </a>
                         </div>
 
                         <!-- Card 6 -->
                         <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
                             <div class="app-header">
-                                <img src="https://i.pravatar.cc/150?img=12" alt="User" class="app-avatar">
+                                <img src={% static "images/cris.jpg" %} alt="User" class="app-avatar">
                                 <div>
                                     <h5 class="app-name">Leslie Alexander</h5>
                                     <span class="app-campus">BatStateU - Nasugbu</span>
@@ -727,10 +718,8 @@
                                 <li>Experience Level: Academic Projects</li>
                                 <li>Education: Bachelor's Degree</li>
                                 <li>Student Classification: Regular</li>
+                                <li id="date-applied-display">Date Applied: Loading...</li>
                             </ul>
-                            <a href="#" class="download-link">
-                                <i class="fa-solid fa-download"></i> Download Curriculum Vitae / Resume
-                            </a>
                         </div>
 
                     </div>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobShark - Candidate Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- COPIED STYLES FROM YOUR SETTINGS PAGE --- */
+        :root {
+            --primary-color: #6930C3; 
+            --primary-hover: #5626a3;
+            --secondary-bg: #F5F6FA;
+            --text-color: #111827;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+            --sidebar-width: 280px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            background: url('images/bgshark.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        }
+
+        /* Top Utility Bar (Navbar Style) */
+        #navbar-header {
+            background-color: #6930C3;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+        #navbar-header .nav-link {
+            color: white;
+            font-weight: 500;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+        #navbar-header .nav-link:hover,
+        #navbar-header .nav-link.active {
+            color: #e0e0e0;
+        }
+
+        /* Main Header */
+        .main-header {
+            padding: 1rem 0;
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 20;
+        }
+        .navbar-brand img {
+            max-height: 50px;
+        }
+        
+        /* User Profile */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-avatar {
+            width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+        }
+        .user-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Layout */
+        .dashboard-container {
+            margin-top: 0;
+            padding-bottom: 4rem;
+        }
+
+        /* Sidebar Styling */
+        .sidebar-container {
+            background: #fff;
+            padding: 2rem 1rem;
+            border-radius: 0 0 12px 12px; 
+            min-height: calc(100vh - 130px);
+            height: 100%;
+            border-right: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .sidebar-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            letter-spacing: 0.5px;
+        }
+        .nav-pills .nav-link {
+            color: var(--text-muted);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .nav-pills .nav-link:hover {
+            color: var(--primary-color);
+            background-color: rgba(123, 97, 255, 0.05);
+        }
+        .nav-pills .nav-link.active {
+            background-color: rgba(123, 97, 255, 0.1);
+            color: var(--primary-color);
+            border-left: 3px solid var(--primary-color);
+        }
+        .nav-pills .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* UPDATED: Pushed logout to bottom of the extended sidebar */
+        .logout-link {
+            margin-top: auto; 
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 1.5rem;
+            font-weight: 500;
+            padding-bottom: 1rem;
+            padding-top: 2rem;
+        }
+        .logout-link:hover { color: #dc3545; }
+
+        /* Content Area */
+        .col-content {
+            padding-top: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            color: #1e293b;
+        }
+
+        /* Job List Header & Rows: Adjusting for new columns (Title + Category/Rate, Date Applied, Status, Details) */
+        .job-header-row {
+            /* 4 columns: Job Info (4fr) | Date Applied (1.5fr) | Status (2fr) | Details Button (2fr) */
+            display: grid;
+            grid-template-columns: 4fr 1.5fr 2fr 2fr; 
+            padding: 0.75rem 1.5rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .job-row {
+            display: grid;
+            grid-template-columns: 4fr 1.5fr 2fr 2fr;
+            padding: 1rem 1.5rem;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .job-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+        .job-meta {
+            font-size: 0.8rem;
+            color: #6B7280;
+        }
+
+        /* Pills - NEW STATUS COLORS FOR COMMISSIONEE */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        /* New Status Colors */
+        .status-active { 
+            color: #10B981; /* Green: Client Hired Commissionee */
+        } 
+        .status-done { 
+            color: #F97316; /* Orange: Application Complete (Hired/Rejected) */
+        }
+        .status-expired { 
+            color: #EF4444; /* Red: Client deleted job OR Application Rejected */
+        }
+        /* New Status Colors */
+        
+        /* Active Card Pop-out Effect */
+        .job-row.active-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border-bottom: none;
+            margin: 10px -10px;
+            padding: 1.25rem 2rem;
+            z-index: 10;
+            transform: scale(1.02);
+        }
+
+        .btn-view {
+            background: #ede9fe;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: none;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        .btn-view:hover { background: #ddd6fe; }
+
+        .active-card .btn-view {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 6px rgba(105, 48, 195, 0.3);
+        }
+
+        /* Footer */
+        .main-footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #9CA3AF;
+            font-size: 0.85rem;
+            border-top: 1px solid #F3F4F6;
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .job-header-row { display: none; }
+            .job-row { 
+                grid-template-columns: 1fr; 
+                gap: 10px; 
+                background: rgba(255,255,255,0.8); 
+                border-radius: 8px; 
+                margin-bottom: 10px; 
+            }
+        }
+
+        /* Clean up old styles not needed for commissionee view */
+        .job-header-row > div:first-child, .job-header-row > div:last-child {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg d-none d-lg-block" id="navbar-header">
+        <div class="container">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Find Job</a> 
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a> 
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="images/logo_name.png" alt="JobShark Logo" 
+                    onerror="this.src='https://placehold.co/150x40/6930C3/ffffff?text=JobShark&font=inter'; this.onerror=null;">
+                </a>
+
+                <div class="d-flex align-items-center gap-4">
+                    <div class="user-profile">
+                        <span class="user-name d-none d-md-block">Esther Howard</span>
+                        <img src="images/cris.jpg" alt="Profile" class="user-avatar">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container dashboard-container">
+        <div class="row">
+            
+            <div class="col-lg-3 d-flex flex-column">
+                <div class="sidebar-container d-flex flex-column flex-grow-1">
+                    <div class="sidebar-title">CANDIDATE DASHBOARD</div>
+                    <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link active" href="#" role="tab">
+                            <i class="fa-solid fa-briefcase"></i> Applied Jobs
+                        </a>
+                        <a class="nav-link" href="#" role="tab">
+                            <i class="fa-regular fa-heart"></i> Favorite Jobs
+                        </a>
+                        <a class="nav-link" href="#" role="tab">
+                            <i class="fa-solid fa-gear"></i> Account
+                        </a>
+                    </div>
+                        
+                    <a href="#" class="logout-link">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-9 col-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="page-title">Applied Jobs <span style="color: #94a3b8; font-weight: 400; font-size: 1.2rem;">(7)</span></h2>
+                    
+                    <div class="d-flex align-items-center gap-2">
+                        <span style="font-size: 0.9rem; font-weight: 500; color: #475569;">Application Status</span>
+                        <select class="form-select form-select-sm" style="width: auto;">
+                            <option>All Applications</option>
+                            <option>Active</option>
+                            <option>Done</option>
+                            <option>Expired</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="job-list-wrapper">
+                    <div class="job-header-row">
+                        <div>Job & Rate</div>
+                        <div>Date Applied</div>
+                        <div>Status</div>
+                        <div class="text-end">Details</div>
+                    </div>
+
+                    <div class="job-row">
+                        <div style="opacity: 0.6;">
+                            <div class="job-title">Thesis Help: Chapter 2 Research</div>
+                            <div class="job-meta">Academic Assistance &bull; ₱1,500</div> 
+                        </div>
+                        <div class="text-muted small">
+                            05/20/2025
+                        </div>
+                        <div>
+                            <span class="status-pill status-expired"><i class="fa-regular fa-circle-xmark"></i> EXPIRED</span>
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center gap-2">
+                            <button class="btn-view">View Details</button>
+                        </div>
+                    </div>
+
+                    <div class="job-row active-card">
+                        <div>
+                            <div class="job-title">Logo Design for Milk Tea Shop</div>
+                            <div class="job-meta">Graphic Design &bull; ₱800</div> 
+                        </div>
+                        <div class="text-dark small fw-bold">
+                            05/15/2025
+                        </div>
+                        <div>
+                            <span class="status-pill status-active"><i class="fa-solid fa-check"></i> ACTIVE</span>
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center gap-2">
+                            <button class="btn-view">View Details</button>
+                        </div>
+                    </div>
+
+                    <div class="job-row">
+                        <div>
+                            <div class="job-title">Python Debugging: Inventory System</div>
+                            <div class="job-meta">Programming &bull; ₱2,000</div> 
+                        </div>
+                        <div class="text-muted small">
+                            05/10/2025
+                        </div>
+                        <div>
+                            <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap"></i> DONE</span>
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center gap-2">
+                            <button class="btn-view">View Details</button>
+                        </div>
+                    </div>
+
+                    <div class="job-row">
+                        <div style="opacity: 0.6;">
+                            <div class="job-title">Video Edit for Vlog (5 mins)</div>
+                            <div class="job-meta">Video Editing &bull; ₱1,200</div> 
+                        </div>
+                        <div class="text-muted small" style="opacity: 0.6;">
+                            04/28/2025
+                        </div>
+                        <div>
+                             <span class="status-pill status-expired"><i class="fa-solid fa-trash"></i> EXPIRED</span>
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center gap-2">
+                            <button class="btn-view">View Details</button>
+                        </div>
+                    </div>
+
+                    <div class="job-row">
+                        <div>
+                            <div class="job-title">Essay: Economic Impact of AI</div>
+                            <div class="job-meta">Academic Assistance &bull; ₱500</div> 
+                        </div>
+                        <div class="text-muted small">
+                            04/15/2025
+                        </div>
+                        <div>
+                            <span class="status-pill status-active"><i class="fa-solid fa-check"></i> ACTIVE</span>
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center gap-2 position-relative">
+                            <button class="btn-view">View Details</button>
+                        </div>
+                    </div>
+
+                    <div class="job-row">
+                        <div>
+                            <div class="job-title">AutoCAD Floor Plan for 2-Storey House</div>
+                            <div class="job-meta">Engineering & CAD &bull; ₱3,000</div> 
+                        </div>
+                        <div class="text-muted small">
+                            04/01/2025
+                        </div>
+                        <div>
+                            <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap"></i> DONE</span>
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center gap-2">
+                            <button class="btn-view">View Details</button>
+                        </div>
+                    </div>
+
+                    <div class="job-row">
+                        <div style="opacity: 0.6;">
+                            <div class="job-title">Statistical Analysis (SPSS) for Psych Thesis</div>
+                            <div class="job-meta">Academic Assistance &bull; ₱2,500</div> 
+                        </div>
+                        <div class="text-muted small" style="opacity: 0.6;">
+                            03/25/2025
+                        </div>
+                        <div>
+                            <span class="status-pill status-expired"><i class="fa-regular fa-circle-xmark"></i> EXPIRED</span>
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center gap-2">
+                            <button class="btn-view">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center mt-4 gap-2">
+                    <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;"><i class="fa-solid fa-arrow-left"></i></button>
+                    <button class="btn btn-sm rounded-circle text-white fw-bold shadow-sm" style="width: 32px; height: 32px; background-color: var(--primary-color);">01</button>
+                    <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;">02</button>
+                    <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;">03</button>
+                    <button class="btn btn-sm rounded-circle fw-bold" style="width: 32px; height: 32px; color: var(--primary-color); background: #f3f0ff;">04</button>
+                    <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;">05</button>
+                    <button class="btn btn-sm rounded-circle fw-bold" style="width: 32px; height: 32px; color: var(--primary-color); background: #f3f0ff;"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+
+            </div>
+        </div>
+
+        <footer class="main-footer">
+            <p class="mb-0">&copy; 2024 JobShark - Job Portal. All rights Reserved</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
