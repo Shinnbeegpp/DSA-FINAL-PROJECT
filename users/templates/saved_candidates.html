@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +27,7 @@
             font-family: 'Inter', sans-serif;
             color: var(--text-color);
             /* Ensure you have this image in an 'images' folder next to this file */
-            background: url('images/bgshark.png'), linear-gradient(135deg, #a5f3fc 0%, #c4b5fd 50%, #bae6fd 100%);
+            background: url({% static 'images/bgshark.png' %}), linear-gradient(135deg, #a5f3fc 0%, #c4b5fd 50%, #bae6fd 100%);
             background-size: 600px auto, cover; 
             background-position: center top, center;
             background-attachment: fixed, fixed;
@@ -380,7 +381,7 @@
                     <a href="#" class="btn-outline-primary-custom">Post A Job</a>
                     <div class="user-profile">
                         <span class="user-name d-none d-md-block">Esther Howard</span>
-                        <img src="https://i.pravatar.cc/150?img=12" alt="Profile" class="user-avatar">
+                        <img src={% static "images/cris.jpg" %} alt="Profile" class="user-avatar">
                     </div>
                 </div>
             </div>
