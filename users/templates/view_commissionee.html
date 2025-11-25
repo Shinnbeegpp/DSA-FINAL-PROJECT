@@ -360,6 +360,8 @@
             font-size: 0.9rem;
         }
         .btn-icon-square {
+            margin-top: 15px;
+            margin-right: 12px;
             width: 40px;
             height: 40px;
             display: flex;
@@ -374,6 +376,8 @@
         .btn-icon-square:hover { background-color: #e5e7eb; }
         
         .btn-send-mail {
+            margin-top: 15px;
+            margin-right: 50px;
             background-color: var(--primary-color);
             color: white;
             border: none;
@@ -383,6 +387,8 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            text-decoration: none;     /* removes white underline */
+            outline: none;             /* removes focus outline */
         }
         .btn-send-mail:hover { background-color: var(--primary-hover); color: white;}
 
@@ -490,7 +496,7 @@
         .btn-close-modal {
             position: absolute;
             top: 20px;
-            right: 20px;
+            right: 25px;
             background: #F3F4F6;
             border-radius: 50%;
             width: 32px;
@@ -504,6 +510,10 @@
             z-index: 10;
         }
         .btn-close-modal:hover { background: #e5e7eb; }
+
+        .modal-content {
+    position: relative;
+}
 
         body {
             /* Full-Screen Coverage (might crop the shark but guarantees fill) */
@@ -550,8 +560,6 @@
                 </a>
 
                 <div class="d-flex align-items-center gap-4">
-                    <a href="#" class="btn-outline-primary-custom">Post A Job</a>
-                    
                     <div class="user-profile">
                         <span class="user-name d-none d-md-block">Esther Howard</span>
                         <img src={% static "images/cris.jpg" %} alt="Profile" class="user-avatar">
@@ -568,13 +576,14 @@
             <div class="col-lg-3 d-flex flex-column">
                 <div class="sidebar-container d-flex flex-column flex-grow-1">
                     <div class="sidebar-title">COMMISSIONER DASHBOARD</div>
-                    <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-                        <a class="nav-link" href="#" role="tab"><i class="fa-solid fa-circle-plus"></i> Post a Job</a>
-                        <a class="nav-link active" href="#" role="tab"><i class="fa-solid fa-briefcase"></i> My Jobs</a>
-                        <a class="nav-link" href="#" role="tab"><i class="fa-regular fa-bookmark"></i> Saved Candidate</a>
-                        <a class="nav-link" href="#" role="tab"><i class="fa-solid fa-gear"></i> Profile</a>
+                    <div class="nav flex-column nav-pills">
+                        <a class="nav-link" href="#" role="tab"><i class="fa-solid fa-user"></i> My Profile</a>
+                        <a class="nav-link" href="#"><i class="fa-solid fa-circle-plus"></i> Post a Job</a>
+                        <a class="nav-link active" href="#"><i class="fa-solid fa-briefcase"></i> My Jobs</a>
+                        <a class="nav-link" href="#"><i class="fa-solid fa-bookmark"></i> Saved Candidates</a>
+                        <a class="nav-link" href="#"><i class="fa-solid fa-gear"></i> Profile</a>
+                        <a class="nav-link" href="#" role="tab" class="logout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out</a>
                     </div>
-                    <a href="#" class="logout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out</a>
                 </div>
             </div>
 
@@ -756,11 +765,12 @@
                 </div>
                 <div class="d-flex gap-3">
                     <button class="btn-icon-square">
-                        <i class="fa-regular fa-bookmark"></i>
+                        <i class="fa-regular fa-bookmark icon-bookmark"></i>
                     </button>
-                    <button class="btn-send-mail">
+                    <!-- MAILTO LINK -->
+                    <a href="mailto:esther.howard@gmail.com" class="btn-send-mail">
                         <i class="fa-regular fa-envelope"></i> Send Mail
-                    </button>
+                    </a>
                 </div>
             </div>
 
@@ -795,39 +805,33 @@
                     
                     <!-- Stats Grid -->
                     <div class="info-grid-box">
-                        <div class="row">
-                            <div class="col-6 info-item">
-                                <div class="info-icon"><i class="fa-solid fa-cake-candles"></i></div>
-                                <span class="info-label">DATE OF BIRTH</span>
-                                <div class="info-value">14 June, 2021</div>
-                            </div>
-                            <div class="col-6 info-item">
-                                <div class="info-icon"><i class="fa-regular fa-map"></i></div>
-                                <span class="info-label">Student Classification</span>
-                                <div class="info-value">Regular Student (Full Load)</div>
-                            </div>
-                            <div class="col-6 info-item">
-                                <div class="info-icon"><i class="fa-solid fa-ring"></i></div>
-                                <span class="info-label">MARITAL STATUS</span>
-                                <div class="info-value">Single</div>
-                            </div>
-                            <div class="col-6 info-item">
-                                <div class="info-icon"><i class="fa-regular fa-user"></i></div>
-                                <span class="info-label">GENDER</span>
-                                <div class="info-value">Male</div>
-                            </div>
-                            <div class="col-6 info-item">
-                                <div class="info-icon"><i class="fa-solid fa-layer-group"></i></div>
-                                <span class="info-label">EXPERIENCE</span>
-                                <div class="info-value">Beginner (No paid experience)</div>
-                            </div>
-                            <div class="col-6 info-item">
-                                <div class="info-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                                <span class="info-label">EDUCATION</span>
-                                <div class="info-value">1st Year</div>
-                            </div>
-                        </div>
+
+                    <div class="info-item">
+                        <span class="info-label">DATE OF BIRTH</span>
+                        <div class="info-value">14 June, 2021</div>
                     </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Student Classification</span>
+                        <div class="info-value">Regular Student (Full Load)</div>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">GENDER</span>
+                        <div class="info-value">Male</div>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">EXPERIENCE</span>
+                        <div class="info-value">Beginner (No paid experience)</div>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">EDUCATION</span>
+                        <div class="info-value">1st Year</div>
+                    </div>
+
+                </div>
 
                     <!-- Download Resume -->
                     <div class="info-grid-box">
@@ -851,21 +855,18 @@
                         <h6 class="section-header-line mb-3">Contact Information</h6>
                         <ul class="contact-list">
                             <li class="contact-li">
-                                <i class="fa-solid fa-globe contact-icon"></i>
                                 <div>
                                     <span class="contact-label">SOCIAL LINK</span>
                                     <div class="contact-value">www.estherhoward.com</div>
                                 </div>
                             </li>
                             <li class="contact-li">
-                                <i class="fa-solid fa-phone contact-icon"></i>
                                 <div>
-                                    <span class="contact-label">PHONE</span>
+                                    <span class="contact-label">CONTACT NUMBER</span>
                                     <div class="contact-value">+1-202-555-0141</div>
                                 </div>
                             </li>
                             <li class="contact-li">
-                                <i class="fa-regular fa-envelope contact-icon"></i>
                                 <div>
                                     <span class="contact-label">EMAIL ADDRESS</span>
                                     <div class="contact-value">esther.howard@gmail.com</div>
@@ -884,5 +885,16 @@
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".icon-bookmark").forEach(icon => {
+                icon.addEventListener("click", () => {
+                    icon.classList.toggle("fa-solid");
+                    icon.classList.toggle("fa-regular");
+                });
+            });
+        });
+    </script>
 </body>
 </html>

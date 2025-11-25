@@ -271,7 +271,7 @@
             color: var(--text-muted);
         }
 
-        .btn-bookmark {
+        .btn-heart {
             font-size: 1.5rem;
             color: var(--text-dark);
             background: none;
@@ -281,22 +281,22 @@
         }
 
         /* Hide the filled icon by default */
-        .btn-bookmark .bi-bookmark-fill {
+        .btn-heart .bi-heart-fill {
             display: none;
         }
 
         /* Show the filled icon and hide the outlined icon when 'saved' class is present */
-        .btn-bookmark.saved .bi-bookmark {
+        .btn-heart.saved .bi-heart {
             display: none;
         }
         
-        .btn-bookmark.saved .bi-bookmark-fill {
+        .btn-heart.saved .bi-heart-fill {
             display: inline-block; /* Show the filled icon */
             color: var(--brand-purple); /* Make it purple/filled color */
         }
         
         /* Ensure the hover effect still works on the outline icon */
-        .btn-bookmark:hover {
+        .btn-heart:hover {
             color: var(--brand-purple);
         }
 
@@ -482,9 +482,9 @@
                             </p>
                         </div>
                         <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
-                            <button class="btn btn-bookmark me-4" onclick="toggleBookmark(this)">
-                                <i class="bi bi-bookmark"></i>
-                                <i class="bi bi-bookmark-fill"></i>
+                            <button class="btn btn-heart me-4" onclick="toggleheart(this)">
+                                <i class="bi bi-heart"></i>
+                                <i class="bi bi-heart-fill"></i>
                             </button>
                             <a href="#" class="btn-apply-now">
                                 Apply Now <i class="bi bi-arrow-right"></i>
@@ -505,9 +505,9 @@
                             </p>
                         </div>
                         <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
-                            <button class="btn btn-bookmark me-4 saved" onclick="toggleBookmark(this)">
-                                <i class="bi bi-bookmark"></i>
-                                <i class="bi bi-bookmark-fill"></i>
+                            <button class="btn btn-heart me-4 saved" onclick="toggleheart(this)">
+                                <i class="bi bi-heart"></i>
+                                <i class="bi bi-heart-fill"></i>
                             </button>
                             <a href="#" class="btn-apply-now">
                                 Apply Now <i class="bi bi-arrow-right"></i>
@@ -528,9 +528,9 @@
                             </p>
                         </div>
                         <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
-                            <button class="btn btn-bookmark me-4" onclick="toggleBookmark(this)">
-                                <i class="bi bi-bookmark"></i>
-                                <i class="bi bi-bookmark-fill"></i>
+                            <button class="btn btn-heart me-4" onclick="toggleheart(this)">
+                                <i class="bi bi-heart"></i>
+                                <i class="bi bi-heart-fill"></i>
                             </button>
                             <a href="#" class="btn-apply-now">
                                 Apply Now <i class="bi bi-arrow-right"></i>
@@ -551,9 +551,9 @@
                             </p>
                         </div>
                         <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
-                            <button class="btn btn-bookmark me-4" onclick="toggleBookmark(this)">
-                                <i class="bi bi-bookmark"></i>
-                                <i class="bi bi-bookmark-fill"></i>
+                            <button class="btn btn-heart me-4" onclick="toggleheart(this)">
+                                <i class="bi bi-heart"></i>
+                                <i class="bi bi-heart-fill"></i>
                             </button>
                             <a href="#" class="btn-apply-now">
                                 Apply Now <i class="bi bi-arrow-right"></i>
@@ -574,9 +574,9 @@
                             </p>
                         </div>
                         <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
-                            <button class="btn btn-bookmark me-4" onclick="toggleBookmark(this)">
-                                <i class="bi bi-bookmark"></i>
-                                <i class="bi bi-bookmark-fill"></i>
+                            <button class="btn btn-heart me-4" onclick="toggleheart(this)">
+                                <i class="bi bi-heart"></i>
+                                <i class="bi bi-heart-fill"></i>
                             </button>
                             <a href="#" class="btn-apply-now">
                                 Apply Now <i class="bi bi-arrow-right"></i>
@@ -762,7 +762,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>
-        function toggleBookmark(buttonElement) {
+        function toggleheart(buttonElement) {
             // Toggles the 'saved' class on the button
             buttonElement.classList.toggle('saved');
             
