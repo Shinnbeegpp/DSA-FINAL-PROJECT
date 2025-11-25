@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from .models import UserProfile
+from django.contrib.auth.decorators import login_required
+
+from django.views.decorators.cache import never_cache
 
 # Create your views here.
 
@@ -100,20 +103,32 @@ def sign_in(request):
 
     return render(request,'signin.html')
 
+@never_cache       # <--- Prevents the "Back Button" issue
+@login_required    # <--- Ensures they must be logged in to see it
 def success(request):
     return render(request,'success.html')
 
+@never_cache       # <--- Prevents the "Back Button" issue
+@login_required    # <--- Ensures they must be logged in to see it
 def find_job_candidate(request):
     return render(request,'find_job_candidate.html')
-    
+
+@never_cache       # <--- Prevents the "Back Button" issue
+@login_required    # <--- Ensures they must be logged in to see it
 def myjobs(request):
     return render(request,'myjobs.html')
 
+@never_cache       # <--- Prevents the "Back Button" issue
+@login_required    # <--- Ensures they must be logged in to see it
 def commissionee_settings(request):
     return render(request,'commissionee_settings.html')
 
+@never_cache       # <--- Prevents the "Back Button" issue
+@login_required    # <--- Ensures they must be logged in to see it
 def commissioner_settings(request):
     return render(request,'commissioner_settings.html')
 
+@never_cache       # <--- Prevents the "Back Button" issue
+@login_required    # <--- Ensures they must be logged in to see it
 def post_job(request):
     return render(request,'post_job.html')

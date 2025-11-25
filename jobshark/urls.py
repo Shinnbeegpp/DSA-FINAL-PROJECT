@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+# 1. ADD THIS IMPORT for the built-in logout functionality
+from django.contrib.auth import views as auth_views
 
 from users.views import homepage, sign_in, find_job_notsigned
 from users.views import registration, success, myjobs, find_job_candidate
@@ -33,5 +35,7 @@ urlpatterns = [
     path('find_job_candidate/', find_job_candidate, name="find_job_candidate"),
     path('settings/commissionee/', commissionee_settings, name="commissionee_settings"),
     path('settings/commissioner/', commissioner_settings, name="commissioner_settings"),
-    path('post_job/', post_job, name="post_job")
+    path('post_job/', post_job, name="post_job"),
+    
+    path('logout/', auth_views.LogoutView.as_view(next_page="homepage"), name='logout'),
 ]
