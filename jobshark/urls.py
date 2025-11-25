@@ -23,7 +23,7 @@ from django.contrib.auth import views as auth_views
 from users.views import homepage, sign_in, find_job_notsigned
 from users.views import registration, success, myjobs, find_job_candidate
 from users.views import commissionee_settings, commissioner_settings, post_job
-from users.views import applied_jobs
+from users.views import applied_jobs, favorite_jobs
 
 urlpatterns = [
     path('', homepage, name="homepage"),
@@ -37,7 +37,7 @@ urlpatterns = [
     path('settings/commissionee/', commissionee_settings, name="commissionee_settings"),
     path('settings/commissioner/', commissioner_settings, name="commissioner_settings"),
     path('post_job/', post_job, name="post_job"),
-    path('applied_jobs/', applied_jobs, name="applied_jobs"),
-    
-    path('logout/', auth_views.LogoutView.as_view(next_page="homepage"), name='logout'),
+    path('applied_jobs', applied_jobs, name="applied_jobs"),
+    path('favorite_jobs', favorite_jobs, name="favorite_jobs"),
+    path('logout/', auth_views.LogoutView.as_view(next_page="homepage"), name='logout')
 ]
