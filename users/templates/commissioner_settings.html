@@ -356,8 +356,15 @@
 
                 <div class="d-flex align-items-center gap-4">
                     <div class="user-profile">
-                        <span class="user-name d-none d-md-block">Esther Howard</span>
-                        <img src={% static "images/cris.jpg" %} alt="Profile" class="user-avatar">
+                        <span class="user-name d-none d-md-block">
+                            {{ user.first_name|default:user.username }}
+                        </span>
+
+                        {% if user.userprofile.profile_picture %}
+                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar">
+                        {% else %}
+                            <img src="{% static 'images/default.jpg' %}" alt="Profile" class="user-avatar">
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -395,198 +402,243 @@
 
             <!-- Main Content -->
             <div class="col-lg-9">
-                <h2 class="page-title">Setting</h2>
+                <form method="POST" enctype="multipart/form-data"> 
+                    {% csrf_token %}
+                    <h2 class="page-title">Setting</h2>
 
-                <!-- Tabs -->
-                <ul class="nav custom-tabs">
-                    <li class="nav-item">
-                        </a>
-                    </li>
-                </ul>
+                    <!-- Tabs -->
+                    <ul class="nav custom-tabs">
+                        <li class="nav-item">
+                            </a>
+                        </li>
+                    </ul>
 
-                <!-- Basic Information -->
-                <section class="mb-5">
-                    <h5 class="section-title">Basic Information</h5>
-                    <div class="row g-4">
-                        <!-- Photo Upload -->
-                        <div class="col-md-4">
-                            <label class="form-label">Profile Picture</label>
-                            <!-- ADDED DATA TOGGLE FOR MODAL HERE -->
-                            <div class="profile-upload-box" data-bs-toggle="modal" data-bs-target="#addPhotoModal">
-                                <div class="upload-icon-circle"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-                                <div class="fw-bold mb-1">Browse photo <span class="fw-normal text-muted">or drop here</span></div>
-                                <div class="upload-subtext mt-2">A photo larger than 400 pixels work best. Max photo size 5 MB.</div>
-                            </div>
-                        </div>
-                        <!-- Full Name Input -->
-                        <div class="col-md-8">
-                            <div class="mb-4">
-                                <label for="firstname" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="firstname" placeholder="e.g Juan">
-                            </div>
-                            <div class="mb-4">
-                                <label for="lastname" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="lastname" placeholder="e.g Dela Cruz">
-                            </div>
-                            <!-- Save Button aligned to mimic design -->
-                            <button class="btn btn-primary-custom">Save Changes</button>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Additional Fields -->
-                <section class="mb-5">
-                    <div class="row g-3">
-                        <!-- Campus -->
-                        <div class="col-md-6">
-                            <label class="form-label">Campus / Institution</label>
-                            <select class="form-select" id="campusSelect" onchange="toggleInput('campusSelect')">
-                                <option selected disabled>Select Campus...</option>
+                    <!-- Basic Information -->
+                    <section class="mb-5">
+                        <h5 class="section-title">Basic Information</h5>
+                        <div class="row g-4">
+                            <!-- Photo Upload -->
+                            <div class="col-md-4">
+                                <label class="form-label">Profile Picture</label>
                                 
-                                <!-- BatStateU Campuses -->
-                                <option value="BatStateU - Pablo Borbon">BatStateU - Pablo Borbon (Main I)</option>
-                                <option value="BatStateU - Alangilan">BatStateU - Alangilan (Main II)</option>
-                                <option value="BatStateU - Nasugbu">BatStateU - ARASOF Nasugbu</option>
-                                <option value="BatStateU - Lipa">BatStateU - Lipa</option>
-                                <option value="BatStateU - Malvar">BatStateU - Malvar (JPLPC)</option>
-                                <option value="BatStateU - Balayan">BatStateU - Balayan</option>
-                                <option value="BatStateU - Lemery">BatStateU - Lemery</option>
-                                <option value="BatStateU - Rosario">BatStateU - Rosario</option>
-                                <option value="BatStateU - San Juan">BatStateU - San Juan</option>
-                                <option value="BatStateU - Lobo">BatStateU - Lobo</option>
-                                <option value="BatStateU - Mabini">BatStateU - Mabini</option>
-                                <option value="BatStateU - Lima">BatStateU - Lima</option>
-                            </select>
-                        </div>
+                                <div class="profile-upload-box" data-bs-toggle="modal" data-bs-target="#addPhotoModal" style="cursor: pointer;">
+                                    
+                                    {% if user.userprofile.profile_picture %}
+                                        <img src="{{ user.userprofile.profile_picture.url }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
+                                    {% else %}
+                                        <div class="upload-icon-circle"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                                    {% endif %}
 
-                        <!-- Student Classification & DOB -->
-                        <div class="col-md-6">
-                            <label class="form-label">Student Classification</label>
-                                <select class="form-select">
-                                    <option selected disabled>Select Classification...</option>
+                                    <div class="fw-bold mb-1">Browse photo <span class="fw-normal text-muted">or drop here</span></div>
+                                    <div class="upload-subtext mt-2">Max photo size 5 MB.</div>
+                                </div>
+                            </div>
+                            <!-- Full Name Input -->
+                            <div class="col-md-8">
+                                <div class="mb-4">
+                                    <label for="firstname" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" name="first_name" id="firstname" placeholder="e.g Juan" 
+                                    value="{{ u_form.first_name.value|default:'' }}">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="lastname" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" name="last_name" id="lastname" placeholder="e.g Dela Cruz"
+                                    value="{{ u_form.last_name.value|default:'' }}">
+                                </div>
+                                <!-- Save Button aligned to mimic design -->
+                                <button class="btn btn-primary-custom">Save Changes</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Additional Fields -->
+                    <section class="mb-5">
+                        <div class="row g-3">
+                            <!-- Campus -->
+                            <div class="col-md-6">
+                                <label class="form-label">Campus / Institution</label>
+                                <select class="form-select" id="campusSelect" name="campus_institution" onchange="toggleInput('campusSelect')">
+                                    <option selected disabled>Select Campus...</option>
                                     
-                                    <!-- 1. Standard student with fixed block schedule -->
-                                    <option value="Regular">Regular Student (Full Load)</option>
-                                    
-                                    <!-- 2. Often has a broken schedule, might be more flexible -->
-                                    <option value="Irregular">Irregular Student (Flexible Schedule)</option>
-                                    
-                                    <!-- 3. Already knows how to balance work/study -->
-                                    <option value="Working">Working Student</option>
-                                    
-                                    <!-- 4. Busy with major requirements -->
-                                    <option value="Graduating">Graduating / Thesis Year</option>
-                                    
-                                    <!-- 5. Fully available professional -->
-                                    <option value="Alumni">Alumni / Graduate</option>
+                                    <!-- BatStateU Campuses -->
+                                    <option value="BatStateU - Pablo Borbon (Main I)">BatStateU - Pablo Borbon (Main I)</option>
+                                    <option value="BatStateU - Alangilan (Main II)">BatStateU - Alangilan (Main II)</option>
+                                    <option value="BatStateU - ARASOF Nasugbu">BatStateU - ARASOF Nasugbu</option>
+                                    <option value="BatStateU - Lipa">BatStateU - Lipa</option>
+                                    <option value="BatStateU - Malvar (JPLPC)">BatStateU - Malvar (JPLPC)</option>
+                                    <option value="BatStateU - Balayan">BatStateU - Balayan</option>
+                                    <option value="BatStateU - Lemery">BatStateU - Lemery</option>
+                                    <option value="BatStateU - Rosario">BatStateU - Rosario</option>
+                                    <option value="BatStateU - San Juan">BatStateU - San Juan</option>
+                                    <option value="BatStateU - Lobo">BatStateU - Lobo</option>
+                                    <option value="BatStateU - Mabini">BatStateU - Mabini</option>
+                                    <option value="BatStateU - Lima">BatStateU - Lima</option>
                                 </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Date of Birth</label>
-                            <div class="input-group">
-                                <input type="date" class="form-control">
+                            </div>
+
+                            <!-- Student Classification & DOB -->
+                            <div class="col-md-6">
+                                <label class="form-label">Student Classification</label>
+                                    <select class="form-select" name="student_classification">
+                                        <option selected disabled>Select Classification...</option>
+                                        
+                                        <!-- 1. Standard student with fixed block schedule -->
+                                        <option value="Regular Student (Full Load)">Regular Student (Full Load)</option>
+                                        
+                                        <!-- 2. Often has a broken schedule, might be more flexible -->
+                                        <option value="Irregular Student (Flexible Schedule)">Irregular Student (Flexible Schedule)</option>
+                                        
+                                        <!-- 3. Already knows how to balance work/study -->
+                                        <option value="Working Student">Working Student</option>
+                                        
+                                        <!-- 4. Busy with major requirements -->
+                                        <option value="Graduating / Thesis Year">Graduating / Thesis Year</option>
+                                        
+                                        <!-- 5. Fully available professional -->
+                                        <option value="Alumni / Graduate">Alumni / Graduate</option>
+                                    </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Date of Birth</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control" name="date_of_birth"
+                                    value="{{ p_form.date_of_birth.value|date:'Y-m-d' }}">
+                                </div>
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="col-md-6">
+                                <label class="form-label">Gender</label>
+                                <select class="form-select" name="gender">
+                                    <option selected disabled>Select...</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+
+                            <!-- Education & Experience -->
+                            <div class="col-md-6">
+                                <label class="form-label">Education</label>
+                                <select class="form-select" name="education">
+                                    <option selected disabled>Select Level...</option>
+
+                                    <optgroup label="Undergraduate (College)">
+                                        <option value="1st Year">1st Year</option>
+                                        <option value="2nd Year">2nd Year</option>
+                                        <option value="3rd Year">3rd Year</option>
+                                        <option value="4th Year">4th Year</option>
+                                        <option value="5th Year">5th Year</option>
+                                    </optgroup>
+
+                                    <optgroup label="Post-Graduate">
+                                        <option value = "Master's Degree" >Master's Degree</option>
+                                        <option value="Doctorate / PhD">Doctorate / PhD</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Experience Level</label>
+                                <select class="form-select" name="experience_level">
+                                    <option selected disabled>Select Experience...</option>
+                                    
+                                    <!-- 1. For those just starting out -->
+                                    <option value="Beginner (No paid experience)">Beginner (No paid experience)</option>
+                                    
+                                    <!-- 2. For students who have done Thesis/Capstone/Plates -->
+                                    <option value="Academic Projects Only (Thesis/Capstone)">Academic Projects Only (Thesis/Capstone)</option>
+                                    
+                                    <!-- 3. For those who take commissions on the side -->
+                                    <option value="Freelancing / Commissions">Freelancing / Commissions</option>
+                                    
+                                    <!-- 4. For those who have finished their OJT -->
+                                    <option value="Internship / OJT Experience">Internship / OJT Experience</option>
+                                    
+                                    <!-- 5. For Working Students or Alumni -->
+                                    <option value="Professional / Industry Work">Professional / Industry Work</option>
+                                </select>
                             </div>
                         </div>
+                    </section>
 
-                        <!-- Gender -->
-                        <div class="col-md-6">
-                            <label class="form-label">Gender</label>
-                            <select class="form-select">
-                                <option selected disabled>Select...</option>
-                                <option>Male</option>
-                                <option>Female</option>
-                            </select>
+                    <!-- Biography -->
+                    <section class="mb-5">
+                        <label class="form-label">Biography</label>
+                        <div class="bio-editor-container">
+                            <textarea class="bio-textarea" name="biography" placeholder="Write down your biography here. Let the commissionee know who you are...">
+                                {{ p_form.biography.value|default:'' }}</textarea>
+                            <div class="editor-toolbar">
+                                <i class="fa-solid fa-bold"></i>
+                                <i class="fa-solid fa-italic"></i>
+                                <i class="fa-solid fa-underline"></i>
+                                <i class="fa-solid fa-strikethrough"></i>
+                                <div class="border-end mx-1"></div>
+                                <i class="fa-solid fa-link"></i>
+                                <div class="border-end mx-1"></div>
+                                <i class="fa-solid fa-list-ul"></i>
+                                <i class="fa-solid fa-list-ol"></i>
+                            </div>
                         </div>
+                        <button class="btn btn-primary-custom mt-3">Save Changes</button>
+                    </section>
 
-                        <!-- Education & Experience -->
-                        <div class="col-md-6">
-                            <label class="form-label">Education</label>
-                            <select class="form-select">
-                                <option selected disabled>Select Level...</option>
+                    <!-- Contact Information -->
+                    <section>
+                        <h5 class="section-title">Contact Information</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Social Link</label>
+                                <input type="text" class="form-control" name="social_link" value="{{ p_form.social_link.value|default:'' }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Email Address</label>
+                                <input type="email" class="form-control" name="email" 
+                                    value="{{ u_form.email.value|default:'' }}">
+                            </div>
+                                <!-- Empty for layout matching -->
 
-                                <optgroup label="Undergraduate (College)">
-                                    <option>1st Year</option>
-                                    <option>2nd Year</option>
-                                    <option>3rd Year</option>
-                                    <option>4th Year</option>
-                                    <option>5th Year</option>
-                                </optgroup>
-
-                                <optgroup label="Post-Graduate">
-                                    <option>Master's Degree</option>
-                                    <option>Doctorate / PhD</option>
-                                </optgroup>
-                            </select>
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Contact Number</label>
+                                <input type="text" class="form-control" name="phone_number" 
+                                    value="{{ p_form.phone_number.value|default:'' }}">
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Experience Level</label>
-                            <select class="form-select">
-                                <option selected disabled>Select Experience...</option>
+                        <button class="btn btn-primary-custom mt-4">Save Changes</button>
+                    </section>
+                    <div class="modal fade" id="addPhotoModal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content p-3">
+                                <div class="modal-header">
+                                    <h5 class="modal-title fw-bold">Update Profile Picture</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
                                 
-                                <!-- 1. For those just starting out -->
-                                <option value="Beginner">Beginner (No paid experience)</option>
-                                
-                                <!-- 2. For students who have done Thesis/Capstone/Plates -->
-                                <option value="Academic">Academic Projects Only (Thesis/Capstone)</option>
-                                
-                                <!-- 3. For those who take commissions on the side -->
-                                <option value="Freelance">Freelancing / Commissions</option>
-                                
-                                <!-- 4. For those who have finished their OJT -->
-                                <option value="Internship">Internship / OJT Experience</option>
-                                
-                                <!-- 5. For Working Students or Alumni -->
-                                <option value="Professional">Professional / Industry Work</option>
-                            </select>
-                        </div>
-                    </div>
-                </section>
+                                <div class="modal-body text-center">
+                                    <input type="file" 
+                                           name="profile_picture" 
+                                           id="real_file_input" 
+                                           style="display: none;" 
+                                           accept="image/*"
+                                           onchange="previewImage(event)">
 
-                <!-- Biography -->
-                <section class="mb-5">
-                    <label class="form-label">Biography</label>
-                    <div class="bio-editor-container">
-                        <textarea class="bio-textarea" placeholder="Write down your biography here. Let the commissionee know who you are..."></textarea>
-                        <div class="editor-toolbar">
-                            <i class="fa-solid fa-bold"></i>
-                            <i class="fa-solid fa-italic"></i>
-                            <i class="fa-solid fa-underline"></i>
-                            <i class="fa-solid fa-strikethrough"></i>
-                            <div class="border-end mx-1"></div>
-                            <i class="fa-solid fa-link"></i>
-                            <div class="border-end mx-1"></div>
-                            <i class="fa-solid fa-list-ul"></i>
-                            <i class="fa-solid fa-list-ol"></i>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary-custom mt-3">Save Changes</button>
-                </section>
+                                    <img id="modal_preview" src="#" alt="Preview" style="display: none; max-width: 100%; max-height: 300px; margin-bottom: 20px; border-radius: 10px;">
 
-                <!-- Contact Information -->
-                <section>
-                    <h5 class="section-title">Contact Information</h5>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Social Link</label>
-                            <input type="text" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Email Address</label>
-                            <input type="email" class="form-control">
-                        </div>
-                            <!-- Empty for layout matching -->
-                        </div>
+                                    <div class="modal-upload-box" onclick="document.getElementById('real_file_input').click();" style="cursor: pointer;">
+                                        <div class="upload-icon-circle"><i class="fa-regular fa-image"></i></div>
+                                        <div class="fw-bold mb-1">Browse Photo <span class="fw-normal text-muted">or drop here</span></div>
+                                        <div class="upload-subtext mt-2">Supports JPG, PNG. Max size 5 MB.</div>
+                                    </div>
+                                </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Contact Number</label>
-                            <input type="text" class="form-control">
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary-custom text-white">Save Photo</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <button class="btn btn-primary-custom mt-4">Save Changes</button>
-                </section>
-
-            </div>
-        </div>
+                    </div>  
+                </form>
+            </div> 
+        </div> 
 
         <!-- Footer -->
         <footer class="main-footer">
@@ -594,64 +646,26 @@
         </footer>
     </div>
 
-    <!-- === ADD PROFILE PICTURE MODAL (New!) === -->
-    <div class="modal fade" id="addPhotoModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content p-3">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Update Profile Picture</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <div class="modal-upload-box">
-                            <div class="upload-icon-circle"><i class="fa-regular fa-image"></i></div>
-                            <div class="fw-bold mb-1">Browse Photo <span class="fw-normal text-muted">or drop here</span></div>
-                            <div class="upload-subtext mt-2">Supports JPG, PNG. Max size 5 MB.</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary-custom text-white">Save Photo</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-        <!-- Logout Confirmation Modal -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content p-4 text-center">
-                
-                <div class="modal-header border-0 p-0">
-                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="mb-3 text-muted">
-                        <i class="fa-solid fa-arrow-right-from-bracket fa-3x"></i>
-                    </div>
-                    
-                    <h4 class="fw-bold mb-2">Log Out?</h4>
-                    <p class="text-muted">Are you sure you want to end your session?</p>
-                </div>
-
-                <div class="modal-footer border-0 justify-content-center gap-2">
-                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
-                    
-                    <form action="{% url 'logout' %}" method="post" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger px-4 text-white">Yes, Log Out</button>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <!-- === END MODAL === -->
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
+<script>
+    function previewImage(event) {
+        var input = event.target;
+        var preview = document.getElementById('modal_preview');
+        
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block'; // Show the image
+            }
+
+            reader.readAsDataURL(input.files[0]); // Read the file
+        }
+    }
+</script>
 </html>
