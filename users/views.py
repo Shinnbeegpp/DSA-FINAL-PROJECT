@@ -108,3 +108,12 @@ def find_job_candidate(request):
     
 def myjobs(request):
     return render(request,'myjobs.html')
+
+def commissionee_settings(request):
+    return render(request,'commissionee_settings.html')
+
+def commissioner_settings(request):
+    return render(request,'commissioner_settings.html')
+
+def post_job(request):
+    return render(request,'post_job.html')
