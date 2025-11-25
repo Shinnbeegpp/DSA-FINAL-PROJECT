@@ -128,6 +128,17 @@
             width: 20px;
             text-align: center;
         }
+
+        /* New Status Colors */
+        .status-active { 
+            color: #10B981; /* Green: Client Hired Commissionee */
+        } 
+        .status-done { 
+            color: #F97316; /* Orange: Application Complete (Hired/Rejected) */
+        }
+        .status-expired { 
+            color: #EF4444; /* Red: Client deleted job OR Application Rejected */
+        }
         
         /* UPDATED: Pushed logout to bottom of the extended sidebar */
         .logout-link {
@@ -243,14 +254,7 @@
             white-space: nowrap;
         }
         
-        /* Specific Colors for new statuses */
-        .status-pending { color: #D97706; } /* Amber */
-        .status-reviewed { color: #2563EB; } /* Blue */
-        .status-approved { color: #059669; } /* Green */
-        .status-ongoing { color: #7C3AED; } /* Purple */
-        .status-revision { color: #EA580C; } /* Orange */
-        .status-completed { color: #0D9488; } /* Teal */
-        .status-rejected { color: #DC2626; } /* Red */
+        
         
         /* Active Card Pop-out Effect */
         .job-row.active-card {
@@ -350,9 +354,6 @@
                 </a>
 
                 <div class="d-flex align-items-center gap-4">
-                    <!-- Post Job Button (Outline) -->
-                    <a href="#" class="btn-outline-primary-custom">Post A Job</a>
-                    
                     <!-- User Profile -->
                     <div class="user-profile">
                         <span class="user-name d-none d-md-block">{{user.username}}</span>
@@ -372,22 +373,22 @@
                     <div class="sidebar-title">COMMISSIONER DASHBOARD</div>
                     <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
                         <a class="nav-link" href="#" role="tab">
+                            <i class="fa-solid fa-user"></i> My Profile
+                        </a>
+                        <a class="nav-link" href="#" role="tab">
                             <i class="fa-solid fa-circle-plus"></i> Post a Job
                         </a>
                         <a class="nav-link active" href="#" role="tab">
                             <i class="fa-solid fa-briefcase"></i> My Jobs
                         </a>
                         <a class="nav-link" href="#" role="tab">
-                            <i class="fa-regular fa-bookmark"></i> Saved Candidate
+                            <i class="fa-solid fa-bookmark"></i> Saved Candidate
                         </a>
                         <a class="nav-link" href="#" role="tab">
                             <i class="fa-solid fa-gear"></i> Profile
                         </a>
                     </div>
-                        
-                    <a href="#" class="logout-link">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
-                    </a>
+
                 </div>
             </div>
 
@@ -400,14 +401,10 @@
                     <div class="d-flex align-items-center gap-2">
                         <span style="font-size: 0.9rem; font-weight: 500; color: #475569;">Job status</span>
                         <select class="form-select form-select-sm" style="width: auto;">
-                            <option>All Jobs</option>
-                            <option>Pending (Waiting for Email Review)</option>
-                            <option>Reviewed (Check Your Email)</option>
-                            <option>Approved (Confirmed via Email)</option>
-                            <option>On-Going (Work Started – Email Updates Only)</option>
-                            <option>For Revision (Sent Back via Email)</option>
-                            <option>Completed (Final Output Sent via Email)</option>
-                            <option>Rejected (Declined via Email)</option>
+                            <option>All Applications</option>
+                            <option>Active</option>
+                            <option>Done</option>
+                            <option>Expired</option>
                         </select>
                     </div>
                 </div>
@@ -428,7 +425,7 @@
                             <div class="job-meta">Academic Assistance &bull; ₱1,500</div>
                         </div>
                         <div>
-                            <span class="status-pill status-pending"><i class="fa-regular fa-clock"></i> Pending</span>
+                            <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap"></i> DONE</span>
                         </div>
                         <div class="text-muted small"><i class="fa-regular fa-user"></i> 798 Applications</div>
                         <div class="d-flex justify-content-end align-items-center gap-2">
@@ -444,7 +441,7 @@
                             <div class="job-meta">Graphic Design &bull; ₱800</div>
                         </div>
                         <div>
-                            <span class="status-pill status-reviewed"><i class="fa-regular fa-envelope-open"></i> Reviewed</span>
+                            <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap"></i> DONE</span>
                         </div>
                         <div class="text-muted small"><i class="fa-regular fa-user"></i> 185 Applications</div>
                         <div class="d-flex justify-content-end align-items-center gap-2">
@@ -460,7 +457,7 @@
                             <div class="job-meta">Programming &bull; ₱2,000</div>
                         </div>
                         <div>
-                            <span class="status-pill status-approved"><i class="fa-regular fa-circle-check"></i> Approved</span>
+                            <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap"></i> DONE</span>
                         </div>
                         <div class="text-muted small"><i class="fa-regular fa-user"></i> 583 Applications</div>
                         <div class="d-flex justify-content-end align-items-center gap-2">
@@ -471,14 +468,14 @@
 
                     <!-- Row 4 (Expired) -->
                     <div class="job-row">
-                        <div style="opacity: 0.6;">
+                        <div style="">
                             <div class="job-title">Video Edit for Vlog (5 mins)</div>
                             <div class="job-meta">Video Editing &bull; ₱1,200</div>
                         </div>
                         <div>
-                            <span class="status-pill status-ongoing"><i class="fa-solid fa-spinner"></i> On-Going</span>
+                            <span class="status-pill status-expired"><i class="fa-solid fa-trash"></i> EXPIRED</span>
                         </div>
-                        <div class="text-muted small" style="opacity: 0.6;"><i class="fa-regular fa-user"></i> 740 Applications</div>
+                        <div class="text-muted small" style=""><i class="fa-regular fa-user"></i> 740 Applications</div>
                         <div class="d-flex justify-content-end align-items-center gap-2">
                             <button class="btn-view">View Applications</button>
                             <i class="fa-solid fa-ellipsis-vertical text-muted ms-2"></i>
@@ -492,7 +489,7 @@
                             <div class="job-meta">Academic Assistance &bull; ₱500</div>
                         </div>
                         <div>
-                            <span class="status-pill status-revision"><i class="fa-solid fa-pencil"></i> For Revision</span>
+                            <span class="status-pill status-expired"><i class="fa-solid fa-trash"></i> EXPIRED</span>
                         </div>
                         <div class="context-menu">
                             <!-- NEW: Update Status Link triggers the modal -->
@@ -500,7 +497,6 @@
                                 <i class="fa-solid fa-pen-to-square me-2"></i> Update Status
                             </a>
                             <a href="#" class="context-item"><i class="fa-regular fa-eye me-2"></i> View Detail</a>
-                            <a href="#" class="context-item"><i class="fa-regular fa-circle-xmark me-2"></i> Make it Expire</a>
                         </div>
                         <div class="text-muted small"><i class="fa-regular fa-user"></i> 558 Applications</div>
                         <div class="d-flex justify-content-end align-items-center gap-2 position-relative">
@@ -511,14 +507,14 @@
 
                     <!-- Row 6 -->
                     <div class="job-row">
-                        <div style="opacity: 0.6;">
+                        <div style="">
                             <div class="job-title">AutoCAD Floor Plan for 2-Storey House</div>
                             <div class="job-meta">Engineering & CAD &bull; ₱3,000</div>
                         </div>
                         <div>
-                            <span class="status-pill status-completed"><i class="fa-solid fa-check-double"></i> Completed</span>
+                            <span class="status-pill status-active"><i class="fa-solid fa-check"></i> ACTIVE</span>
                         </div>
-                        <div class="text-muted small" style="opacity: 0.6;"><i class="fa-regular fa-user"></i> 426 Applications</div>
+                        <div class="text-muted small" style=""><i class="fa-regular fa-user"></i> 426 Applications</div>
                         <div class="d-flex justify-content-end align-items-center gap-2">
                             <button class="btn-view">View Applications</button>
                             <i class="fa-solid fa-ellipsis-vertical text-muted ms-2"></i>
@@ -532,7 +528,7 @@
                             <div class="job-meta">Academic Assistance &bull; ₱2,500</div>
                         </div>
                         <div>
-                            <span class="status-pill status-rejected"><i class="fa-regular fa-circle-xmark"></i> Rejected</span>
+                            <span class="status-pill status-active"><i class="fa-solid fa-check"></i> ACTIVE</span>
                         </div>
                         <div class="text-muted small"><i class="fa-regular fa-user"></i> 922 Applications</div>
                         <div class="d-flex justify-content-end align-items-center gap-2">
@@ -580,13 +576,9 @@
                     <label class="form-label fw-bold small text-muted">Select New Status</label>
                     <select class="form-select form-select-lg" style="font-size: 0.9rem;">
                         <option selected disabled>Choose status...</option>
-                        <option value="pending">Pending (Waiting for Email Review)</option>
-                        <option value="reviewed">Reviewed (Check Your Email)</option>
-                        <option value="approved">Approved (Confirmed via Email)</option>
-                        <option value="ongoing">On-Going (Work Started – Email Updates Only)</option>
-                        <option value="revision">For Revision (Sent Back via Email)</option>
-                        <option value="completed">Completed (Final Output Sent via Email)</option>
-                        <option value="rejected">Rejected (Declined via Email)</option>
+                        <option>Active</option>
+                        <option>Done</option>
+                        <option>Expired</option>
                     </select>
                 </div>
 

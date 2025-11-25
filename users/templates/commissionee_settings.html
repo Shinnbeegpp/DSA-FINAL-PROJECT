@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobShark - Candidate Profile Setting</title>
+    <title>JobShark - Commissionee Profile Setting</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -482,16 +482,15 @@
                         <i class="fa-solid fa-briefcase"></i> Applied Jobs
                     </a>
                     <a class="nav-link" href="#" role="tab">
-                        <i class="fa-solid fa-bookmark"></i> Favorite Jobs
+                        <i class="fa-solid fa-heart"></i> Favorite Jobs
                     </a>
                     <a class="nav-link active" href="#" role="tab">
                         <i class="fa-solid fa-gear"></i> Manage Account
                     </a>
+                    <a class="nav-link" href="#" role="tab" class="logout-link">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
+                    </a>
                 </div>
-
-                <a href="#" class="logout-link">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
-                </a>
             </div>
 
             <!-- Main Content -->
@@ -522,11 +521,11 @@
                         <div class="col-md-8">
                             <div class="mb-4">
                                 <label for="firstname" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="firstname" placeholder="">
+                                <input type="text" class="form-control" id="firstname" placeholder="e.g Juan">
                             </div>
                             <div class="mb-4">
                                 <label for="lastname" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="lastname" placeholder="">
+                                <input type="text" class="form-control" id="lastname" placeholder="e.g Dela Cruz">
                             </div>
                             <!-- Save Button aligned to mimic design -->
                             <button class="btn btn-primary-custom text-white">Save Changes</button>
@@ -702,7 +701,7 @@
                 <section class="mb-5">
                     <label class="form-label">Biography</label>
                     <div class="bio-editor-container">
-                        <textarea class="bio-textarea" placeholder="Write down your biography here. Let the employers know who you are..."></textarea>
+                        <textarea class="bio-textarea" placeholder="Write down your biography here. Let the commissioner know who you are..."></textarea>
                         <div class="editor-toolbar">
                             <i class="fa-solid fa-bold"></i>
                             <i class="fa-solid fa-italic"></i>
