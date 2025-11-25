@@ -225,11 +225,10 @@
             /* Gradient background from image */
             background: 
                 linear-gradient(
-                    135deg, 
+                    135deg,  Color with 60% opacity */
+                    rgba(105, 48, 195, 0.6) 100% /* End
                     rgba(0, 198, 255, 0.6) 0%, /* Start Color with 60% opacity */
-                    rgba(105, 48, 195, 0.6) 100% /* End Color with 60% opacity */
                 ), 
-                /* **IMPORTANT: REPLACE THIS URL WITH YOUR DJANGO STATIC PATH** */
                 url('https://placehold.co/1920x1080/FFFFFF/000000?text=Background+Image+Placeholder') no-repeat center center;
             background-size: cover;
         }
@@ -388,13 +387,13 @@
 
         <nav class="navbar navbar-expand-lg navbar-light bg-white d-none d-lg-block" id="navbar-top">
             <div class="container">
-                <a class="navbar-brand d-flex align-items-center" href="#">
-                    <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo" style="max-height: 50px;">
-                </a>
+                <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo" style="max-height: 50px;">
 
                 <div class="user-profile">
-                    <p class="user-profile-name">{{ user.username }}</p>
-                    <img src="https://placehold.co/40x40/6c63ff/ffffff?text=EH" alt="User Profile Picture" class="user-profile-img">
+                    </a href="{% url 'commissionee_settings' %}" class="user-profile-name">
+                        {{ user.username }}
+                        <img src="https://placehold.co/40x40/6c63ff/ffffff?text=EH" alt="User Profile Picture" class="user-profile-img">
+                    <a> 
                 </div>
             </div>
         </nav>
@@ -460,7 +459,10 @@
         </div>
     </header>
 
-    <main class="job-listings-section">
+    <main class="job-listings-section"
+                style="background: linear-gradient(135deg, rgba(0, 198, 255, 0.6) 0%, rgba(105, 48, 195, 0.6) 100%), 
+                url('{% static "images/mainbg2.png" %}') no-repeat center center; background-size: cover;">
+                
         <div class="container">
 
             <div class="job-card">

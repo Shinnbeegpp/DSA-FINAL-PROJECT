@@ -18,8 +18,9 @@ from django.contrib import admin
 from django.urls import path
 
 
-from users.views import homepage, sign_in, find_job_notsigned, registration, success, myjobs, find_job_candidate
-
+from users.views import homepage, sign_in, find_job_notsigned
+from users.views import registration, success, myjobs, find_job_candidate
+from users.views import commissionee_settings, commissioner_settings, post_job
 
 urlpatterns = [
     path('', homepage, name="homepage"),
@@ -30,4 +31,7 @@ urlpatterns = [
     path('success/', success, name="success"),
     path('myjobs/', myjobs, name="myjobs"),
     path('find_job_candidate/', find_job_candidate, name="find_job_candidate"),
+    path('settings/commissionee/', commissionee_settings, name="commissionee_settings"),
+    path('settings/commissioner/', commissioner_settings, name="commissioner_settings"),
+    path('post_job/', post_job, name="post_job")
 ]
