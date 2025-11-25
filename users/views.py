@@ -129,16 +129,34 @@ def commissioner_settings(request):
 def success(request):
     return render(request,'success.html')
 
+@never_cache       # <--- Prevents the "Back Button" issue
+@login_required    # <--- Ensures they must be logged in to see it
 def find_job_candidate(request):
     return render(request,'find_job_candidate.html')
-    
+
+@never_cache       # <--- Prevents the "Back Button" issue
+@login_required    # <--- Ensures they must be logged in to see it
 def myjobs(request):
     return render(request,'myjobs.html')
 
+@never_cache       # <--- Prevents the "Back Button" issue
+@login_required    # <--- Ensures they must be logged in to see it
 def commissionee_settings(request):
     return render(request,'commissionee_settings.html')
 
 
 
+@never_cache       # <--- Prevents the "Back Button" issue
+@login_required    # <--- Ensures they must be logged in to see it
 def post_job(request):
     return render(request,'post_job.html')
+
+@never_cache       # <--- Prevents the "Back Button" issue
+@login_required    # <--- Ensures they must be logged in to see it
+def applied_jobs(request):
+    return render(request,'applied_jobs.html')
+
+@never_cache       # <--- Prevents the "Back Button" issue
+@login_required    # <--- Ensures they must be logged in to see it
+def favorite_jobs(request):
+    return render(request,'favorite_jobs.html')
