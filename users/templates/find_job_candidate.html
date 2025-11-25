@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -376,10 +377,10 @@
             <div class="container">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'find_job_page' %}">Find Job</a> 
+                        <a class="nav-link active" aria-current="page" href="{% url 'find_job_candidate' %}">Find Job</a> 
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'dashboard_page' %}">Dashboard</a> 
+                        <a class="nav-link" href="{% url 'find_job_candidate' %}">Dashboard</a> 
                     </li>
                 </ul>
             </div>
@@ -392,7 +393,7 @@
                 </a>
 
                 <div class="user-profile">
-                    <p class="user-profile-name">Esther Howard</p>
+                    <p class="user-profile-name">{{ user.username }}</p>
                     <img src="https://placehold.co/40x40/6c63ff/ffffff?text=EH" alt="User Profile Picture" class="user-profile-img">
                 </div>
             </div>
