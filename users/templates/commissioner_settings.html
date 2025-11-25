@@ -358,7 +358,7 @@
                     <a href="#" class="btn-outline-primary-custom" style="border: 1px solid var(--primary-color); color: var(--primary-color); padding: 0.5rem 1.5rem; border-radius: 6px; text-decoration: none;">Post A Job</a>
                     
                     <div class="user-profile">
-                        <span class="user-name d-none d-md-block">Esther Howard</span>
+                        <span class="user-name d-none d-md-block">{{ user.first_name }} {{ user.last_name }}</span>
                         <img src="https://i.pravatar.cc/150?img=12" alt="Profile" class="user-avatar">
                     </div>
                 </div>
@@ -387,7 +387,7 @@
                     </a>
                 </div>
 
-                <a href="#" class="logout-link">
+                <a href="#" class="logout-link" onclick="return confirm('Are you sure you want to log out?');">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
                 </a>
             </div>
