@@ -476,13 +476,16 @@
                 <div class="sidebar-title">Commissionee Dashboard</div>
                 <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
                     <a class="nav-link" href="#" role="tab">
+                        <i class="fa-solid fa-user"></i> My Profile
+                    </a>
+                    <a class="nav-link" href="#" role="tab">
                         <i class="fa-solid fa-briefcase"></i> Applied Jobs
                     </a>
                     <a class="nav-link" href="#" role="tab">
-                        <i class="fa-regular fa-bookmark"></i> Favorite Jobs
+                        <i class="fa-solid fa-bookmark"></i> Favorite Jobs
                     </a>
                     <a class="nav-link active" href="#" role="tab">
-                        <i class="fa-solid fa-gear"></i> Account
+                        <i class="fa-solid fa-gear"></i> Manage Account
                     </a>
                 </div>
 
@@ -493,14 +496,11 @@
 
             <!-- Main Content -->
             <div class="col-lg-9">
-                <h2 class="page-title">Setting</h2>
+                <h2 class="page-title">Profile Settings</h2>
 
                 <!-- Tabs -->
                 <ul class="nav custom-tabs">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">
-                            <i class="fa-regular fa-user me-2"></i> Profile
-                        </a>
                     </li>
                 </ul>
 
@@ -521,8 +521,12 @@
                         <!-- Full Name Input -->
                         <div class="col-md-8">
                             <div class="mb-4">
-                                <label for="fullName" class="form-label">Full name</label>
-                                <input type="text" class="form-control" id="fullName" placeholder="">
+                                <label for="firstname" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstname" placeholder="">
+                            </div>
+                            <div class="mb-4">
+                                <label for="lastname" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastname" placeholder="">
                             </div>
                             <!-- Save Button aligned to mimic design -->
                             <button class="btn btn-primary-custom text-white">Save Changes</button>
@@ -532,7 +536,7 @@
 
                 <!-- CV/Resume Section -->
                 <section class="mb-5">
-                    <h5 class="section-title">Your Curriculum Vitae/Resume</h5>
+                    <h5 class="section-title">Your Curriculum Vitae / Resume</h5>
                     <div class="row g-3">
                         <!-- Resume Card 1 -->
                         <div class="col-md-4">
@@ -589,7 +593,7 @@
                 <section class="mb-5">
                     <div class="row g-3">
                         <!-- Campus -->
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label class="form-label">Campus / Institution</label>
                             <select class="form-select" id="campusSelect" onchange="toggleInput('campusSelect')">
                                 <option selected disabled>Select Campus...</option>
@@ -635,8 +639,7 @@
                         <div class="col-md-6">
                             <label class="form-label">Date of Birth</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="dd/mm/yyyy">
-                                <span class="input-group-text"><i class="fa-regular fa-calendar"></i></span>
+                                <input type="date" class="form-control">
                             </div>
                         </div>
 
@@ -716,16 +719,16 @@
                             <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Social Link</label>
                             <input type="text" class="form-control">
                         </div>
-                        <div class="col-md-6"></div> 
-
-                        <div class="col-md-6">
-                            <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Phone</label>
-                            <input type="text" class="form-control">
-                        </div>
                         <div class="col-md-6">
                             <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Email Address</label>
                             <input type="email" class="form-control">
                         </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Contact Number</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        
                     </div>
                     <button class="btn btn-primary-custom text-white mt-4">Save Changes</button>
                 </section>
