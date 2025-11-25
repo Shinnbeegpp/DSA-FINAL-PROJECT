@@ -2,8 +2,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import UserProfile
+from .forms import UserUpdateForm, ProfileUpdateForm
 
 # Create your views here.
 
@@ -100,6 +102,30 @@ def sign_in(request):
 
     return render(request,'signin.html')
 
+@login_required
+def commissioner_settings(request):
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.userprofile)
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save() 
+            p_form.save() 
+            messages.success(request, 'Your profile has been updated!')
+            return redirect('commissioner_settings') 
+
+    else:
+        # If it's a GET request, just load the forms with current data
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.userprofile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form
+    }
+
+    return render(request, 'commissioner_settings.html', context)
+
 def success(request):
     return render(request,'success.html')
 
@@ -112,8 +138,7 @@ def myjobs(request):
 def commissionee_settings(request):
     return render(request,'commissionee_settings.html')
 
-def commissioner_settings(request):
-    return render(request,'commissioner_settings.html')
+
 
 def post_job(request):
     return render(request,'post_job.html')
