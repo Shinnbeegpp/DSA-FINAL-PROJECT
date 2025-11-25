@@ -11,8 +11,8 @@ def homepage(request):
     return render(request,'homepage.html')
 
 
-def find_job(request):
-    return render(request, 'find_job.html')
+def find_job_notsigned(request):
+    return render(request, 'find_job_notsigned.html')
 
 def registration(request):
     if request.method == 'POST':

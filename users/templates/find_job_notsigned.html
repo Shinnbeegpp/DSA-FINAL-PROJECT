@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -77,6 +79,10 @@
             font-weight: 600;
         }
 
+        /* Ensure logo is always sized correctly */
+        .navbar-brand img {
+            max-height: 50px;
+        }
 
         .navbar .btn-search:hover {
             background-color: #f8f9fa;
@@ -221,16 +227,6 @@
         /* --- Job Listings --- */
         .job-listings-section {
             padding: 3rem 0;
-            /* Gradient background from image */
-            background: 
-                linear-gradient(
-                    135deg, 
-                    rgba(0, 198, 255, 0.6) 0%, /* Start Color with 60% opacity */
-                    rgba(105, 48, 195, 0.6) 100% /* End Color with 60% opacity */
-                ), 
-                /* **IMPORTANT: REPLACE THIS URL WITH YOUR DJANGO STATIC PATH** */
-                url('https://placehold.co/1920x1080/FFFFFF/000000?text=Background+Image+Placeholder') no-repeat center center;
-            background-size: cover;
         }
 
         .job-card {
@@ -383,10 +379,10 @@
             <div class="container">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'home_page' %}">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{% url 'homepage' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'find_job_page' %}">Find Job</a>
+                        <a class="nav-link" href="{% url 'find_job_notsigned' %}">Find Job</a>
                     </li>
                 </ul>
             </div>
@@ -395,12 +391,12 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-white d-none d-lg-block" id="navbar-top">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="{% url 'homepage' %}">
-                    <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo" 
+                    <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo"
                     onerror="this.src='https://placehold.co/150x40/6c63ff/ffffff?text=JobShark&font=inter'; this.onerror=null;">
                 </a>
 
                 <div class="navbar-signin">
-                    <a href="{% url 'sign_in_page' %}" class="btn btn-brand-primary">
+                    <a href="{% url 'sign_in' %}" class="btn btn-brand-primary">
                         Sign In
                     </a>
                 </div>
@@ -426,7 +422,7 @@
                     </li>
                     <li class="nav-item">
                         <li class="nav-item">
-                            <a href="{% url 'sign_in_page' %}" class="btn btn-brand-primary">
+                            <a href="{% url 'sign_in' %}" class="btn btn-brand-primary">
                                 Sign In
                             </a>
                         </li>
@@ -469,7 +465,10 @@
         </div>
     </header>
 
-    <main class="job-listings-section">
+    <main class="job-listings-section"
+        style="background: linear-gradient(135deg, rgba(0, 198, 255, 0.6) 0%, rgba(105, 48, 195, 0.6) 100%), 
+        url('{% static "images/mainbg2.png" %}') no-repeat center center; background-size: cover;">
+        
         <div class="container">
 
             <div class="job-card">
