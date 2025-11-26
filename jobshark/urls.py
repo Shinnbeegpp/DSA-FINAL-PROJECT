@@ -21,9 +21,9 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from users.views import homepage, sign_in, find_job_notsigned
-from users.views import registration, success, myjobs, find_job_candidate
+from users.views import registration, myjobs, find_job_candidate
 from users.views import commissionee_settings, commissioner_settings, post_job
-from users.views import applied_jobs, favorite_jobs
+from users.views import applied_jobs, favorite_jobs, myprofile
 
 urlpatterns = [
     path('', homepage, name="homepage"),
@@ -31,7 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('sign_in/', sign_in, name="sign_in"),
     path('registration/', registration, name="registration"),
-    path('success/', success, name="success"),
+    #path('success/', success, name="success"),
     path('myjobs/', myjobs, name="myjobs"),
     path('find_job_candidate/', find_job_candidate, name="find_job_candidate"),
     path('settings/commissionee/', commissionee_settings, name="commissionee_settings"),
@@ -40,5 +40,5 @@ urlpatterns = [
     path('applied_jobs', applied_jobs, name="applied_jobs"),
     path('favorite_jobs', favorite_jobs, name="favorite_jobs"),
     path('logout/', auth_views.LogoutView.as_view(next_page="homepage"), name='logout'),
-    
+    path('myprofile/commissioner', myprofile, name="myprofile_commissioner"),
 ]
