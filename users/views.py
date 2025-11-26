@@ -86,7 +86,7 @@ def sign_in(request):
                 
                 elif profile.account_type == 'commissioner':
  
-                    return redirect('myjobs')
+                    return redirect('myprofile_commissioner')
                 
                 else:
                     return redirect('homepage') 
@@ -126,37 +126,40 @@ def commissioner_settings(request):
 
     return render(request, 'commissioner_settings.html', context)
 
-def success(request):
-    return render(request,'success.html')
+def myprofile_commissioner(request):
+    return render(request,'myprofile_commissioner.html')
 
-@never_cache       # <--- Prevents the "Back Button" issue
-@login_required    # <--- Ensures they must be logged in to see it
+def myprofile_commissionee(request):
+    return render(request,'myprofile_commissionee.html')
+
+#@never_cache       # <--- Prevents the "Back Button" issue
+#@login_required    # <--- Ensures they must be logged in to see it
 def find_job_candidate(request):
     return render(request,'find_job_candidate.html')
 
-@never_cache       # <--- Prevents the "Back Button" issue
-@login_required    # <--- Ensures they must be logged in to see it
+# <---  @never_cache       # <--- Prevents the "Back Button" issue
+# <---  @login_required    # <--- Ensures they must be logged in to see it
 def myjobs(request):
     return render(request,'myjobs.html')
 
-@never_cache       # <--- Prevents the "Back Button" issue
-@login_required    # <--- Ensures they must be logged in to see it
+#@never_cache       # <--- Prevents the "Back Button" issue
+#@login_required    # <--- Ensures they must be logged in to see it
 def commissionee_settings(request):
     return render(request,'commissionee_settings.html')
 
 
 
-@never_cache       # <--- Prevents the "Back Button" issue
-@login_required    # <--- Ensures they must be logged in to see it
+#@never_cache       # <--- Prevents the "Back Button" issue
+#@login_required    # <--- Ensures they must be logged in to see it
 def post_job(request):
     return render(request,'post_job.html')
 
-@never_cache       # <--- Prevents the "Back Button" issue
-@login_required    # <--- Ensures they must be logged in to see it
+#@never_cache       # <--- Prevents the "Back Button" issue
+#@login_required    # <--- Ensures they must be logged in to see it
 def applied_jobs(request):
     return render(request,'applied_jobs.html')
 
-@never_cache       # <--- Prevents the "Back Button" issue
-@login_required    # <--- Ensures they must be logged in to see it
+#@never_cache       # <--- Prevents the "Back Button" issue
+#@login_required    # <--- Ensures they must be logged in to see it
 def favorite_jobs(request):
     return render(request,'favorite_jobs.html')
