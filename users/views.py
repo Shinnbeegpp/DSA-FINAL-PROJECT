@@ -126,8 +126,11 @@ def commissioner_settings(request):
 
     return render(request, 'commissioner_settings.html', context)
 
-def myprofile(request):
+def myprofile_commissioner(request):
     return render(request,'myprofile_commissioner.html')
+
+def myprofile_commissionee(request):
+    return render(request,'myprofile_commissionee.html')
 
 #@never_cache       # <--- Prevents the "Back Button" issue
 #@login_required    # <--- Ensures they must be logged in to see it
