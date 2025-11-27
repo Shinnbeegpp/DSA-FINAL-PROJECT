@@ -394,14 +394,30 @@
             <div class="col-lg-3 d-flex flex-column">
                 <div class="sidebar-container d-flex flex-column flex-grow-1">
                     <div class="sidebar-title">COMMISSIONER DASHBOARD</div>
-                    <div class="nav flex-column nav-pills">
-                        <a class="nav-link" href="#" role="tab"><i class="fa-solid fa-user"></i> My Profile</a>
-                        <a class="nav-link" href="#"><i class="fa-solid fa-circle-plus"></i> Post a Job</a>
-                        <a class="nav-link" href="#"><i class="fa-solid fa-briefcase"></i> My Jobs</a>
-                        <a class="nav-link active" href="#"><i class="fa-solid fa-bookmark"></i> Saved Candidates</a>
-                        <a class="nav-link" href="#"><i class="fa-solid fa-gear"></i> Profile</a>
-                        <a class="nav-link" href="#" role="tab" class="logout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out</a>
-                    </div>
+                    <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                    <!-- MY PROFILE IS NOW ACTIVE (Display Page) -->
+                    <a class="nav-link active" href="{% url 'myprofile_commissioner' %}" role="tab">
+                        <i class="fa-solid fa-user"></i> My Profile
+                    </a>
+                    <a class="nav-link" href="{% url 'post_job' %}" role="tab">
+                        <i class="fa-solid fa-circle-plus"></i> Post a Job
+                    </a>
+                    <a class="nav-link" href="{% url 'myjobs' %}" role="tab">
+                        <i class="fa-solid fa-briefcase"></i> My Jobs
+                    </a>
+                    <a class="nav-link" href="{% url 'saved_candidates' %}" role="tab">
+                        <i class="fa-solid fa-bookmark"></i> Saved Candidate
+                    </a>
+                    <!-- MANAGE ACCOUNT (Edit Page) - Links to a mock edit URL -->
+                    <a class="nav-link" href="{% url 'commissioner_settings' %}" role="tab">
+                        <i class="fa-solid fa-gear"></i> Manage Account
+                    </a>
+                    <!-- LOGOUT LINK WITH MODAL TRIGGER -->
+                    <a class="nav-link" href="#" role="tab"  class="logout-link" 
+                        data-bs-toggle="modal" data-bs-target="#logoutModal">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
+                    </a>
+                </div>
                 </div>
             </div>
 
