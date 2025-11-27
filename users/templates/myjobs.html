@@ -371,19 +371,19 @@
             <div class="col-lg-3 sidebar-container">
                 <div class="sidebar-title">COMMISSIONER DASHBOARD</div>
                 <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link" href="#" role="tab">
-                        <i class="fa-solid fa-user"></i> My Profile
+                    <a class="nav-link" href="{% url 'myprofile_commissioner' %}" role="tab">
+                        <i class="fa-solid fa-user"></i> My Profile 
                     </a>
-                    <a class="nav-link" href="#" role="tab">
+                    <a class="nav-link" href="{% url 'post_job' %}" role="tab">
                         <i class="fa-solid fa-circle-plus"></i> Post a Job
                     </a>
                     <a class="nav-link active" href="{% url 'myjobs' %}" role="tab">
                         <i class="fa-solid fa-briefcase"></i> My Jobs
                     </a>
-                    <a class="nav-link" href="#" role="tab">
-                        <i class="fa-solid fa-bookmark"></i> Saved Candidate
+                    <a class="nav-link" href="{% url 'saved_candidate' %}" role="tab">
+                        <i class="fa-solid fa-bookmark"></i> Saved Candidate 
                     </a>
-                    <a class="nav-link " href="{% url 'commissioner_settings' %}" role="tab">
+                    <a class="nav-link " href="{% url 'manage_account_commissioner' %}" role="tab">
                         <i class="fa-solid fa-gear"></i> Manage Account
                     </a>
                     <a class="nav-link" href="{% url 'homepage' %}" role="tab" class="logout-link">
