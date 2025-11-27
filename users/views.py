@@ -1,11 +1,11 @@
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import UserProfile
-from .forms import UserUpdateForm, ProfileUpdateForm
+from .models import UserProfile, UserResume
+from .forms import UserUpdateForm, ProfileUpdateForm, ResumeForm
 
 # Create your views here.
 
@@ -115,7 +115,7 @@ def commissioner_settings(request):
             return redirect('commissioner_settings') 
 
     else:
-        # If it's a GET request, just load the forms with current data
+     
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.userprofile)
 
@@ -132,34 +132,82 @@ def myprofile_commissioner(request):
 def myprofile_commissionee(request):
     return render(request,'myprofile_commissionee.html')
 
-#@never_cache       # <--- Prevents the "Back Button" issue
-#@login_required    # <--- Ensures they must be logged in to see it
+#@never_cache      
+#@login_required   
 def find_job_candidate(request):
     return render(request,'find_job_candidate.html')
 
-# <---  @never_cache       # <--- Prevents the "Back Button" issue
-# <---  @login_required    # <--- Ensures they must be logged in to see it
+      
+#@never_cache       <---  @never_cache   
+#@login_required    <---  @login_required    
 def myjobs(request):
     return render(request,'myjobs.html')
 
-#@never_cache       # <--- Prevents the "Back Button" issue
-#@login_required    # <--- Ensures they must be logged in to see it
+#@never_cache      
+@login_required    
 def commissionee_settings(request):
-    return render(request,'commissionee_settings.html')
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.userprofile)
 
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save() 
+            p_form.save() 
+            messages.success(request, 'Your profile has been updated!')
+            return redirect('commissionee_settings') 
 
+    else:
+     
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.userprofile)
 
-#@never_cache       # <--- Prevents the "Back Button" issue
-#@login_required    # <--- Ensures they must be logged in to see it
+    resumes = UserResume.objects.filter(user=request.user)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+        'resumes': resumes,
+    }
+
+    return render(request,'commissionee_settings.html', context)
+
+@login_required
+def upload_resume(request):
+    if request.method == 'POST':
+        form = ResumeForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Check if user already has 3 resumes (Optional limit)
+            if UserResume.objects.filter(user=request.user).count() >= 3:
+                messages.error(request, "You can only upload up to 3 resumes.")
+            else:
+                resume = form.save(commit=False)
+                resume.user = request.user
+                resume.save()
+                messages.success(request, "Resume uploaded successfully!")
+        else:
+            messages.error(request, "Error uploading file. Please upload a valid PDF/Doc.")
+    
+    return redirect('commissionee_settings')
+
+@login_required
+def delete_resume(request, pk):
+
+    resume = get_object_or_404(UserResume, pk=pk, user=request.user)
+    resume.delete()
+    messages.success(request, "Resume deleted.")
+    return redirect('commissionee_settings')
+
+#@never_cache      
+#@login_required    
 def post_job(request):
     return render(request,'post_job.html')
 
-#@never_cache       # <--- Prevents the "Back Button" issue
-#@login_required    # <--- Ensures they must be logged in to see it
+#@never_cache       
+#@login_required    
 def applied_jobs(request):
     return render(request,'applied_jobs.html')
 
-#@never_cache       # <--- Prevents the "Back Button" issue
-#@login_required    # <--- Ensures they must be logged in to see it
+#@never_cache      
+#@login_required 
 def favorite_jobs(request):
     return render(request,'favorite_jobs.html')

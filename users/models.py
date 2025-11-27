@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import os
 
 class UserProfile(models.Model):
 
@@ -84,7 +85,16 @@ class UserProfile(models.Model):
         return f"{self.user.username} - {self.account_type}"
 
 
+class UserResume(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resumes')
+    file = models.FileField(upload_to='resumes/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
 
+    def filename(self):
+        return os.path.basename(self.file.name)
+
+    def __str__(self):
+        return f"{self.user.username} - Resume"
 
 
 

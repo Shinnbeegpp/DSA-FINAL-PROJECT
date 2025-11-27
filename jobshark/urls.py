@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 # 1. ADD THIS IMPORT for the built-in logout functionality
 from django.contrib.auth import views as auth_views
@@ -24,7 +26,7 @@ from users.views import homepage, sign_in, find_job_notsigned
 from users.views import registration, myjobs, find_job_candidate
 from users.views import commissionee_settings, commissioner_settings, post_job
 from users.views import applied_jobs, favorite_jobs, myprofile_commissioner
-from users.views import myprofile_commissionee
+from users.views import myprofile_commissionee, upload_resume, delete_resume
 
 urlpatterns = [
     path('', homepage, name="homepage"),
@@ -43,4 +45,9 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page="homepage"), name='logout'),
     path('myprofile/commissioner', myprofile_commissioner, name="myprofile_commissioner"),
     path('myprofile/commissionee', myprofile_commissionee, name="myprofile_commissionee"),
+    path('resume/upload/', upload_resume, name='upload_resume'),
+    path('resume/delete/<int:pk>/', delete_resume, name='delete_resume'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
