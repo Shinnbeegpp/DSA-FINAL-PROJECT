@@ -338,7 +338,7 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <!-- Logo -->
-                <a class="navbar-brand d-flex align-items-center" href="#">
+                <a class="navbar-brand d-flex align-items-center" href="{% url 'myprofile_commissioner' %}">
                     <img src={% static "images/logo_name.png" %} alt="JobShark Logo" 
                     onerror="this.src='https://placehold.co/150x40/6930C3/ffffff?text=JobShark&font=inter'; this.onerror=null;">
                 </a>
@@ -347,7 +347,7 @@
                     <div class="user-profile">
                         <!-- Use Django template tags for user info -->
                         <span class="user-name d-none d-md-block">
-                            {% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}Esther Howard (Mock){% endif %}
+                            {{ user.username }}
                         </span>
 
                         {% if user.userprofile.profile_picture %}
@@ -369,16 +369,16 @@
                 <div class="sidebar-title">COMMISSIONER DASHBOARD</div>
                 <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
                     <!-- MY PROFILE IS NOW ACTIVE (Display Page) -->
-                    <a class="nav-link active" href="#" role="tab">
+                    <a class="nav-link active" href="{% url 'myprofile_commissioner' %}" role="tab">
                         <i class="fa-solid fa-user"></i> My Profile
                     </a>
-                    <a class="nav-link" href="#" role="tab">
+                    <a class="nav-link" href="{% url 'post_job' %}" role="tab">
                         <i class="fa-solid fa-circle-plus"></i> Post a Job
                     </a>
-                    <a class="nav-link" href="#" role="tab">
+                    <a class="nav-link" href="{% url 'myjobs' %}" role="tab">
                         <i class="fa-solid fa-briefcase"></i> My Jobs
                     </a>
-                    <a class="nav-link" href="#" role="tab">
+                    <a class="nav-link" href="{% url 'saved_candidates' %}" role="tab">
                         <i class="fa-solid fa-bookmark"></i> Saved Candidate
                     </a>
                     <!-- MANAGE ACCOUNT (Edit Page) - Links to a mock edit URL -->
@@ -412,21 +412,21 @@
                         <!-- Photo Display -->
                         <div class="col-md-4">
                             <label class="form-label">Profile Picture</label>
-                            <div class="profile-upload-box flex flex-col justify-center items-center h-full" style="cursor: default;">
+                            
+                            <div class="p-2 border rounded" style="background-color: #fff;">
                                 
                                 {% if user.userprofile.profile_picture %}
-                                    <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
+                                    <img src="{{ user.userprofile.profile_picture.url }}" 
+                                        alt="Profile" 
+                                        class="img-fluid"
+                                        style="width: 100%; height: 300px; object-fit: cover; object-position: center; border-radius: 8px;">
                                 {% else %}
-                                    <div class="upload-icon-circle" style="width: 80px; height: 80px; background-color: #E5E7EB; margin-bottom: 0.5rem;">
-                                        <i class="fa-solid fa-user text-3xl"></i>
+                                    <div class="d-flex align-items-center justify-content-center" 
+                                        style="width: 100%; height: 300px; background-color: #F3F4F6; border-radius: 8px;">
+                                        <i class="fa-solid fa-user text-muted" style="font-size: 5rem;"></i>
                                     </div>
                                 {% endif %}
 
-                                <div class="fw-bold mb-1 mt-2">
-                                    {% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}Esther Howard{% endif %}
-                                </div>
-                                <div class="upload-subtext">Active since: {{ user.date_joined|date:"M Y" }}</div>
-                                <!-- REMOVED CHANGE PHOTO BUTTON -->
                             </div>
                         </div>
                         <!-- Full Name Display -->
@@ -457,7 +457,7 @@
                             <label class="form-label">Campus / Institution</label>
                             <div class="display-box display-box-muted">
                                 <!-- Mock Data -->
-                                BatStateU - Pablo Borbon (Main I)
+                                {{ user.userprofile.campus_institution|default:"Not set" }}
                             </div>
                         </div>
                         <!-- Education -->
@@ -465,7 +465,7 @@
                             <label class="form-label">Education</label>
                             <div class="display-box display-box-muted">
                                 <!-- Mock Data -->
-                                4th Year - Undergraduate (College)
+                                {{ user.userprofile.education|default:"Not set" }}
                             </div>
                         </div>
                         <!-- Date of Birth -->
@@ -473,7 +473,7 @@
                             <label class="form-label">Date of Birth</label>
                             <div class="display-box display-box-muted">
                                 <!-- Mock Data -->
-                                1999-07-21
+                                {{ user.userprofile.date_of_birth|date:"F j, Y"|default:"Not set" }}
                             </div>
                         </div>
 
@@ -482,7 +482,7 @@
                             <label class="form-label">Gender</label>
                             <div class="display-box display-box-muted">
                                 <!-- Mock Data -->
-                                Male
+                                {{ user.userprofile.gender|default:"Not set" }}
                             </div>
                         </div>
                     </div>
@@ -494,7 +494,7 @@
                     <div class="bio-display-container">
                         <p class="bio-display-empty">
                             <!-- Mock Data -->
-                            Highly motivated 4th-year student at BatStateU specializing in web application development and UI/UX design. Proficient in Python (Django) and front-end frameworks. Seeking commission work to expand my portfolio and gain practical, real-world experience outside of academic projects.
+                            {{ user.userprofile.biography|default:"Not set" }}
                         </p>
                     </div>
                     <!-- REMOVED EDIT BIOGRAPHY BUTTON -->
@@ -507,23 +507,26 @@
                         <div class="col-md-6">
                             <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Social Link</label>
                             <div class="display-box">
-                                <!-- Mock Data -->
-                                <a href="https://linkedin.com/in/estherhoward" target="_blank" class="text-decoration-none text-primary">
-                                    linkedin.com/in/estherhoward
-                                </a>
+                                {% if user.userprofile.social_link %}
+                                    <a href="{{ user.userprofile.social_link }}" target="_blank" class="text-decoration-none text-primary text-truncate" style="max-width: 100%; display: block;">
+                                        {{ user.userprofile.social_link }}
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted small">Not provided</span>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Email Address</label>
                             <div class="display-box">
-                                {{ user.email|default:"esther.howard@email.com" }}
+                                {{ user.email|default:"Not provided" }}
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Contact Number</label>
                             <div class="display-box">
                                 <!-- Mock Data -->
-                                +63 917 555 1234
+                                {{ user.userprofile.phone_number|default:"Not provided" }}
                             </div>
                         </div>
                     </div>
