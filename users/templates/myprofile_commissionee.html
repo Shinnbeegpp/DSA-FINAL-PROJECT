@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- TITLE: Changed to My Profile -->
+    <title>JobShark - Commissionee My Profile</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #6930C3; /* The vibrant purple from the design */
+            --primary-hover: #644bd9;
+            --secondary-bg: #F5F6FA;
+            --text-color: #111827;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+            --sidebar-width: 280px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fff;
+            color: var(--text-color);
+        }
+
+        /* Top Utility Bar */
+        #navbar-header {
+            background-color: #6930C3;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+        #navbar-header .nav-link {
+            color: white;
+            font-weight: 500;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+        #navbar-header .nav-link:hover,
+        #navbar-header .nav-link.active {
+            color: #e0e0e0;
+        }
+
+        .navbar-brand img {
+            max-height: 50px;
+        }
+
+        /* Main Header */
+        .main-header {
+            padding: 1rem 0;
+            border-bottom: 1px solid transparent;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .user-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Layout */
+        .dashboard-container {
+            margin-top: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        /* Sidebar */
+        .sidebar-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            letter-spacing: 0.5px;
+        }
+        .nav-pills .nav-link {
+            color: var(--text-muted);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .nav-pills .nav-link:hover {
+            color: var(--primary-color);
+            background-color: rgba(123, 97, 255, 0.05);
+        }
+        .nav-pills .nav-link.active {
+            background-color: rgba(123, 97, 255, 0.1);
+            color: var(--primary-color);
+            border-left: 3px solid var(--primary-color);
+        }
+        .nav-pills .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+        .logout-link {
+            margin-top: 15rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 1.5rem;
+            font-weight: 500;
+        }
+        .logout-link:hover {
+            color: #dc3545;
+        }
+
+        /* Main Content Area */
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Tabs */
+        .custom-tabs {
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+        .custom-tabs .nav-link {
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            padding: 1rem 0;
+            margin-right: 2rem;
+            font-weight: 500;
+            position: relative;
+        }
+        .custom-tabs .nav-link.active {
+            color: var(--primary-color);
+        }
+        .custom-tabs .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        /* Forms / Display Styles */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            margin-top: 1rem;
+        }
+        .form-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* STATIC DISPLAY BOX STYLES (Used for view-only fields) */
+        .display-box {
+            background-color: var(--secondary-bg); /* Light background for non-editable data */
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            color: var(--text-color);
+            font-weight: 600;
+            min-height: 48px; /* Match input height */
+            display: flex;
+            align-items: center;
+        }
+        .display-box-muted {
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+        /* End Static Display Styles */
+        
+        .profile-display-box {
+            border: 2px dashed #E5E7EB;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: default; /* Not clickable */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .upload-icon-circle {
+            width: 48px;
+            height: 48px;
+            background-color: #F3F4F6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }
+        .bio-display-container {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            min-height: 150px;
+            background-color: var(--secondary-bg);
+            font-size: 0.9rem;
+            color: #374151;
+        }
+        .bio-display-empty {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Curriculum Vitae/Resume Cards (Display Only) */
+        .resume-card {
+            background-color: #F9FAFB;
+            border: 1px solid #F3F4F6;
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(123, 97, 255, 0.1);
+            color: var(--primary-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        .resume-info h6 {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .resume-info span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .resume-actions {
+            margin-left: auto;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* Buttons (For Modal) */
+        .btn-danger-custom {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            border-radius: 6px;
+        }
+        .btn-danger-custom:hover {
+            background-color: #c82333;
+        }
+        .btn-secondary {
+            background-color: #EFEFEF;
+            color: #333;
+            font-weight: 500;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+        }
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Footer */
+        .main-footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #9CA3AF;
+            font-size: 0.85rem;
+            border-top: 1px solid #F3F4F6;
+            margin-top: 4rem;
+        }
+
+        /* Responsive Tweak */
+        @media (max-width: 991.98px) {
+            .sidebar-container { margin-bottom: 2rem; }
+            .logout-link { margin-top: 2rem; }
+            .nav-pills .nav-link.active {
+                border-left: none;
+                border-bottom: 3px solid var(--primary-color);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Utility Bar -->
+    <nav class="navbar navbar-expand-lg d-none d-lg-block" id="navbar-header">
+        <div class="container">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Find Job</a> 
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a> 
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <!-- Logo -->
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src={% static "images/logo_name.png" %} alt="JobShark Logo" 
+                    onerror="this.src='https://placehold.co/150x40/6c63ff/ffffff?text=JobShark&font=inter'; this.onerror=null;">
+                </a>
+                <!-- User Profile -->
+                <div class="user-profile">
+                    <span class="user-name d-none d-md-block">{{ user.first_name|default:"Esther Howard" }} {{ user.last_name|default:"(Mock)" }}</span>
+                    <img src="images/cris.jpg" alt="Profile" class="user-avatar" 
+                         onerror="this.src='https://placehold.co/40x40/E5E7EB/9CA3AF?text=U'; this.onerror=null;">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container dashboard-container">
+        <div class="row">
+            
+            <!-- Sidebar -->
+            <div class="col-lg-3 sidebar-container">
+                <div class="sidebar-title">Commissionee Dashboard</div>
+                <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                    <!-- MY PROFILE: ACTIVE -->
+                    <a class="nav-link active" href="#" role="tab">
+                        <i class="fa-solid fa-user"></i> My Profile
+                    </a>
+                    <a class="nav-link" href="{%url 'applied_jobs'%}" role="tab">
+                        <i class="fa-solid fa-briefcase"></i> Applied Jobs
+                    </a>
+                    <a class="nav-link" href="{%url 'favorite_jobs'%}" role="tab">
+                        <i class="fa-solid fa-heart"></i> Favorite Jobs
+                    </a>
+                    <!-- MANAGE ACCOUNT: INACTIVE (Redirects to Edit Page) -->
+                    <a class="nav-link" href="/settings/commissionee/" role="tab">
+                        <i class="fa-solid fa-gear"></i> Manage Account
+                    </a>
+                    <!-- LOGOUT LINK WITH MODAL TRIGGER -->
+                    <a class="nav-link" href="#" role="tab"  class="logout-link" 
+                        data-bs-toggle="modal" data-bs-target="#logoutModal">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- REMOVED FORM TAGS -->
+                <h2 class="page-title">My Profile</h2>
+
+                <!-- Tabs (Kept for layout consistency) -->
+                <ul class="nav custom-tabs">
+                    <li class="nav-item">
+                        <!-- Content here if needed -->
+                    </li>
+                </ul>
+
+                <!-- Basic Information (DISPLAY MODE) -->
+                <section class="mb-5">
+                    <h5 class="section-title">Basic Information</h5>
+                    <div class="row g-4">
+                        <!-- Photo Display -->
+                        <div class="col-md-4">
+                            <label class="form-label">Profile Picture</label>
+                            <div class="profile-display-box flex flex-col justify-center items-center h-full">
+                                
+                                <img src="images/cris.jpg" alt="Profile" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;"
+                                     onerror="this.src='https://placehold.co/80x80/E5E7EB/9CA3AF?text=U'; this.onerror=null;">
+
+                                <div class="fw-bold mb-1 mt-2">
+                                    {{ user.first_name|default:"Esther Howard" }} {{ user.last_name|default:"(Mock)" }}
+                                </div>
+                                <div class="upload-subtext">Joined: {{ user.date_joined|date:"M Y"|default:"Oct 2023" }}</div>
+                            </div>
+                        </div>
+                        <!-- Full Name Display -->
+                        <div class="col-md-8">
+                            <div class="mb-4">
+                                <label class="form-label">First Name</label>
+                                <div class="display-box">
+                                    {{ user.first_name|default:"Juan" }}
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Last Name</label>
+                                <div class="display-box">
+                                    {{ user.last_name|default:"Dela Cruz" }}
+                                </div>
+                            </div>
+                            <!-- REMOVED SAVE BUTTONS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CV/Resume Section (DISPLAY MODE - VIEW ONLY) -->
+                <section class="mb-5">
+                    <h5 class="section-title">Your Curriculum Vitae / Resume</h5>
+                    <div class="row g-3">
+                        <!-- Resume Card 1 (Display Only) -->
+                        <div class="col-md-4">
+                            <div class="resume-card">
+                                <div class="file-icon"><i class="fa-regular fa-file-lines"></i></div>
+                                <div class="resume-info"><h6>Professional CV (2024)</h6><span>2.8 MB / PDF</span></div>
+                                <!-- REMOVED DELETE ACTION -->
+                                <a href="#" class="resume-actions text-primary" title="Download">
+                                     <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Resume Card 2 (Display Only) -->
+                        <div class="col-md-4">
+                            <div class="resume-card">
+                                <div class="file-icon"><i class="fa-regular fa-file-lines"></i></div>
+                                <div class="resume-info"><h6>Academic Portfolio</h6><span>5.1 MB / PDF</span></div>
+                                <!-- REMOVED DELETE ACTION -->
+                                <a href="#" class="resume-actions text-primary" title="Download">
+                                     <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- REMOVED ADD RESUME BOX -->
+                    </div>
+                </section>
+
+                <!-- Additional Fields (DISPLAY MODE) -->
+                <section class="mb-5">
+                    <h5 class="section-title">Academic & Professional Details</h5>
+                    <div class="row g-3">
+                        <!-- Campus -->
+                        <div class="col-md-6">
+                            <label class="form-label">Campus / Institution</label>
+                            <div class="display-box display-box-muted">
+                                BatStateU - Pablo Borbon (Main I)
+                            </div>
+                        </div>
+
+                        <!-- Student Classification -->
+                        <div class="col-md-6">
+                            <label class="form-label">Student Classification</label>
+                            <div class="display-box display-box-muted">
+                                Regular Student (Full Load)
+                            </div>
+                        </div>
+                        <!-- Education -->
+                        <div class="col-md-6">
+                            <label class="form-label">Education</label>
+                            <div class="display-box display-box-muted">
+                                4th Year - Undergraduate (College)
+                            </div>
+                        </div>
+                        <!-- Experience Level -->
+                        <div class="col-md-6">
+                            <label class="form-label">Experience Level</label>
+                            <div class="display-box display-box-muted">
+                                Freelancing / Commissions
+                            </div>
+                        </div>
+                        <!-- Date of Birth -->
+                        <div class="col-md-6">
+                            <label class="form-label">Date of Birth</label>
+                            <div class="display-box display-box-muted">
+                                1999-07-21
+                            </div>
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="col-md-6">
+                            <label class="form-label">Gender</label>
+                            <div class="display-box display-box-muted">
+                                Male
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- Biography (DISPLAY MODE) -->
+                <section class="mb-5">
+                    <h5 class="section-title">Biography</h5>
+                    <div class="bio-display-container">
+                        <p class="mb-0">
+                            Highly motivated 4th-year student at BatStateU specializing in web application development and UI/UX design. Proficient in Python (Django) and front-end frameworks. Seeking commission work to expand my portfolio and gain practical, real-world experience outside of academic projects.
+                        </p>
+                    </div>
+                    <!-- REMOVED SAVE BUTTONS -->
+                </section>
+
+                <!-- Contact Information (DISPLAY MODE) -->
+                <section>
+                    <h5 class="section-title">Contact Information</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Social Link</label>
+                            <div class="display-box">
+                                <a href="https://linkedin.com/in/estherhoward" target="_blank" class="text-decoration-none text-primary">
+                                    linkedin.com/in/estherhoward
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Email Address</label>
+                            <div class="display-box">
+                                {{ user.email|default:"esther.howard@email.com" }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Contact Number</label>
+                            <div class="display-box">
+                                +63 917 555 1234
+                            </div>
+                        </div>
+                    </div>
+                    <!-- REMOVED SAVE BUTTONS -->
+                </section>
+
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <p class="mb-0">&copy; 2024 JobShark - Job Portal. All rights Reserved</p>
+        </footer>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 text-center">
+                
+                <div class="modal-header border-0 p-0">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3 text-muted">
+                        <i class="fa-solid fa-arrow-right-from-bracket fa-3x"></i>
+                    </div>
+                    
+                    <h4 class="fw-bold mb-2">Log Out?</h4>
+                    <p class="text-muted">Are you sure you want to end your session?</p>
+                </div>
+
+                <div class="modal-footer border-0 justify-content-center gap-2">
+                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
+                    
+                    <form action="{% url 'logout' %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger px-4 text-white">Yes, Log Out</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- PHOTO UPLOAD MODAL (Kept for consistency in base structure) -->
+    <div class="modal fade" id="addPhotoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content p-3">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Update Profile Picture</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body text-center">
+                    <!-- Note: This modal should only be accessed via the Manage Account page for editing -->
+                    <input type="file" 
+                        name="profile_picture" 
+                        id="real_file_input" 
+                        style="display: none;" 
+                        accept="image/*"
+                        onchange="previewImage(event)">
+
+                    <img id="modal_preview" src="#" alt="Preview" style="display: none; max-width: 100%; max-height: 300px; margin-bottom: 20px; border-radius: 10px;">
+
+                    <div class="modal-upload-box" onclick="document.getElementById('real_file_input').click();" style="cursor: pointer;">
+                        <div class="upload-icon-circle"><i class="fa-regular fa-image"></i></div>
+                        <div class="fw-bold mb-1">Browse Photo <span class="fw-normal text-muted">or drop here</span></div>
+                        <div class="upload-subtext mt-2">Supports JPG, PNG. Max size 5 MB.</div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary-custom text-white">Save Photo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ADD RESUME POPUP MODAL (Kept for consistency in base structure) -->
+    <div class="modal fade" id="addResumeModal" tabindex="-1" aria-labelledby="addResumeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content p-3">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="addResumeModalLabel">Add Curriculum Vitae/Resume</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Upload Box -->
+                    <div class="mb-3">
+                        <div class="modal-upload-box">
+                            <div class="upload-icon-circle">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                            </div>
+                            <div class="fw-bold mb-1">Browse File <span class="fw-normal text-muted">or drop here</span></div>
+                            <div class="upload-subtext mt-2">
+                                Only PDF format available. Max file size 12 MB.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary-custom text-white">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // JS for the photo upload preview in the modal
+        function previewImage(event) {
+            var input = event.target;
+            var preview = document.getElementById('modal_preview');
+            
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block'; // Show the image
+                }
+
+                reader.readAsDataURL(input.files[0]); // Read the file
+            }
+        }
+
+    </script>
+</body>
+</html>

@@ -378,7 +378,7 @@
             <div class="col-lg-3 sidebar-container">
                 <div class="sidebar-title">COMMISSIONER DASHBOARD</div>
                 <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link" href="#" role="tab">
+                    <a class="nav-link" href="{% url 'myprofile_commissioner' %}" role="tab">
                         <i class="fa-solid fa-user"></i> My Profile
                     </a>
                     <a class="nav-link" href="#" role="tab">
@@ -445,14 +445,13 @@
                                     <input type="text" class="form-control" name="last_name" id="lastname" placeholder="e.g Dela Cruz"
                                     value="{{ u_form.last_name.value|default:'' }}">
                                 </div>
-                                <!-- Save Button aligned to mimic design -->
-                                <button class="btn btn-primary-custom">Save Changes</button>
                             </div>
                         </div>
                     </section>
 
                     <!-- Additional Fields -->
                     <section class="mb-5">
+                        <h5 class="section-title">Personal and Academic Details</h5>
                         <div class="row g-3">
                             <!-- Campus -->
                             <div class="col-md-6">
@@ -474,29 +473,6 @@
                                     <option value="BatStateU - Mabini">BatStateU - Mabini</option>
                                     <option value="BatStateU - Lima">BatStateU - Lima</option>
                                 </select>
-                            </div>
-
-                            <!-- Student Classification & DOB -->
-                            <div class="col-md-6">
-                                <label class="form-label">Student Classification</label>
-                                    <select class="form-select" name="student_classification">
-                                        <option selected disabled>Select Classification...</option>
-                                        
-                                        <!-- 1. Standard student with fixed block schedule -->
-                                        <option value="Regular Student (Full Load)">Regular Student (Full Load)</option>
-                                        
-                                        <!-- 2. Often has a broken schedule, might be more flexible -->
-                                        <option value="Irregular Student (Flexible Schedule)">Irregular Student (Flexible Schedule)</option>
-                                        
-                                        <!-- 3. Already knows how to balance work/study -->
-                                        <option value="Working Student">Working Student</option>
-                                        
-                                        <!-- 4. Busy with major requirements -->
-                                        <option value="Graduating / Thesis Year">Graduating / Thesis Year</option>
-                                        
-                                        <!-- 5. Fully available professional -->
-                                        <option value="Alumni / Graduate">Alumni / Graduate</option>
-                                    </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Date of Birth</label>
@@ -536,27 +512,6 @@
                                     </optgroup>
                                 </select>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Experience Level</label>
-                                <select class="form-select" name="experience_level">
-                                    <option selected disabled>Select Experience...</option>
-                                    
-                                    <!-- 1. For those just starting out -->
-                                    <option value="Beginner (No paid experience)">Beginner (No paid experience)</option>
-                                    
-                                    <!-- 2. For students who have done Thesis/Capstone/Plates -->
-                                    <option value="Academic Projects Only (Thesis/Capstone)">Academic Projects Only (Thesis/Capstone)</option>
-                                    
-                                    <!-- 3. For those who take commissions on the side -->
-                                    <option value="Freelancing / Commissions">Freelancing / Commissions</option>
-                                    
-                                    <!-- 4. For those who have finished their OJT -->
-                                    <option value="Internship / OJT Experience">Internship / OJT Experience</option>
-                                    
-                                    <!-- 5. For Working Students or Alumni -->
-                                    <option value="Professional / Industry Work">Professional / Industry Work</option>
-                                </select>
-                            </div>
                         </div>
                     </section>
 
@@ -578,7 +533,6 @@
                                 <i class="fa-solid fa-list-ol"></i>
                             </div>
                         </div>
-                        <button class="btn btn-primary-custom mt-3">Save Changes</button>
                     </section>
 
                     <!-- Contact Information -->
@@ -602,7 +556,9 @@
                                     value="{{ p_form.phone_number.value|default:'' }}">
                             </div>
                         </div>
-                        <button class="btn btn-primary-custom mt-4">Save Changes</button>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary-custom mt-4">Save All Changes</button>
+                        </div>
                     </section>
                     <div class="modal fade" id="addPhotoModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">

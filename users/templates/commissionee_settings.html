@@ -228,14 +228,16 @@
 
         /* Buttons */
         .btn-primary-custom {
-            background-color: var(--primary-color);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-weight: 500;
-            border-radius: 6px;
+        background-color: var(--primary-color);
+        color: white; /* <--- ADDED: Sets the text color to white */
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        border-radius: 6px;
         }
         .btn-primary-custom:hover {
             background-color: var(--primary-hover);
+            color: white; /* Ensures text remains white on hover */
         }
 
         /* Curriculum Vitae/Resume Cards */
@@ -474,7 +476,7 @@
             <div class="col-lg-3 sidebar-container">
                 <div class="sidebar-title">Commissionee Dashboard</div>
                 <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link" href="#" role="tab">
+                    <a class="nav-link" href="{% url 'myprofile_commissionee'%}" role="tab">
                         <i class="fa-solid fa-user"></i> My Profile
                     </a>
                     <a class="nav-link" href={% url 'applied_jobs'%} role="tab">
@@ -527,8 +529,6 @@
                                 <label for="lastname" class="form-label">Last Name</label>
                                 <input type="text" class="form-control" id="lastname" placeholder="e.g Dela Cruz">
                             </div>
-                            <!-- Save Button aligned to mimic design -->
-                            <button class="btn btn-primary-custom text-white">Save Changes</button>
                         </div>
                     </div>
                 </section>
@@ -707,7 +707,6 @@
                             <i class="fa-solid fa-underline"></i>
                         </div>
                     </div>
-                    <button class="btn btn-primary-custom text-white mt-3">Save Changes</button>
                 </section>
 
                 <!-- Contact Information -->
@@ -729,7 +728,9 @@
                         </div>
                         
                     </div>
-                    <button class="btn btn-primary-custom text-white mt-4">Save Changes</button>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary-custom mt-4">Save All Changes</button>
+                    </div>
                 </section>
 
             </div>
