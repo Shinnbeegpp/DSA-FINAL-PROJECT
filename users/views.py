@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 from django.contrib import messages
 from .models import UserProfile, UserResume
 from .forms import UserUpdateForm, ProfileUpdateForm, ResumeForm
@@ -214,3 +215,13 @@ def favorite_jobs(request):
 
 def saved_candidates(request):
     return render(request,'saved_candidates.html')
+
+
+def manage_account_commissionee(request):
+    return render(request,'commissionee_settings.html')
+
+def manage_account_commissioner(request):
+    return render(request,'commissioner_settings.html')
+
+def view_details(request):
+    return render(request,'view_details.html')

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -242,14 +244,14 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <a class="navbar-brand d-flex align-items-center" href="#">
-                    <img src="images/logo_name.png" alt="JobShark Logo" 
+                    <img src="{% static 'images/logo_name.png'%}" alt="JobShark Logo" 
                     onerror="this.src='https://placehold.co/150x40/6930C3/ffffff?text=JobShark&font=inter'; this.onerror=null;">
                 </a>
 
                 <div class="d-flex align-items-center gap-4">
                     <div class="user-profile">
                         <span class="user-name d-none d-md-block">Esther Howard</span>
-                        <img src="images/cris.jpg" alt="Profile" class="user-avatar">
+                        <img src="{% static 'images/cris.jpg'%}" alt="Profile" class="user-avatar">
                     </div>
                 </div>
             </div>
@@ -263,7 +265,7 @@
                 <div class="sidebar-container d-flex flex-column flex-grow-1">
                     <div class="sidebar-title">COMMISSIONEE DASHBOARD</div>
                     <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-                        <a class="nav-link" href="#" role="tab">
+                        <a class="nav-link" href="{% url 'myprofile_commissionee' %}" role="tab">
                             <i class="fa-solid fa-user"></i> My Profile
                         </a>
                         <a class="nav-link" href="{%url 'applied_jobs'%}" role="tab">

@@ -489,13 +489,13 @@
                     <a class="nav-link" href="{% url 'myprofile_commissionee'%}" role="tab">
                         <i class="fa-solid fa-user"></i> My Profile
                     </a>
-                    <a class="nav-link" href="{%url 'applied_jobs'%}" role="tab">
+                    <a class="nav-link" href={% url 'applied_jobs'%} role="tab">
                         <i class="fa-solid fa-briefcase"></i> Applied Jobs
                     </a>
                     <a class="nav-link" href="{%url 'favorite_jobs'%}" role="tab">
                         <i class="fa-solid fa-heart"></i> Favorite Jobs
                     </a>
-                    <p class="nav-link active"  role="tab">
+                    <p class="nav-link active" href="{%url 'manage_account_commissionee'%}" role="tab">
                         <i class="fa-solid fa-gear"></i> Manage Account
                     </p>
                     <a class="nav-link" href="#" role="tab"  class="logout-link" 

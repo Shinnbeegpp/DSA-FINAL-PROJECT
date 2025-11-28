@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -285,14 +287,14 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <a class="navbar-brand d-flex align-items-center" href="#">
-                    <img src="images/logo_name.png" alt="JobShark Logo" 
+                    <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo" 
                     onerror="this.src='https://placehold.co/150x40/6930C3/ffffff?text=JobShark&font=inter'; this.onerror=null;">
                 </a>
 
                 <div class="d-flex align-items-center gap-4">
                     <div class="user-profile">
                         <span class="user-name d-none d-md-block">Esther Howard</span>
-                        <img src="images/cris.jpg" alt="Profile" class="user-avatar">
+                        <img src="{% static 'images/cris.jpg'%}" alt="Profile" class="user-avatar">
                     </div>
                 </div>
             </div>
@@ -306,10 +308,10 @@
                 <div class="sidebar-container d-flex flex-column flex-grow-1">
                     <div class="sidebar-title">COMMISSIONEE DASHBOARD</div>
                     <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-                        <a class="nav-link" href="#" role="tab">
+                        <a class="nav-link" href="{% url 'myprofile_commissionee' %}" role="tab">
                             <i class="fa-solid fa-user"></i> My Profile
                         </a>
-                        <p class="nav-link active" " role="tab">
+                        <p class="nav-link active" role="tab">
                             <i class="fa-solid fa-briefcase"></i> Applied Jobs
                         </p>
                         <a class="nav-link" href="{%url 'favorite_jobs'%}" role="tab">
@@ -350,7 +352,7 @@
                     </div>
 
                     <div class="job-row">
-                        <div style="opacity: 0.6;">
+                        <div style="">
                             <div class="job-title">Thesis Help: Chapter 2 Research</div>
                             <div class="job-meta">Academic Assistance &bull; ₱1,500</div> 
                         </div>
@@ -377,7 +379,7 @@
                             <span class="status-pill status-active"><i class="fa-solid fa-check"></i> ACTIVE</span>
                         </div>
                         <div class="d-flex justify-content-end align-items-center gap-2">
-                            <button class="btn-view">View Details</button>
+                            <a href="{% url 'view_details' %}" class="btn-view">View Details</a>
                         </div>
                     </div>
 
@@ -398,11 +400,11 @@
                     </div>
 
                     <div class="job-row">
-                        <div style="opacity: 0.6;">
+                        <div style="">
                             <div class="job-title">Video Edit for Vlog (5 mins)</div>
                             <div class="job-meta">Video Editing &bull; ₱1,200</div> 
                         </div>
-                        <div class="text-muted small" style="opacity: 0.6;">
+                        <div class="text-muted small" style="">
                             04/28/2025
                         </div>
                         <div>
@@ -446,7 +448,7 @@
                     </div>
 
                     <div class="job-row">
-                        <div style="opacity: 0.6;">
+                        <div style="">
                             <div class="job-title">Statistical Analysis (SPSS) for Psych Thesis</div>
                             <div class="job-meta">Academic Assistance &bull; ₱2,500</div> 
                         </div>

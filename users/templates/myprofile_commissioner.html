@@ -353,7 +353,7 @@
                         {% if user.userprofile.profile_picture %}
                             <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar">
                         {% else %}
-                            <img src="https://placehold.co/40x40/E5E7EB/9CA3AF?text=U" alt="Profile" class="user-avatar">
+                            <img src={% static "images/default_pfp.jpg" %} alt="Profile" class="user-avatar">
                         {% endif %}
                     </div>
                 </div>
@@ -369,9 +369,9 @@
                 <div class="sidebar-title">COMMISSIONER DASHBOARD</div>
                 <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
                     <!-- MY PROFILE IS NOW ACTIVE (Display Page) -->
-                    <a class="nav-link active" href="{% url 'myprofile_commissioner' %}" role="tab">
+                    <p class="nav-link active" href="{% url 'myprofile_commissioner' %}" role="tab">
                         <i class="fa-solid fa-user"></i> My Profile
-                    </a>
+                    </p>
                     <a class="nav-link" href="{% url 'post_job' %}" role="tab">
                         <i class="fa-solid fa-circle-plus"></i> Post a Job
                     </a>
@@ -382,11 +382,11 @@
                         <i class="fa-solid fa-bookmark"></i> Saved Candidate
                     </a>
                     <!-- MANAGE ACCOUNT (Edit Page) - Links to a mock edit URL -->
-                    <a class="nav-link" href="{% url 'commissioner_settings' %}" role="tab">
+                    <a class="nav-link" href="{% url 'manage_account_commissioner' %}" role="tab">
                         <i class="fa-solid fa-gear"></i> Manage Account
                     </a>
                     <!-- LOGOUT LINK WITH MODAL TRIGGER -->
-                    <a class="nav-link" href="#" role="tab"  class="logout-link" 
+                    <a class="nav-link" href="{% url 'homepage' %}" role="tab"  class="logout-link" 
                         data-bs-toggle="modal" data-bs-target="#logoutModal">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
                     </a>
@@ -421,10 +421,10 @@
                                         class="img-fluid"
                                         style="width: 100%; height: 300px; object-fit: cover; object-position: center; border-radius: 8px;">
                                 {% else %}
-                                    <div class="d-flex align-items-center justify-content-center" 
-                                        style="width: 100%; height: 300px; background-color: #F3F4F6; border-radius: 8px;">
-                                        <i class="fa-solid fa-user text-muted" style="font-size: 5rem;"></i>
-                                    </div>
+                                    <img src= "{% static "images/default_pfp.jpg"%}"
+                                        alt="Profile" 
+                                        class="img-fluid"
+                                        style="width: 100%; height: 300px; object-fit: cover; object-position: center; border-radius: 8px;">
                                 {% endif %}
 
                             </div>

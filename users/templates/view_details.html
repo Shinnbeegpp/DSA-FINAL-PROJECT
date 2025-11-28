@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -115,9 +117,8 @@
                 <!-- Logo -->
                 <a class="flex items-center space-x-2" href="#">
                     <!-- Placeholder for Logo/Site Name -->
-                    <svg class="w-8 h-8 text-primary-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    <!-- DJANGO PLACEHOLDER: {% static 'images/logo_name.png' %} -->
-                    <span class="text-xl font-bold text-dark-blue-text">JobShark</span>
+                    <img src={% static "images/logo_name.png" %} alt="JobShark Logo" style="width: 150px;" 
+                        onerror="this.src='https://placehold.co/150x40/6c63ff/ffffff?text=JobShark&font=inter'; this.onerror=null;">
                 </a>
 
                 <!-- User Profile -->
@@ -151,9 +152,9 @@
             
             <!-- Mobile Menu Dropdown -->
             <div id="mobileMenu" class="hidden absolute top-full left-0 right-0 bg-white shadow-md border-t border-gray-200 py-2">
-                <!-- DJANGO PLACEHOLDER: {% url 'find_job_page' %} -->
+                <!-- DJANGO PLACEHOLDER: % url 'find_job_page' % -->
                 <a href="#" class="block px-4 py-2 text-dark-blue-text hover:bg-gray-50">Find Job</a>
-                <!-- DJANGO PLACEHOLDER: {% url 'dashboard_page' %} -->
+                <!-- DJANGO PLACEHOLDER: % url 'dashboard_page' % -->
                 <a href="#" class="block px-4 py-2 text-dark-blue-text hover:bg-gray-50">Dashboard</a>
             </div>
         </nav>
@@ -164,7 +165,9 @@
         
         <!-- Commission Overview Header -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-            <h1 class="text-3xl font-extrabold text-dark-blue-text">Commission Overview</h1>
+            <h1 class="text-3xl font-extrabold mx-auto ">
+                Commission Overview
+            </h1>
             <button id="applyJobBtnTop" class="btn-primary flex items-center mt-4 md:mt-0" onclick="openApplyModal()">
                 Apply Now 
                 <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -179,8 +182,6 @@
                 
                 <!-- Project Title & Category -->
                 <div class="card p-6 border-l-4 border-primary-purple">
-                    <h2 class="text-xl font-semibold text-gray-500 mb-1">Project Title</h2>
-                    <!-- DJANGO PLACEHOLDER: {{ job.title }} -->
                     <h3 class="text-3xl font-bold text-dark-blue-text" id="job-title-display">Project Title Placeholder (Design & Web)</h3>
                     <!-- DJANGO PLACEHOLDER: {{ job.category }} -->
                     <p class="text-lg text-primary-purple font-medium mt-1">
@@ -192,11 +193,11 @@
 
                 <!-- Job Description & Instructions -->
                 <div class="card">
-                    <h4 class="text-xl font-bold mb-4 border-b pb-2">Job Description & Instructions</h4>
+                    <h4 class="text-xl font-bold mb-4 border-b pb-2 ">Job Description & Instructions</h4>
                     <!-- DJANGO PLACEHOLDER: {{ job.description|linebreaks }} -->
                     <div id="job-description-content" class="text-base text-text-gray leading-relaxed">
-                        <p class="mb-4">Integer aliquet pretium consequat. Donec et sapien id leo accumsan pellentesque eget maximus tellus. Duis et est ac leo rhoncus tincidunt vitae vehicula augue. Donec in suscipit diam. Pellentesque quis justo sit amet arcu commodo sollicitudin. Integer finibus blandit condimentum. Vivamus sit amet ligula ullamcorper, pulvinar ante id, tristique erat. Quisque sit amet aliquam urna. Maecenas blandit felis id massa sodales finibus. Integer bibendum eu nulla eu sollicitudin. Sed lobortis diam tincidunt accumsan faucibus. Quisque blandit augue quis turpis auctor, dapibus euismod ante ultricies. Ut non felis lacinia turpis feugiat euismod at id magna. Sed ut orci arcu. Suspendisse sollicitudin faucibus aliquet.</p>
-                        <p>Integer aliquet pretium consequat. Donec et sapien id leo accumsan pellentesque eget maximus tellus. Duis et est ac leo rhoncus tincidunt vitae vehicula augue. Donec in suscipit diam. Pellentesque quis justo sit amet arcu commodo sollicitudin. Integer finibus blandit condimentum.</p>
+                        <p class="mb-4 font-serif">Integer aliquet pretium consequat. Donec et sapien id leo accumsan pellentesque eget maximus tellus. Duis et est ac leo rhoncus tincidunt vitae vehicula augue. Donec in suscipit diam. Pellentesque quis justo sit amet arcu commodo sollicitudin. Integer finibus blandit condimentum. Vivamus sit amet ligula ullamcorper, pulvinar ante id, tristique erat. Quisque sit amet aliquam urna. Maecenas blandit felis id massa sodales finibus. Integer bibendum eu nulla eu sollicitudin. Sed lobortis diam tincidunt accumsan faucibus. Quisque blandit augue quis turpis auctor, dapibus euismod ante ultricies. Ut non felis lacinia turpis feugiat euismod at id magna. Sed ut orci arcu. Suspendisse sollicitudin faucibus aliquet.</p>
+                        <p class="mb-4 font-serif">Integer aliquet pretium consequat. Donec et sapien id leo accumsan pellentesque eget maximus tellus. Duis et est ac leo rhoncus tincidunt vitae vehicula augue. Donec in suscipit diam. Pellentesque quis justo sit amet arcu commodo sollicitudin. Integer finibus blandit condimentum.</p>
                     </div>
                 </div>
 
@@ -204,8 +205,8 @@
                 <div class="card">
                     <h4 class="text-xl font-bold mb-4 border-b pb-2">Required Deliverables & Specifications</h4>
                     <!-- DJANGO PLACEHOLDER: {{ job.deliverables|linebreaks }} -->
-                    <div id="job-deliverables-content" class="text-base text-text-gray leading-relaxed">
-                        <ul class="list-disc list-inside space-y-2 pl-4">
+                    <div id="job-deliverables-content" class="text-base text-text-gray leading-relaxed ">
+                        <ul class="list-disc list-inside space-y-2 pl-4 mb-4 font-serif">
                             <li>Complete front-end website code (HTML/Tailwind/JS)</li>
                             <li>Mobile-responsive design for all major breakpoints.</li>
                             <li>Source files (Figma or Sketch) provided upon completion.</li>
@@ -220,29 +221,31 @@
             <div class="lg:col-span-1 space-y-6">
                 
                 <!-- Job Overview Card -->
-                <div class="card">
+                <div class="card text-sm">
                     <h4 class="text-xl font-bold mb-4">Job Overview:</h4>
+
                     <div class="space-y-3">
+
                         <div class="data-list-item">
-                            <span class="text-gray-500 font-medium">Job Title:</span>
-                            <!-- DJANGO PLACEHOLDER: {{ job.short_title }} -->
-                            <span class="font-semibold">Web Design & Development</span>
+                            <span class="text-gray-500">Job Title:</span>
+                            <span class="font-medium">Web Design & Development</span>
                         </div>
+
                         <div class="data-list-item">
-                            <span class="text-gray-500 font-medium">Category:</span>
-                            <!-- DJANGO PLACEHOLDER: {{ job.category }} -->
-                            <span class="font-semibold">Programming & IT</span>
+                            <span class="text-gray-500">Category:</span>
+                            <span class="font-medium">Programming & IT</span>
                         </div>
+
                         <div class="data-list-item">
-                            <span class="text-gray-500 font-medium">Service Rate:</span>
-                            <!-- DJANGO PLACEHOLDER: ${{ job.rate }} -->
-                            <span class="font-semibold text-green-600">€500 - €800 (Placeholder)</span>
+                            <span class="text-gray-500">Service Rate:</span>
+                            <span class="font-medium">₱500 - ₱800</span>
                         </div>
+
                         <div class="data-list-item">
-                            <span class="text-gray-500 font-medium">Posted Date:</span>
-                            <!-- DJANGO PLACEHOLDER: {{ job.posted_date|date:"M d, Y" }} -->
-                            <span class="font-semibold">Jan 15, 2025</span>
+                            <span class="text-gray-500">Posted Date:</span>
+                            <span class="font-medium">Jan 15, 2025</span>
                         </div>
+
                     </div>
                 </div>
 
@@ -436,7 +439,7 @@
                     <button type="button" onclick="closeApplyModal()" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition">
                         Cancel
                     </button>
-                    <button type="submit" class="btn-primary flex items-center">
+                    <button type="submit"  href={% url 'applied_jobs'%} class="btn-primary flex items-center">
                         Apply Now 
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                     </button>
