@@ -345,15 +345,17 @@
 
                 <div class="d-flex align-items-center gap-4">
                     <div class="user-profile">
-                        <!-- Use Django template tags for user info -->
                         <span class="user-name d-none d-md-block">
-                            {{ user.username }}
+                            {{ user.first_name|default:user.username }} {{ user.last_name }}
                         </span>
 
                         {% if user.userprofile.profile_picture %}
-                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar">
+                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar"
+                            style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                         {% else %}
-                            <img src={% static "images/default_pfp.jpg" %} alt="Profile" class="user-avatar">
+                            <img src="{% static 'images/default_pfp.jpg' %}" 
+                                alt="Default Profile"
+                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
                         {% endif %}
                     </div>
                 </div>
@@ -417,14 +419,12 @@
                                 
                                 {% if user.userprofile.profile_picture %}
                                     <img src="{{ user.userprofile.profile_picture.url }}" 
-                                        alt="Profile" 
-                                        class="img-fluid"
-                                        style="width: 100%; height: 300px; object-fit: cover; object-position: center; border-radius: 8px;">
+                                        alt="Profile Preview"
+                                        style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
                                 {% else %}
-                                    <img src= "{% static "images/default_pfp.jpg"%}"
-                                        alt="Profile" 
-                                        class="img-fluid"
-                                        style="width: 100%; height: 300px; object-fit: cover; object-position: center; border-radius: 8px;">
+                                    <img src="{% static 'images/default_pfp.jpg' %}" 
+                                        alt="Default Profile"
+                                        style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
                                 {% endif %}
 
                             </div>
