@@ -44,7 +44,6 @@ urlpatterns = [
     path('post_job/', post_job, name="post_job"),
     path('applied_jobs/', applied_jobs, name="applied_jobs"),
     path('favorite_jobs/', favorite_jobs, name="favorite_jobs"),
-    path('logout/', auth_views.LogoutView.as_view(next_page="homepage"), name='logout'),
     path('my_profile/commissioner/', myprofile_commissioner, name="myprofile_commissioner"),
     path('my_profile/commissionee/', myprofile_commissionee, name="myprofile_commissionee"),
     path('manage_account/commissionee/', manage_account_commissionee, name="manage_account_commissionee"),
@@ -52,7 +51,9 @@ urlpatterns = [
     path('manage_account/commissioner/', manage_account_commissioner, name="manage_account_commissioner"),
     path('resume/upload/', upload_resume, name='upload_resume'),
     path('resume/delete/<int:pk>/', delete_resume, name='delete_resume'),
-    path('saved_candidates', saved_candidates, name='saved_candidates')
+    path('saved_candidates', saved_candidates, name='saved_candidates'),
+    
+    path('logout/', auth_views.LogoutView.as_view(next_page="homepage"), name='logout'),
 ]
 
 if settings.DEBUG:
