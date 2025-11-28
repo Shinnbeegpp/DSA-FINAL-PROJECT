@@ -357,13 +357,17 @@
                 <div class="d-flex align-items-center gap-4">
                     <div class="user-profile">
                         <span class="user-name d-none d-md-block">
-                            {{ user.first_name|default:user.username }}
+                            {{ user.first_name|default:user.username }} {{ user.last_name }}
                         </span>
 
                         {% if user.userprofile.profile_picture %}
-                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar">
+                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar"
+                            style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                         {% else %}
-                            <img src="{% static 'images/default.jpg' %}" alt="Profile" class="user-avatar">
+                            <div class="user-avatar d-flex align-items-center justify-content-center bg-light text-secondary rounded-circle" 
+                                style="width: 40px; height: 40px;">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
@@ -378,22 +382,25 @@
             <div class="col-lg-3 sidebar-container">
                 <div class="sidebar-title">COMMISSIONER DASHBOARD</div>
                 <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link" href="{% url 'myprofile_commissioner' %}" role="tab">
+                    <!-- MY PROFILE IS NOW ACTIVE (Display Page) -->
+                    <a class="nav-link active" href="{% url 'myprofile_commissioner' %}" role="tab">
                         <i class="fa-solid fa-user"></i> My Profile
                     </a>
-                    <a class="nav-link" href="{% url 'myprofile_commissioner' %}" role="tab">
+                    <a class="nav-link" href="{% url 'post_job' %}" role="tab">
                         <i class="fa-solid fa-circle-plus"></i> Post a Job
                     </a>
                     <a class="nav-link" href="{% url 'myjobs' %}" role="tab">
                         <i class="fa-solid fa-briefcase"></i> My Jobs
                     </a>
-                    <a class="nav-link" href="{% url 'saved_candidate' %}" role="tab">
+                    <a class="nav-link" href="{% url 'saved_candidates' %}" role="tab">
                         <i class="fa-solid fa-bookmark"></i> Saved Candidate
                     </a>
-                    <a class="nav-link active" href="{% url 'manage_account_commissioner' %}" role="tab">
+                    <!-- MANAGE ACCOUNT (Edit Page) - Links to a mock edit URL -->
+                    <a class="nav-link" href="{% url 'commissioner_settings' %}" role="tab">
                         <i class="fa-solid fa-gear"></i> Manage Account
                     </a>
-                    <a class="nav-link" href="{% url 'myprofile_commissioner' %}" role="tab"  class="logout-link" 
+                    <!-- LOGOUT LINK WITH MODAL TRIGGER -->
+                    <a class="nav-link" href="#" role="tab"  class="logout-link" 
                         data-bs-toggle="modal" data-bs-target="#logoutModal">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
                     </a>
@@ -421,16 +428,23 @@
                             <div class="col-md-4">
                                 <label class="form-label">Profile Picture</label>
                                 
-                                <div class="profile-upload-box" data-bs-toggle="modal" data-bs-target="#addPhotoModal" style="cursor: pointer;">
+                                <div class="profile-upload-box text-center p-3" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#addPhotoModal" 
+                                    style="cursor: pointer; border: 2px dashed #ddd; border-radius: 10px; overflow: hidden;">
                                     
                                     {% if user.userprofile.profile_picture %}
-                                        <img src="{{ user.userprofile.profile_picture.url }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
+                                        <img src="{{ user.userprofile.profile_picture.url }}" 
+                                            alt="Profile Preview"
+                                            style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
                                     {% else %}
-                                        <div class="upload-icon-circle"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                                        <div class="upload-icon-circle mb-2" style="margin-top: 40px;">
+                                            <i class="fa-solid fa-cloud-arrow-up fa-2x text-muted"></i>
+                                        </div>
                                     {% endif %}
 
                                     <div class="fw-bold mb-1">Browse photo <span class="fw-normal text-muted">or drop here</span></div>
-                                    <div class="upload-subtext mt-2">Max photo size 5 MB.</div>
+                                    <div class="upload-subtext small text-muted">Max photo size 5 MB.</div>
                                 </div>
                             </div>
                             <!-- Full Name Input -->
@@ -560,6 +574,7 @@
                             <button type="submit" class="btn btn-primary-custom mt-4">Save All Changes</button>
                         </div>
                     </section>
+
                     <div class="modal fade" id="addPhotoModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                             <div class="modal-content p-3">
