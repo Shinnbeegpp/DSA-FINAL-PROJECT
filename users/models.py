@@ -97,4 +97,27 @@ class UserResume(models.Model):
         return f"{self.user.username} - Resume"
 
 
+class Job(models.Model):
+    # Link to the Commissioner who posted it
+    commissioner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posted_jobs')
+    
+    title = models.CharField(max_length=255)
+    category = models.CharField(max_length=100)
+    budget = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    # Advanced Info
+    campus = models.CharField(max_length=150)
+    department = models.CharField(max_length=150)
+    academic_level = models.CharField(max_length=100)
+    
+    # Details
+    description = models.TextField()
+    deliverables = models.TextField()
+    
+    # System fields
+    STATUS_CHOICES = [('Open', 'Open'), ('Hired', 'Hired'), ('Completed', 'Completed')]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Open')
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.title

@@ -386,17 +386,18 @@
                 <h2 class="page-title">Post a job</h2>
 
                 <!-- Added ID to form for JS selector -->
-                <form id="postJobForm">
+                <form id="postJobForm" method="POST">
+                    {% csrf_token %}
                     <!-- Job / Task Title -->
                     <div class="mb-4">
                         <label class="form-label">Job / Task Title</label>
-                        <input type="text" class="form-control" placeholder="e.g., Need help with Thesis Chapter 2, Logo Design, Python Debugging...">
+                        <input type="text" name="title" class="form-control" required placeholder="e.g., Need help with Thesis Chapter 2, Logo Design, Python Debugging...">
                     </div>
 
                     <!-- Category with 'Others' Toggle -->
                     <div class="mb-4">
                         <label class="form-label">Category</label>
-                        <select class="form-select" id="categorySelect" onchange="toggleInput('categorySelect', 'otherCategoryInput')">
+                        <select class="form-select" name="category" id="categorySelect" onchange="toggleInput('categorySelect', 'otherCategoryInput')">
                             <option selected disabled>Select...</option>
                             <option value="Academic Assistance">Academic Assistance</option>
                             <option value="Graphic Design">Graphic Design</option>
@@ -404,7 +405,7 @@
                             <option value="Video Editing">Video Editing</option>
                             <option value="Others">Others</option>
                         </select>
-                        <input type="text" class="form-control mt-2" id="otherCategoryInput" placeholder="Please specify category..." style="display: none;">
+                        <input type="text" name="category_other" class="form-control mt-2" id="otherCategoryInput" placeholder="Please specify category..." style="display: none;">
                     </div>
 
                     <!-- Service Rate -->
@@ -413,7 +414,7 @@
                         <div class="col-md-4">
                             <label class="form-label">Budget</label>
                             <div class="input-group">
-                                <input type="number" class="form-control">
+                                <input type="number" name="budget" class="form-control" required>
                                 <span class="input-group-text">₱</span>
                             </div>
                         </div>
@@ -424,15 +425,15 @@
                     <div class="row g-4 mb-4">
                         <div class="col-md-4">
                             <label class="form-label">Campus / Institution</label>
-                            <select class="form-select" id="campusSelect" onchange="toggleInput('campusSelect')">
+                            <select class="form-select" name="campus" id="campusSelect" onchange="toggleInput('campusSelect')">
                                 <option selected disabled>Select Campus...</option>
                                 
                                 <!-- BatStateU Campuses -->
-                                <option value="BatStateU - Pablo Borbon">BatStateU - Pablo Borbon (Main I)</option>
-                                <option value="BatStateU - Alangilan">BatStateU - Alangilan (Main II)</option>
-                                <option value="BatStateU - Nasugbu">BatStateU - ARASOF Nasugbu</option>
+                                <option value="BatStateU - Pablo Borbon (Main I)">BatStateU - Pablo Borbon (Main I)</option>
+                                <option value="BatStateU - Alangilan (Main II)">BatStateU - Alangilan (Main II)</option>
+                                <option value="BatStateU - ARASOF Nasugbu">BatStateU - ARASOF Nasugbu</option>
                                 <option value="BatStateU - Lipa">BatStateU - Lipa</option>
-                                <option value="BatStateU - Malvar">BatStateU - Malvar (JPLPC)</option>
+                                <option value="BatStateU - Malvar (JPLPC)">BatStateU - Malvar (JPLPC)</option>
                                 <option value="BatStateU - Balayan">BatStateU - Balayan</option>
                                 <option value="BatStateU - Lemery">BatStateU - Lemery</option>
                                 <option value="BatStateU - Rosario">BatStateU - Rosario</option>
@@ -445,53 +446,37 @@
 
                         <div class="col-md-4">
                             <label class="form-label">Department / Major</label>
-                            <select class="form-select" id="deptSelect" onchange="toggleInput('deptSelect', 'otherDeptInput')">
+                            <select class="form-select" name="department" id="deptSelect" onchange="toggleInput('deptSelect', 'otherDeptInput')">
                                 <option selected disabled>Select College / Department...</option>
-                                
-                                <!-- CICS -->
-                                <option value="CICS">College of Informatics & Computing Sciences (CICS)</option>
-                                
-                                <!-- CEAFA -->
-                                <option value="CEAFA">College of Engineering, Architecture & Fine Arts (CEAFA)</option>
-                                
-                                <!-- CABEIHM -->
-                                <option value="CABEIHM">College of Accountancy, Business, Economics & IHM (CABEIHM)</option>
-                                
-                                <!-- CAS -->
-                                <option value="CAS">College of Arts & Sciences (CAS)</option>
-                                
-                                <!-- CTE -->
-                                <option value="CTE">College of Teacher Education (CTE)</option>
-                                
-                                <!-- CIT -->
-                                <option value="CIT">College of Industrial Technology (CIT)</option>
-                                
-                                <!-- CONAHS -->
-                                <option value="CONAHS">College of Nursing & Allied Health Sciences (CONAHS)</option>
-                                
-                                <!-- OTHERS -->
-                                <option value="Agri">College of Agriculture & Forestry</option>
-                                <option value="Others">Others / Not Listed</option>
+                                <option value="College of Informatics & Computing Sciences (CICS)">College of Informatics & Computing Sciences (CICS)</option>
+                                <option value="College of Engineering, Architecture & Fine Arts (CEAFA)">College of Engineering, Architecture & Fine Arts (CEAFA)</option>
+                                <option value="College of Accountancy, Business, Economics & IHM (CABEIHM)">College of Accountancy, Business, Economics & IHM (CABEIHM)</option>
+                                <option value="College of Arts & Sciences (CAS)">College of Arts & Sciences (CAS)</option>
+                                <option value="College of Teacher Education (CTE)">College of Teacher Education (CTE)</option>
+                                <option value="College of Industrial Technology (CIT)">College of Industrial Technology (CIT)</option>
+                                <option value="College of Nursing & Allied Health Sciences (CONAHS)">College of Nursing & Allied Health Sciences (CONAHS)</option>
+                                <option value="College of Agriculture & Forestry">College of Agriculture & Forestry</option>
+                                <option value="Others / Not Listed">Others / Not Listed</option>
                             </select>
-                            <input type="text" class="form-control mt-2" id="otherDeptInput" placeholder="Specify Department..." style="display: none;">
+                            <input type="text" name="department_other" class="form-control mt-2" id="otherDeptInput" placeholder="Specify Department..." style="display: none;">
                         </div>
 
                         <div class="col-md-4">
                             <label class="form-label">Academic Level</label>
-                            <select class="form-select">
+                            <select class="form-select" name="academic_level" required>
                                 <option selected disabled>Select Level...</option>
 
                                 <optgroup label="Undergraduate (College)">
-                                    <option>1st Year</option>
-                                    <option>2nd Year</option>
-                                    <option>3rd Year</option>
-                                    <option>4th Year</option>
-                                    <option>5th Year</option>
+                                    <option value="1st Year">1st Year</option>
+                                    <option value="2nd Year">2nd Year</option>
+                                    <option value="3rd Year">3rd Year</option>
+                                    <option value="4th Year">4th Year</option>
+                                    <option value="5th Year">5th Year</option>
                                 </optgroup>
 
                                 <optgroup label="Post-Graduate">
-                                    <option>Master's Degree</option>
-                                    <option>Doctorate / PhD</option>
+                                    <option value="Master's Degree">Master's Degree</option>
+                                    <option value="Doctorate / PhD">Doctorate / PhD</option>
                                 </optgroup>
                             </select>
                         </div>
@@ -503,7 +488,7 @@
                     <div class="mb-4">
                         <label class="form-label">Job Description & Instructions</label>
                         <div class="rich-editor-box">
-                            <textarea class="rich-textarea" placeholder="Describe the project. If this is a research paper, what is the topic? If this is a novel, what is the genre?"></textarea>
+                            <textarea class="rich-textarea" name="description" rows="5" required placeholder="Describe the project. If this is a research paper, what is the topic? If this is a novel, what is the genre?"></textarea>
                             <div class="editor-toolbar">
                                 <i class="fa-solid fa-bold"></i>
                                 <i class="fa-solid fa-italic"></i>
@@ -521,7 +506,7 @@
                     <div class="mb-4">
                         <label class="form-label">Required Deliverables</label>
                         <div class="rich-editor-box">
-                            <textarea class="rich-textarea" placeholder="What exactly do you need submitted? (e.g., A .docx file, a working link, a source code file)."></textarea>
+                            <textarea class="rich-textarea" name="deliverables" rows="3" placeholder="What exactly do you need submitted? (e.g., A .docx file, a working link, a source code file)."></textarea>
                             <div class="editor-toolbar">
                                 <i class="fa-solid fa-bold"></i>
                                 <i class="fa-solid fa-italic"></i>
@@ -538,7 +523,7 @@
 
                     <!-- Submit Button -->
                     <!-- Changed to type button to prevent submission for demo, triggers JS -->
-                    <button type="button" class="btn-post-job" id="triggerSuccessModal">
+                    <button type="submit" class="btn-post-job">
                         Post Job <i class="fa-solid fa-arrow-right"></i>
                     </button>
 
@@ -554,33 +539,31 @@
 
     <!-- SUCCESS MODAL (Hidden by Default) -->
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 700px;">
-        <div class="modal-content modal-custom-content bg-white">
-          
-          <!-- Close Button -->
-          <button type="button" class="btn-close-floating" data-bs-dismiss="modal" aria-label="Close">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+        <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 700px;">
+            <div class="modal-content modal-custom-content bg-white">
+                <!-- Close Button -->
+                <button type="button" class="btn-close-floating" data-bs-dismiss="modal" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+                </button>
 
-          <div class="modal-body p-0">
-            <!-- Title -->
-            <div class="modal-title-custom">
-                <span class="modal-icon">🎉</span> Congratulation, Your Job is successfully posted!
+                <div class="modal-body p-0">
+                    <!-- Title -->
+                    <div class="modal-title-custom">
+                        <span class="modal-icon">🎉</span> Congratulation, Your Job is successfully posted!
+                    </div>
+                
+                    <!-- Subtitle -->
+                    <p class="modal-subtitle-custom">
+                        You can manage your form my-jobs section in your dashboard
+                    </p>
+
+                    <!-- Action Button -->
+                    <a href="{% url 'myjobs' %}" class="btn-view-jobs-modal">
+                        View Jobs <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
-            
-            <!-- Subtitle -->
-            <p class="modal-subtitle-custom">
-                You can manage your form my-jobs section in your dashboard
-            </p>
-
-            <!-- Action Button -->
-            <a href="#" class="btn-view-jobs-modal">
-                View Jobs <i class="fa-solid fa-arrow-right"></i>
-            </a>
-          </div>
-
         </div>
-      </div>
     </div>
 
     <!-- Logout Confirmation Modal -->
@@ -622,7 +605,7 @@
             var select = document.getElementById(selectId);
             var input = document.getElementById(inputId);
             
-            if (select.value === "Others") {
+            if (select.value === "Others" || select.value === "Others / Not Listed") {
                 input.style.display = "block";
                 input.focus();
             } else {
@@ -630,20 +613,15 @@
                 input.value = ""; 
             }
         }
+    </script>
 
-        // Script to Trigger the Success Modal
+    {% if messages %}
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const postBtn = document.getElementById('triggerSuccessModal');
-            const myModal = new bootstrap.Modal(document.getElementById('successModal'));
-
-            postBtn.addEventListener('click', function(e) {
-                // Prevent default form submit if it was a submit button
-                e.preventDefault();
-                
-                // Show the modal
-                myModal.show();
-            });
+            var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+            myModal.show();
         });
     </script>
+    {% endif %}
 </body>
 </html>
