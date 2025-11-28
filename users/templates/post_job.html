@@ -386,7 +386,7 @@
                 <h2 class="page-title">Post a job</h2>
 
                 <!-- Added ID to form for JS selector -->
-                <form id="postJobForm">
+                <form id="postJobForm" method="POST">
                     {% csrf_token %}
                     <!-- Job / Task Title -->
                     <div class="mb-4">
@@ -523,7 +523,7 @@
 
                     <!-- Submit Button -->
                     <!-- Changed to type button to prevent submission for demo, triggers JS -->
-                    <button type="sumbit" class="btn-post-job" id="triggerSuccessModal">
+                    <button type="submit" class="btn-post-job">
                         Post Job <i class="fa-solid fa-arrow-right"></i>
                     </button>
 
@@ -539,33 +539,31 @@
 
     <!-- SUCCESS MODAL (Hidden by Default) -->
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 700px;">
-        <div class="modal-content modal-custom-content bg-white">
-          
-          <!-- Close Button -->
-          <button type="button" class="btn-close-floating" data-bs-dismiss="modal" aria-label="Close">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+        <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 700px;">
+            <div class="modal-content modal-custom-content bg-white">
+                <!-- Close Button -->
+                <button type="button" class="btn-close-floating" data-bs-dismiss="modal" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+                </button>
 
-          <div class="modal-body p-0">
-            <!-- Title -->
-            <div class="modal-title-custom">
-                <span class="modal-icon">🎉</span> Congratulation, Your Job is successfully posted!
+                <div class="modal-body p-0">
+                    <!-- Title -->
+                    <div class="modal-title-custom">
+                        <span class="modal-icon">🎉</span> Congratulation, Your Job is successfully posted!
+                    </div>
+                
+                    <!-- Subtitle -->
+                    <p class="modal-subtitle-custom">
+                        You can manage your form my-jobs section in your dashboard
+                    </p>
+
+                    <!-- Action Button -->
+                    <a href="{% url 'myjobs' %}" class="btn-view-jobs-modal">
+                        View Jobs <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
-            
-            <!-- Subtitle -->
-            <p class="modal-subtitle-custom">
-                You can manage your form my-jobs section in your dashboard
-            </p>
-
-            <!-- Action Button -->
-            <a href="{% url 'myjobs' %}" class="btn-view-jobs-modal">
-                View Jobs <i class="fa-solid fa-arrow-right"></i>
-            </a>
-          </div>
-
         </div>
-      </div>
     </div>
 
     <!-- Logout Confirmation Modal -->
@@ -607,7 +605,7 @@
             var select = document.getElementById(selectId);
             var input = document.getElementById(inputId);
             
-            if (select.value === "Others") {
+            if (select.value === "Others" || select.value === "Others / Not Listed") {
                 input.style.display = "block";
                 input.focus();
             } else {
@@ -615,21 +613,8 @@
                 input.value = ""; 
             }
         }
-
-        // Script to Trigger the Success Modal
-        document.addEventListener("DOMContentLoaded", function() {
-            const postBtn = document.getElementById('triggerSuccessModal');
-            const myModal = new bootstrap.Modal(document.getElementById('successModal'));
-
-            postBtn.addEventListener('click', function(e) {
-                // Prevent default form submit if it was a submit button
-                e.preventDefault();
-                
-                // Show the modal
-                myModal.show();
-            });
-        });
     </script>
+
     {% if messages %}
     <script>
         document.addEventListener("DOMContentLoaded", function() {

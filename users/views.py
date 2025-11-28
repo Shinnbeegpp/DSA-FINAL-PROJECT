@@ -240,7 +240,7 @@ def post_job(request):
 
         # 3. Handle "Department" logic (Check if "Others" was used)
         department = request.POST.get('department')
-        if department == 'Others':
+        if department == 'Others / Not Listed':
             department = request.POST.get('department_other')
 
         campus = request.POST.get('campus')
