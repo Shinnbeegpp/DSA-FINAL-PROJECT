@@ -36,7 +36,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('sign_in/', sign_in, name="sign_in"),
     path('registration/', registration, name="registration"),
-    #path('success/', success, name="success"),
     path('myjobs/', myjobs, name="myjobs"),
     path('find_job_candidate/', find_job_candidate, name="find_job_candidate"),
     path('settings/commissionee/', commissionee_settings, name="commissionee_settings"),
