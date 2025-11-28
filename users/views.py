@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib import messages
-from .models import UserProfile, UserResume
+from .models import UserProfile, UserResume, Job
 from .forms import UserUpdateForm, ProfileUpdateForm, ResumeForm
 
 # Create your views here.
@@ -225,3 +225,44 @@ def manage_account_commissioner(request):
 
 def view_details(request):
     return render(request,'view_details.html')
+
+@login_required
+def post_job(request):
+    if request.method == 'POST':
+        # 1. Get basic data
+        title = request.POST.get('title')
+        budget = request.POST.get('budget')
+        
+        # 2. Handle "Category" logic (Check if "Others" was used)
+        category = request.POST.get('category')
+        if category == 'Others':
+            category = request.POST.get('category_other') # Get the text input instead
+
+        # 3. Handle "Department" logic (Check if "Others" was used)
+        department = request.POST.get('department')
+        if department == 'Others':
+            department = request.POST.get('department_other')
+
+        campus = request.POST.get('campus')
+        academic_level = request.POST.get('academic_level')
+        description = request.POST.get('description')
+        deliverables = request.POST.get('deliverables')
+
+        # 4. Create the Job
+        Job.objects.create(
+            commissioner=request.user,
+            title=title,
+            category=category,
+            budget=budget,
+            campus=campus,
+            department=department,
+            academic_level=academic_level,
+            description=description,
+            deliverables=deliverables
+        )
+
+        # 5. Success Message (Triggers the Modal)
+        messages.success(request, "Job posted successfully!")
+        return redirect('post_job') # Stay on page to show modal
+
+    return render(request, 'post_job.html')
