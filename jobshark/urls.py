@@ -27,7 +27,7 @@ from users.views import registration, myjobs, find_job_candidate
 from users.views import commissionee_settings, commissioner_settings, post_job
 from users.views import applied_jobs, favorite_jobs, myprofile_commissioner
 from users.views import myprofile_commissionee, manage_account_commissionee
-from users.views import view_details, saved_candidate, manage_account_commissioner
+from users.views import view_details, saved_candidates, manage_account_commissioner
 from users.views import myprofile_commissionee, upload_resume, delete_resume, saved_candidates
 
 urlpatterns = [
@@ -45,20 +45,14 @@ urlpatterns = [
     path('applied_jobs/', applied_jobs, name="applied_jobs"),
     path('favorite_jobs/', favorite_jobs, name="favorite_jobs"),
     path('logout/', auth_views.LogoutView.as_view(next_page="homepage"), name='logout'),
-<<<<<<< HEAD
     path('my_profile/commissioner/', myprofile_commissioner, name="myprofile_commissioner"),
     path('my_profile/commissionee/', myprofile_commissionee, name="myprofile_commissionee"),
     path('manage_account/commissionee/', manage_account_commissionee, name="manage_account_commissionee"),
     path('applied_jobs/view_details/', view_details, name="view_details"),
-    path('saved_candidate/', saved_candidate, name="saved_candidate"),
     path('manage_account/commissioner/', manage_account_commissioner, name="manage_account_commissioner"),
-=======
-    path('myprofile/commissioner', myprofile_commissioner, name="myprofile_commissioner"),
-    path('myprofile/commissionee', myprofile_commissionee, name="myprofile_commissionee"),
     path('resume/upload/', upload_resume, name='upload_resume'),
     path('resume/delete/<int:pk>/', delete_resume, name='delete_resume'),
     path('saved_candidates', saved_candidates, name='saved_candidates')
->>>>>>> main
 ]
 
 if settings.DEBUG:
