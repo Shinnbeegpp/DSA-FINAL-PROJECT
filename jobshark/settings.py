@@ -147,3 +147,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 print("LOADED HOST =", os.environ.get("AIVEN_HOST"))
 
 LOGIN_URL = 'sign_in'
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
