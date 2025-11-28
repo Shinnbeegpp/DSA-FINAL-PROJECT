@@ -215,3 +215,13 @@ def favorite_jobs(request):
 
 def saved_candidates(request):
     return render(request,'saved_candidates.html')
+
+
+def manage_account_commissionee(request):
+    return render(request,'commissionee_settings.html')
+
+def manage_account_commissioner(request):
+    return render(request,'commissioner_settings.html')
+
+def view_details(request):
+    return render(request,'view_details.html')
