@@ -13,7 +13,7 @@ class UserProfile(models.Model):
     ]
     account_type = models.CharField(max_length=21, choices=ACCT_TYPES)
 
-    profile_picture = models.ImageField(upload_to='profile_pics/', default='default.jpg', null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
 
     CAMPUS_CHOICES = [
         ('BatStateU - Pablo Borbon (Main I)', 'BatStateU - Pablo Borbon (Main I)'),
