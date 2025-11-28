@@ -332,24 +332,15 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <!-- Logo -->
-                <a class="navbar-brand d-flex align-items-center" href="{% url 'myprofile_commissionee' %}">
+                <a class="navbar-brand d-flex align-items-center" href="#">
                     <img src={% static "images/logo_name.png" %} alt="JobShark Logo" 
-                    onerror="this.src='https://placehold.co/150x40/6930C3/ffffff?text=JobShark&font=inter'; this.onerror=null;">
+                    onerror="this.src='https://placehold.co/150x40/6c63ff/ffffff?text=JobShark&font=inter'; this.onerror=null;">
                 </a>
-
-                <div class="d-flex align-items-center gap-4">
-                    <div class="user-profile">
-                        <!-- Use Django template tags for user info -->
-                        <span class="user-name d-none d-md-block">
-                            {{ user.username }}
-                        </span>
-
-                        {% if user.userprofile.profile_picture %}
-                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar">
-                        {% else %}
-                            <img src="https://placehold.co/40x40/E5E7EB/9CA3AF?text=U" alt="Profile" class="user-avatar">
-                        {% endif %}
-                    </div>
+                <!-- User Profile -->
+                <div class="user-profile">
+                    <span class="user-name d-none d-md-block">{{ user.first_name|default:"Esther Howard" }} {{ user.last_name|default:"(Mock)" }}</span>
+                    <img src="images/cris.jpg" alt="Profile" class="user-avatar" 
+                         onerror="this.src='https://placehold.co/40x40/E5E7EB/9CA3AF?text=U'; this.onerror=null;">
                 </div>
             </div>
         </div>
@@ -403,20 +394,15 @@
                         <!-- Photo Display -->
                         <div class="col-md-4">
                             <label class="form-label">Profile Picture</label>
-                            <div class="p-2 border rounded" style="background-color: #fff;">
+                            <div class="profile-display-box flex flex-col justify-center items-center h-full">
                                 
-                                {% if user.userprofile.profile_picture %}
-                                    <img src="{{ user.userprofile.profile_picture.url }}" 
-                                        alt="Profile" 
-                                        class="img-fluid"
-                                        style="width: 100%; height: 300px; object-fit: cover; object-position: center; border-radius: 8px;">
-                                {% else %}
-                                    <div class="d-flex align-items-center justify-content-center" 
-                                        style="width: 100%; height: 300px; background-color: #F3F4F6; border-radius: 8px;">
-                                        <i class="fa-solid fa-user text-muted" style="font-size: 5rem;"></i>
-                                    </div>
-                                {% endif %}
+                                <img src="images/cris.jpg" alt="Profile" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;"
+                                     onerror="this.src='https://placehold.co/80x80/E5E7EB/9CA3AF?text=U'; this.onerror=null;">
 
+                                <div class="fw-bold mb-1 mt-2">
+                                    {{ user.first_name|default:"Esther Howard" }} {{ user.last_name|default:"(Mock)" }}
+                                </div>
+                                <div class="upload-subtext">Joined: {{ user.date_joined|date:"M Y"|default:"Oct 2023" }}</div>
                             </div>
                         </div>
                         <!-- Full Name Display -->
@@ -440,40 +426,33 @@
 
                 <!-- CV/Resume Section (DISPLAY MODE - VIEW ONLY) -->
                 <section class="mb-5">
-                    <h5 class="section-title">Curriculum Vitae / Resume</h5>
+                    <h5 class="section-title">Your Curriculum Vitae / Resume</h5>
                     <div class="row g-3">
-                        
-                        {% for resume in user.resumes.all %}
+                        <!-- Resume Card 1 (Display Only) -->
                         <div class="col-md-4">
-                            <div class="p-3 border rounded d-flex align-items-center justify-content-between" style="background-color: #fff;">
-                                
-                                <a href="{{ resume.file.url }}" target="_blank" class="text-decoration-none text-dark d-flex align-items-center gap-3 w-100">
-                                    <div class="text-danger">
-                                        <i class="fa-regular fa-file-pdf fs-3"></i>
-                                    </div>
-                                    
-                                    <div style="overflow: hidden;">
-                                        <h6 class="mb-0 text-truncate" style="max-width: 150px; font-size: 0.95rem;">
-                                            {{ resume.filename }}
-                                        </h6>
-                                        
-                                    </div>
+                            <div class="resume-card">
+                                <div class="file-icon"><i class="fa-regular fa-file-lines"></i></div>
+                                <div class="resume-info"><h6>Professional CV (2024)</h6><span>2.8 MB / PDF</span></div>
+                                <!-- REMOVED DELETE ACTION -->
+                                <a href="#" class="resume-actions text-primary" title="Download">
+                                     <i class="fa-solid fa-download"></i>
                                 </a>
-
-                                <a href="{{ resume.file.url }}" download class="text-secondary ms-2" title="Download">
-                                    <i class="fa-solid fa-download"></i>
-                                </a>
-
                             </div>
                         </div>
-                        {% empty %}
-                            <div class="col-12">
-                                <div class="p-3 border rounded bg-light text-muted text-center fst-italic">
-                                    No resume uploaded yet.
-                                </div>
-                            </div>
-                        {% endfor %}
 
+                        <!-- Resume Card 2 (Display Only) -->
+                        <div class="col-md-4">
+                            <div class="resume-card">
+                                <div class="file-icon"><i class="fa-regular fa-file-lines"></i></div>
+                                <div class="resume-info"><h6>Academic Portfolio</h6><span>5.1 MB / PDF</span></div>
+                                <!-- REMOVED DELETE ACTION -->
+                                <a href="#" class="resume-actions text-primary" title="Download">
+                                     <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- REMOVED ADD RESUME BOX -->
                     </div>
                 </section>
 
@@ -485,7 +464,7 @@
                         <div class="col-md-6">
                             <label class="form-label">Campus / Institution</label>
                             <div class="display-box display-box-muted">
-                                {{ user.userprofile.campus_institution|default:"Not set" }}
+                                BatStateU - Pablo Borbon (Main I)
                             </div>
                         </div>
 
@@ -493,29 +472,28 @@
                         <div class="col-md-6">
                             <label class="form-label">Student Classification</label>
                             <div class="display-box display-box-muted">
-                                {{ user.userprofile.student_classification|default:"Not set" }}
+                                Regular Student (Full Load)
                             </div>
                         </div>
                         <!-- Education -->
                         <div class="col-md-6">
                             <label class="form-label">Education</label>
                             <div class="display-box display-box-muted">
-                                {{ user.userprofile.education|default:"Not set" }}
+                                4th Year - Undergraduate (College)
                             </div>
                         </div>
                         <!-- Experience Level -->
                         <div class="col-md-6">
                             <label class="form-label">Experience Level</label>
                             <div class="display-box display-box-muted">
-                                {{ user.userprofile.experience_level|default:"Not set" }}
+                                Freelancing / Commissions
                             </div>
                         </div>
                         <!-- Date of Birth -->
                         <div class="col-md-6">
                             <label class="form-label">Date of Birth</label>
                             <div class="display-box display-box-muted">
-                            
-                                {{ user.userprofile.date_of_birth|date:"F j, Y"|default:"Not set" }}
+                                1999-07-21
                             </div>
                         </div>
 
@@ -523,7 +501,7 @@
                         <div class="col-md-6">
                             <label class="form-label">Gender</label>
                             <div class="display-box display-box-muted">
-                                {{ user.userprofile.gender|default:"Not set" }}
+                                Male
                             </div>
                         </div>
 
@@ -535,7 +513,8 @@
                     <h5 class="section-title">Biography</h5>
                     <div class="bio-display-container">
                         <p class="mb-0">
-                            {{ user.userprofile.biography|default:"Not set" }}
+                            Highly motivated 4th-year student at BatStateU specializing in web application development and UI/UX design. Proficient in Python (Django) and front-end frameworks. Seeking commission work to expand my portfolio and gain practical, real-world experience outside of academic projects.
+                        </p>
                     </div>
                     <!-- REMOVED SAVE BUTTONS -->
                 </section>
@@ -547,26 +526,22 @@
                         <div class="col-md-6">
                             <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Social Link</label>
                             <div class="display-box">
-                                {% if user.userprofile.social_link %}
-                                    <a href="{{ user.userprofile.social_link }}" target="_blank" class="text-decoration-none text-primary text-truncate" style="max-width: 100%; display: block;">
-                                        {{ user.userprofile.social_link }}
-                                    </a>
-                                {% else %}
-                                    <span class="text-muted small">Not provided</span>
-                                {% endif %}
+                                <a href="https://linkedin.com/in/estherhoward" target="_blank" class="text-decoration-none text-primary">
+                                    linkedin.com/in/estherhoward
+                                </a>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Email Address</label>
                             <div class="display-box">
-                                 {{ user.email|default:"Not provided" }}
+                                {{ user.email|default:"esther.howard@email.com" }}
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label text-uppercase text-muted" style="font-size: 0.75rem !important;">Contact Number</label>
                             <div class="display-box">
-                                {{ user.userprofile.phone_number|default:"Not provided" }}
+                                +63 917 555 1234
                             </div>
                         </div>
                     </div>

@@ -26,7 +26,7 @@ from users.views import homepage, sign_in, find_job_notsigned
 from users.views import registration, myjobs, find_job_candidate
 from users.views import commissionee_settings, commissioner_settings, post_job
 from users.views import applied_jobs, favorite_jobs, myprofile_commissioner
-from users.views import myprofile_commissionee, upload_resume, delete_resume, saved_candidates
+from users.views import myprofile_commissionee, upload_resume, delete_resume
 
 urlpatterns = [
     path('', homepage, name="homepage"),
@@ -47,7 +47,6 @@ urlpatterns = [
     path('myprofile/commissionee', myprofile_commissionee, name="myprofile_commissionee"),
     path('resume/upload/', upload_resume, name='upload_resume'),
     path('resume/delete/<int:pk>/', delete_resume, name='delete_resume'),
-    path('saved_candidates', saved_candidates, name='saved_candidates')
 ]
 
 if settings.DEBUG:

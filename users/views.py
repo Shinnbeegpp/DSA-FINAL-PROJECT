@@ -211,6 +211,3 @@ def applied_jobs(request):
 #@login_required 
 def favorite_jobs(request):
     return render(request,'favorite_jobs.html')
-
-def saved_candidates(request):
-    return render(request,'saved_candidates.html')
