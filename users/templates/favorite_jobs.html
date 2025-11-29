@@ -250,8 +250,20 @@
 
                 <div class="d-flex align-items-center gap-4">
                     <div class="user-profile">
-                        <span class="user-name d-none d-md-block">Esther Howard</span>
-                        <img src="{% static 'images/cris.jpg'%}" alt="Profile" class="user-avatar">
+                        <span class="user-name d-none d-md-block">
+                            {{ user.first_name|default:user.username }} {{ user.last_name }}
+                        </span>
+
+                        {% if user.userprofile.profile_picture %}
+                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar"
+                            style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'images/default_pfp.jpg' %}" 
+                                alt="Default Profile"
+                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+                        {% endif %}
+
+
                     </div>
                 </div>
             </div>
