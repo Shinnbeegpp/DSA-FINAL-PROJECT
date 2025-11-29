@@ -331,17 +331,18 @@
                 </a>
 
                 <div class="d-flex align-items-center gap-4">
-                    
                     <div class="user-profile">
-                        <!-- Use Django template tags for user info -->
                         <span class="user-name d-none d-md-block">
-                            {{ user.username }}
+                            {{ user.first_name|default:user.username }} {{ user.last_name }}
                         </span>
 
                         {% if user.userprofile.profile_picture %}
-                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar">
+                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar"
+                            style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                         {% else %}
-                            <img src="https://placehold.co/40x40/E5E7EB/9CA3AF?text=U" alt="Profile" class="user-avatar">
+                            <img src="{% static 'images/default_pfp.jpg' %}" 
+                                alt="Default Profile"
+                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
                         {% endif %}
                     </div>
                 </div>

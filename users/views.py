@@ -7,6 +7,7 @@ from django.views.decorators.cache import never_cache
 from django.contrib import messages
 from .models import UserProfile, UserResume, Job
 from .forms import UserUpdateForm, ProfileUpdateForm, ResumeForm
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -290,5 +291,19 @@ def post_job(request):
 
     return render(request, 'post_job.html')
 
+@login_required
+def delete_job(request, job_id):
+    # 1. Get the job, but ONLY if it belongs to the current user
+    # This prevents users from deleting other people's jobs by guessing the ID
+    job = get_object_or_404(Job, id=job_id, commissioner=request.user)
+    
+    # 2. Delete it
+    job.delete()
+    
+    # 3. Message and Redirect
+    messages.success(request, "Job deleted successfully.")
+    return redirect('myjobs')
+
+@login_required
 def view_commissionee(request):
     return render(request,'view_commissionee.html')

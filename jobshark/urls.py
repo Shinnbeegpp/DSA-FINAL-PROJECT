@@ -22,6 +22,8 @@ from django.conf.urls.static import static
 # 1. ADD THIS IMPORT for the built-in logout functionality
 from django.contrib.auth import views as auth_views
 
+from users import views
+
 from users.views import homepage, sign_in, find_job_notsigned
 from users.views import registration, myjobs, find_job_candidate
 from users.views import commissionee_settings, commissioner_settings, post_job
@@ -54,7 +56,7 @@ urlpatterns = [
     path('job/update_status/', update_job_status, name='update_job_status'),
     path('view_commissionee', view_commissionee, name='view_commissionee'),
 
-
+    path('job/delete/<int:job_id>/', views.delete_job, name='delete_job'),
 
 
     
