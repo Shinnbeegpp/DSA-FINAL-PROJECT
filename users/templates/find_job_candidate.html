@@ -451,6 +451,7 @@
             </div>
 
             <form id="searchForm" method="GET" action="{% url 'find_job_candidate' %}" class="search-bar input-group p-2">
+                <input type="hidden" name="page" id="pageInput" value="1">
                 <span class="input-group-text ps-3">
                     <i class="bi bi-search fs-5"></i>
                 </span>
@@ -505,26 +506,52 @@
             {% endfor %}
             </div>
 
-
-            <nav class="pagination-wrapper" aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+            {% if jobs.has_other_pages %}
+            <nav class="pagination-wrapper mt-5" aria-label="Page navigation">
+                <ul class="pagination justify-content-center gap-2">
+                    
+                    <li class="page-item {% if not jobs.has_previous %}disabled{% endif %}">
+                        <a class="page-link rounded-circle d-flex align-items-center justify-content-center" 
+                        href="#" 
+                        {% if jobs.has_previous %}onclick="changePage({{ jobs.previous_page_number }})"{% endif %}
+                        style="width: 32px; height: 32px; border: none; color: #6B7280;">
                             <i class="bi bi-chevron-left"></i>
                         </a>
                     </li>
-                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                    <li class="page-item"><a class="page-link" href="#">02</a></li>
-                    <li class="page-item"><a class="page-link" href="#">03</a></li>
-                    <li class="page-item"><a class="page-link" href="#">04</a></li>
-                    <li class="page-item"><a class="page-link" href="#">05</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">
+
+                    {% for num in jobs.paginator.page_range %}
+                        {% if jobs.number == num %}
+                            <li class="page-item active">
+                                <a class="page-link rounded-circle fw-bold d-flex align-items-center justify-content-center shadow-sm" 
+                                href="#" 
+                                style="width: 32px; height: 32px; background-color: #6930C3; border-color: #6930C3; color: white;">
+                                    {{ num|stringformat:"02d" }}
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link rounded-circle text-muted d-flex align-items-center justify-content-center" 
+                                href="#" 
+                                onclick="changePage({{ num }})"
+                                style="width: 32px; height: 32px; border: none; background-color: transparent;">
+                                    {{ num|stringformat:"02d" }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <li class="page-item {% if not jobs.has_next %}disabled{% endif %}">
+                        <a class="page-link rounded-circle d-flex align-items-center justify-content-center" 
+                        href="#" 
+                        {% if jobs.has_next %}onclick="changePage({{ jobs.next_page_number }})"{% endif %}
+                        style="width: 32px; height: 32px; border: none; color: #6930C3; background-color: #f3f0ff;">
                             <i class="bi bi-chevron-right"></i>
                         </a>
                     </li>
+
                 </ul>
             </nav>
+            {% endif %}
 
         </div>
     </main>
@@ -646,31 +673,31 @@
                         <h5 class="filter-category-title">Budget Range (PHP)</h5>
                         
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="budget_range" value="100-500" id="budget1" form="searchForm"
+                            <input class="form-check-input" type="checkbox" name="budget_range" value="100-500" id="budget1" form="searchForm"
                             {% if selected_budget == '100-500' %}checked{% endif %}>
                             <label class="form-check-label" for="budget1">₱100 - ₱500</label>
                         </div>
                         
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="budget_range" value="500-1500" id="budget2" form="searchForm"
+                            <input class="form-check-input" type="checkbox" name="budget_range" value="500-1500" id="budget2" form="searchForm"
                             {% if selected_budget == '500-1500' %}checked{% endif %}>
                             <label class="form-check-label" for="budget2">₱500 - ₱1,500</label>
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="budget_range" value="1500-3000" id="budget3" form="searchForm"
+                            <input class="form-check-input" type="checkbox" name="budget_range" value="1500-3000" id="budget3" form="searchForm"
                             {% if selected_budget == '1500-3000' %}checked{% endif %}>
                             <label class="form-check-label" for="budget3">₱1,500 - ₱3,000</label>
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="budget_range" value="3000-5000" id="budget4" form="searchForm"
+                            <input class="form-check-input" type="checkbox" name="budget_range" value="3000-5000" id="budget4" form="searchForm"
                             {% if selected_budget == '3000-5000' %}checked{% endif %}>
                             <label class="form-check-label" for="budget4">₱3,000 - ₱5,000</label>
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="budget_range" value="5000+" id="budget5" form="searchForm"
+                            <input class="form-check-input" type="checkbox" name="budget_range" value="5000+" id="budget5" form="searchForm"
                             {% if selected_budget == '5000+' %}checked{% endif %}>
                             <label class="form-check-label" for="budget5">₱5,000+</label>
                         </div>
@@ -718,6 +745,11 @@
 
                 </div>
             </div>
+            <div class="modal-footer border-0 pt-0"> 
+                <button type="button" class="btn btn-brand-primary"  onclick="clearAllFilters()" style="padding: 0.5rem 2rem;">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Clear All
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -737,6 +769,30 @@
                 console.log('Project Unsaved!');
             }
         }
+        function clearAllFilters() {
+        // 1. Get the Modal Container
+        var modal = document.getElementById('advanceFilterModal');
+        
+        // 2. Find all Checkboxes and Radios inside the modal
+        var inputs = modal.querySelectorAll('input[type="checkbox"], input[type="radio"]');
+        
+        // 3. Uncheck them all
+        inputs.forEach(function(input) {
+            input.checked = false;
+        });
+
+        // 4. (Optional) If you have "Other" text inputs inside the modal, clear them too
+        // var textInputs = modal.querySelectorAll('input[type="text"]');
+        // textInputs.forEach(function(input) { input.value = ''; });
+    }
+    function changePage(pageNum) {
+        // 1. Update the hidden page input with the clicked number
+        document.getElementById('pageInput').value = pageNum;
+        
+        // 2. Submit the main search form
+        // This ensures the search query, categories, and page number are ALL sent together
+        document.getElementById('searchForm').submit();
+    }
     </script>
 </body>
 </html>
