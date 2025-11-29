@@ -115,8 +115,12 @@ class Job(models.Model):
     deliverables = models.TextField()
     
     # System fields
-    STATUS_CHOICES = [('Open', 'Open'), ('Hired', 'Hired'), ('Completed', 'Completed')]
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Open')
+    STATUS_CHOICES = [
+        ('Active', 'Active'),
+        ('Done', 'Done'),
+        ('Expired', 'Expired'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Active')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
