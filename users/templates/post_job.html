@@ -617,12 +617,17 @@
     </script>
 
     {% if messages %}
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var myModal = new bootstrap.Modal(document.getElementById('successModal'));
-            myModal.show();
-        });
-    </script>
+        {# VITAL: This loop consumes the messages so they don't appear again on reload #}
+        {% for message in messages %}
+            {% endfor %}
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // successModal is the ID of your modal
+                var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+                myModal.show();
+            });
+        </script>
     {% endif %}
 </body>
 </html>
