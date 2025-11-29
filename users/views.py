@@ -9,6 +9,7 @@ from .models import UserProfile, UserResume, Job
 from .forms import UserUpdateForm, ProfileUpdateForm, ResumeForm
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django.core.paginator import Paginator
 # Create your views here.
 
 def homepage(request):
@@ -136,13 +137,15 @@ def myprofile_commissionee(request):
 
 #@never_cache      
 #@login_required   
-def find_job_candidate(request):
-    # 1. Fetch all Open/Active jobs, ordered by newest first
-    # Exclude Cancelled/Expired jobs if you want
-    jobs = Job.objects.filter(status__in=['Open', 'Active']).order_by('-created_at')
-    
+from django.db.models import Q # <--- IMPORT THIS at the top
+from .models import Job
 
-    # 2. Search Bar (Title or Description)
+@login_required
+def find_job_candidate(request):
+    # 1. Start with all Open/Active jobs
+    jobs = Job.objects.filter(status__in=['Open', 'Active']).order_by('-created_at')
+
+    # 2. Search Bar
     query = request.GET.get('q')
     if query:
         jobs = jobs.filter(
@@ -150,36 +153,61 @@ def find_job_candidate(request):
             Q(description__icontains=query)
         )
 
-    # 3. Filter by Campus (Checkboxes)
-    campuses = request.GET.getlist('campus') # Returns a list like ['BatStateU - Lipa', '...']
+    # 3. Campus Filter (Multi-select)
+    campuses = request.GET.getlist('campus')
     if campuses:
         jobs = jobs.filter(campus__in=campuses)
 
-    # 4. Filter by Category (Checkboxes)
-    categories = request.GET.getlist('category')
-    if categories:
-        jobs = jobs.filter(category__in=categories)
+    # 4. Budget Filter (Multi-select Checkboxes)
+    budget_ranges = request.GET.getlist('budget_range') # Now accepts multiple
+    if budget_ranges:
+        # We use Q objects to combine ranges with "OR" logic
+        budget_query = Q()
+        
+        for range_val in budget_ranges:
+            if range_val == '100-500':
+                budget_query |= Q(budget__gte=100, budget__lte=500) # |= means OR
+            elif range_val == '500-1500':
+                budget_query |= Q(budget__gte=500, budget__lte=1500)
+            elif range_val == '1500-3000':
+                budget_query |= Q(budget__gte=1500, budget__lte=3000)
+            elif range_val == '3000-5000':
+                budget_query |= Q(budget__gte=3000, budget__lte=5000)
+            elif range_val == '5000+':
+                budget_query |= Q(budget__gte=5000)
+        
+        # Apply the combined budget filter
+        jobs = jobs.filter(budget_query)
 
-    # 5. Filter by Budget (Radio)
-    budget_range = request.GET.get('budget_range')
-    if budget_range:
-        if budget_range == '100-500':
-            jobs = jobs.filter(budget__gte=100, budget__lte=500)
-        elif budget_range == '500-1500':
-            jobs = jobs.filter(budget__gte=500, budget__lte=1500)
-        elif budget_range == '1500-3000':
-            jobs = jobs.filter(budget__gte=1500, budget__lte=3000)
-        elif budget_range == '3000-5000':
-            jobs = jobs.filter(budget__gte=3000, budget__lte=5000)
-        elif budget_range == '5000+':
-            jobs = jobs.filter(budget__gte=5000)
+    # 5. Category Filter (Multi-select + Smart "Others")
+    selected_categories = request.GET.getlist('category')
+    if selected_categories:
+        # List of your "Standard" categories defined in HTML
+        standard_list = [
+            "Academic Assistance", "Graphic Design", "Programming", 
+            "Video Editing", "Multimedia Arts", "Data Analysis", "Tutoring"
+        ]
+
+        category_query = Q()
+
+        # Add the specific categories checked by user (e.g., Programming)
+        category_query |= Q(category__in=[c for c in selected_categories if c != 'Others'])
+
+        # If "Others" is checked, include ANY category that is NOT in the standard list
+        if 'Others' in selected_categories:
+            category_query |= ~Q(category__in=standard_list) # ~Q means NOT IN
+
+        jobs = jobs.filter(category_query)
+        
+    paginator = Paginator(jobs, 5) # Show 5 jobs per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'jobs': jobs,
-        # Pass selections back to template so checkboxes stay checked
+        'jobs': page_obj,
         'selected_campuses': campuses,
-        'selected_categories': categories,
-        'selected_budget': budget_range,
+        'selected_categories': selected_categories,
+        'selected_budget': budget_ranges, # Pass list back to HTML
         'query': query,
     }
     return render(request, 'find_job_candidate.html', context)
