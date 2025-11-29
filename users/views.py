@@ -140,9 +140,32 @@ def find_job_candidate(request):
 
       
 #@never_cache       <---  @never_cache   
-#@login_required    <---  @login_required    
+@login_required
 def myjobs(request):
-    return render(request,'myjobs.html')
+    # 1. Fetch only jobs posted by this user
+    jobs = Job.objects.filter(commissioner=request.user).order_by('-created_at')
+    
+    # 2. Handle Status Filter (from the dropdown)
+    status_filter = request.GET.get('status') # Get from URL ?status=Active
+    if status_filter and status_filter != 'All Applications':
+        jobs = jobs.filter(status=status_filter)
+
+    # 3. Pass data to HTML
+    context = {
+        'jobs': jobs,
+        'total_jobs': jobs.count(),
+        'current_filter': status_filter or 'All Applications'
+    }
+    return render(request, 'myjobs.html', context)
+
+def update_job_status(request):
+    if request.method == 'POST':
+        job_id = request.POST.get('job_id')
+        new_status = request.POST.get('status')
+        job = Job.objects.get(id=job_id, commissioner=request.user)
+        job.status = new_status
+        job.save()
+        return redirect('myjobs')
 
 #@never_cache      
 @login_required    
@@ -266,3 +289,6 @@ def post_job(request):
         return redirect('post_job') # Stay on page to show modal
 
     return render(request, 'post_job.html')
+
+def view_commissionee(request):
+    return render(request,'view_commissionee.html')

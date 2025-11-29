@@ -412,12 +412,14 @@
                     
                     <div class="d-flex align-items-center gap-2">
                         <span style="font-size: 0.9rem; font-weight: 500; color: #475569;">Job status</span>
-                        <select class="form-select form-select-sm" style="width: auto;">
-                            <option>All Applications</option>
-                            <option>Active</option>
-                            <option>Done</option>
-                            <option>Expired</option>
-                        </select>
+                        <form method="GET" id="filterForm">
+                            <select name="status" class="form-select form-select-sm" style="width: auto;" onchange="document.getElementById('filterForm').submit()">
+                                <option value="All Applications" {% if current_filter == 'All Applications' %}selected{% endif %}>All Applications</option>
+                                <option value="Active" {% if current_filter == 'Active' %}selected{% endif %}>Active</option>
+                                <option value="Done" {% if current_filter == 'Done' %}selected{% endif %}>Done</option>
+                                <option value="Expired" {% if current_filter == 'Expired' %}selected{% endif %}>Expired</option>
+                            </select>
+                        </form>
                     </div>
                 </div>
 
@@ -430,124 +432,53 @@
                         <div class="text-end">Actions</div>
                     </div>
 
-                    <!-- Row 1 -->
+                    {% for job in jobs %}
                     <div class="job-row">
                         <div>
-                            <div class="job-title">Thesis Help: Chapter 2 Research</div>
-                            <div class="job-meta">Academic Assistance &bull; ₱1,500</div>
+                            <div class="job-title">{{ job.title }}</div>
+                            <div class="job-meta">{{ job.category }} &bull; ₱{{ job.budget }}</div>
                         </div>
-                        <div>
-                            <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap"></i> DONE</span>
-                        </div>
-                        <div class="text-muted small"><i class="fa-regular fa-user"></i> 798 Applications</div>
-                        <div class="d-flex justify-content-end align-items-center gap-2">
-                            <button class="btn-view">View Applications</button>
-                            <i class="fa-solid fa-ellipsis-vertical text-muted ms-2"></i>
-                        </div>
-                    </div>
 
-                    <!-- Row 2 -->
-                    <div class="job-row">
                         <div>
-                            <div class="job-title">Logo Design for Milk Tea Shop</div>
-                            <div class="job-meta">Graphic Design &bull; ₱800</div>
+                            {% if job.status == 'Active' or job.status == 'Open' %}
+                                <span class="status-pill status-active"><i class="fa-solid fa-check"></i> ACTIVE</span>
+                            {% elif job.status == 'Done' or job.status == 'Completed' %}
+                                <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap"></i> DONE</span>
+                            {% else %}
+                                <span class="status-pill status-expired"><i class="fa-solid fa-trash"></i> {{ job.status|upper }}</span>
+                            {% endif %}
                         </div>
-                        <div>
-                            <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap"></i> DONE</span>
-                        </div>
-                        <div class="text-muted small"><i class="fa-regular fa-user"></i> 185 Applications</div>
-                        <div class="d-flex justify-content-end align-items-center gap-2">
-                            <button class="btn-view">View Applications</button>
-                            <i class="fa-solid fa-ellipsis-vertical text-muted ms-2"></i>
-                        </div>
-                    </div>
 
-                    <!-- Row 3 -->
-                    <div class="job-row">
-                        <div>
-                            <div class="job-title">Python Debugging: Inventory System</div>
-                            <div class="job-meta">Programming &bull; ₱2,000</div>
+                        <div class="text-muted small">
+                            <i class="fa-regular fa-user"></i> 0 Applications
                         </div>
-                        <div>
-                            <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap"></i> DONE</span>
-                        </div>
-                        <div class="text-muted small"><i class="fa-regular fa-user"></i> 583 Applications</div>
-                        <div class="d-flex justify-content-end align-items-center gap-2">
-                            <button class="btn-view">View Applications</button>
-                            <i class="fa-solid fa-ellipsis-vertical text-muted ms-2"></i>
-                        </div>
-                    </div>
 
-                    <!-- Row 4 (Expired) -->
-                    <div class="job-row">
-                        <div style="">
-                            <div class="job-title">Video Edit for Vlog (5 mins)</div>
-                            <div class="job-meta">Video Editing &bull; ₱1,200</div>
-                        </div>
-                        <div>
-                            <span class="status-pill status-expired"><i class="fa-solid fa-trash"></i> EXPIRED</span>
-                        </div>
-                        <div class="text-muted small" style=""><i class="fa-regular fa-user"></i> 740 Applications</div>
-                        <div class="d-flex justify-content-end align-items-center gap-2">
-                            <button class="btn-view">View Applications</button>
-                            <i class="fa-solid fa-ellipsis-vertical text-muted ms-2"></i>
-                        </div>
-                    </div>
-
-                    <!-- Row 5 (ACTIVE POP-OUT) -->
-                    <div class="job-row active-card">
-                        <div>
-                            <div class="job-title">Essay: Economic Impact of AI</div>
-                            <div class="job-meta">Academic Assistance &bull; ₱500</div>
-                        </div>
-                        <div>
-                            <span class="status-pill status-expired"><i class="fa-solid fa-trash"></i> EXPIRED</span>
-                        </div>
-                        <div class="context-menu">
-                            <!-- NEW: Update Status Link triggers the modal -->
-                            <a href="#" class="context-item text-primary" data-bs-toggle="modal" data-bs-target="#updateStatusModal">
-                                <i class="fa-solid fa-pen-to-square me-2"></i> Update Status
-                            </a>
-                            <a href="#" class="context-item"><i class="fa-regular fa-eye me-2"></i> View Detail</a>
-                        </div>
-                        <div class="text-muted small"><i class="fa-regular fa-user"></i> 558 Applications</div>
                         <div class="d-flex justify-content-end align-items-center gap-2 position-relative">
-                            <button class="btn-view">View Applications</button>
-                            <i class="fa-solid fa-ellipsis-vertical text-dark ms-2"></i>
+                            <a href="{% url 'view_commissionee' %}" class="btn-view text-decoration-none">View Applications</a>
+                            
+                            <div class="dropdown">
+                                <i class="fa-solid fa-ellipsis-vertical text-muted ms-2" role="button" data-bs-toggle="dropdown"></i>
+                                <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+                                    <li>
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#updateStatusModal" 
+                                        onclick="setModalJobId('{{ job.id }}', '{{ job.status }}')">
+                                        <i class="fa-solid fa-pen-to-square me-2 text-primary"></i> Update Status
+                                        </a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="#"><i class="fa-regular fa-eye me-2"></i> View Detail</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
+                    
+                    {% empty %}
+                    <div class="p-5 text-center text-muted">
+                        <i class="fa-solid fa-folder-open fa-3x mb-3"></i>
+                        <p>You haven't posted any jobs yet.</p>
+                        <a href="{% url 'post_job' %}" class="btn btn-primary-custom mt-2">Post a Job Now</a>
+                    </div>
+                    {% endfor %}
 
-                    <!-- Row 6 -->
-                    <div class="job-row">
-                        <div style="">
-                            <div class="job-title">AutoCAD Floor Plan for 2-Storey House</div>
-                            <div class="job-meta">Engineering & CAD &bull; ₱3,000</div>
-                        </div>
-                        <div>
-                            <span class="status-pill status-active"><i class="fa-solid fa-check"></i> ACTIVE</span>
-                        </div>
-                        <div class="text-muted small" style=""><i class="fa-regular fa-user"></i> 426 Applications</div>
-                        <div class="d-flex justify-content-end align-items-center gap-2">
-                            <button class="btn-view">View Applications</button>
-                            <i class="fa-solid fa-ellipsis-vertical text-muted ms-2"></i>
-                        </div>
-                    </div>
-
-                    <!-- Row 7 -->
-                    <div class="job-row">
-                        <div>
-                            <div class="job-title">Statistical Analysis (SPSS) for Psych Thesis</div>
-                            <div class="job-meta">Academic Assistance &bull; ₱2,500</div>
-                        </div>
-                        <div>
-                            <span class="status-pill status-active"><i class="fa-solid fa-check"></i> ACTIVE</span>
-                        </div>
-                        <div class="text-muted small"><i class="fa-regular fa-user"></i> 922 Applications</div>
-                        <div class="d-flex justify-content-end align-items-center gap-2">
-                            <button class="btn-view">View Applications</button>
-                            <i class="fa-solid fa-ellipsis-vertical text-muted ms-2"></i>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Pagination -->
@@ -576,29 +507,33 @@
             <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
             
                 <!-- Modal Header -->
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold" style="color: var(--text-color);">Update Job Status</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <!-- Modal Body -->
-                <div class="modal-body">
-                    <p class="text-muted small mb-3">Change the status to reflect the current stage of the application.</p>
+                <form action="{% url 'update_job_status' %}" method="POST">
+                    {% csrf_token %}
                     
-                    <label class="form-label fw-bold small text-muted">Select New Status</label>
-                    <select class="form-select form-select-lg" style="font-size: 0.9rem;">
-                        <option selected disabled>Choose status...</option>
-                        <option>Active</option>
-                        <option>Done</option>
-                        <option>Expired</option>
-                    </select>
-                </div>
+                    <input type="hidden" name="job_id" id="modalJobId">
 
-                <!-- Modal Footer -->
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light text-muted fw-medium" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn text-white fw-medium px-4" style="background-color: var(--primary-color);">Save Changes</button>
-                </div>
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-bold" style="color: var(--text-color);">Update Job Status</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p class="text-muted small mb-3">Change the status to reflect the current stage of the application.</p>
+                        
+                        <label class="form-label fw-bold small text-muted">Select New Status</label>
+                        <select name="status" class="form-select form-select-lg" required>
+                            <option value="" selected disabled>Choose status...</option>
+                            <option value="Active">Active</option>
+                            <option value="Done">Done</option>
+                            <option value="Expired">Expired</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-light text-muted fw-medium" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn text-white fw-medium px-4" style="background-color: var(--primary-color);">Save Changes</button>
+                    </div>
+                </form>
 
             </div>
         </div>
@@ -651,6 +586,9 @@
                 input.style.display = "none";
                 input.value = ""; 
             }
+        }
+        function setModalJobId(id, currentStatus) {
+            document.getElementById('modalJobId').value = id;
         }
 
     </script>
