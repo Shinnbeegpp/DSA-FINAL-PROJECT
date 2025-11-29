@@ -390,10 +390,20 @@
                 <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo" style="max-height: 50px;">
 
                 <div class="user-profile">
-                    <p class="user-profile-name">{{ user.username }}</p> 
-                    <a href="{% url 'commissionee_settings' %}" >
-                        <img src="https://placehold.co/40x40/6c63ff/ffffff?text=EH" alt="User Profile Picture" class="user-profile-img">
-                    </a>
+                    <span class="user-name d-none d-md-block">
+                        {{ user.first_name|default:user.username }} {{ user.last_name }}
+                    </span>
+
+                    {% if user.userprofile.profile_picture %}
+                        <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar"
+                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'images/default_pfp.jpg' %}" 
+                            alt="Default Profile"
+                            style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+                    {% endif %}
+
+
                 </div>
             </div>
         </nav>
@@ -440,12 +450,11 @@
                 </nav>
             </div>
 
-            <div class="search-bar input-group p-2">
+            <form id="searchForm" method="GET" action="{% url 'find_job_candidate' %}" class="search-bar input-group p-2">
                 <span class="input-group-text ps-3">
                     <i class="bi bi-search fs-5"></i>
                 </span>
-                <input type="text" class="form-control form-control-lg" placeholder="Project title, Keyword..." aria-label="Project title, Keyword...">
-                
+                <input type="text" name="q" class="form-control form-control-lg" placeholder="Project title, Keyword..." value="{{ query|default:'' }}" aria-label="Project title, Keyword...">
                 <span class="input-group-text d-none d-md-flex" style="color: #E5E7EB;">|</span>
                 
                 <div class="d-none d-md-block">
@@ -454,24 +463,26 @@
                     </button>
                 </div>
 
-                <button class="btn btn-brand-primary btn-find-job" type="button">Find Project</button>
+                <button class="btn btn-brand-primary btn-find-job" type="submit">Find Project</button>
             </div>
         </div>
     </header>
 
     <main class="job-listings-section"
-                style="background: linear-gradient(135deg, rgba(0, 198, 255, 0.6) 0%, rgba(105, 48, 195, 0.6) 100%), 
-                url('{% static "images/mainbg2.png" %}') no-repeat center center; background-size: cover;">>
+            style="background: linear-gradient(135deg, rgba(0, 198, 255, 0.6) 0%, rgba(105, 48, 195, 0.6) 100%), 
+            url('{% static "images/mainbg2.png" %}') no-repeat center center; background-size: cover;">
+
         <div class="container">
+            {% for job in jobs %}
 
             <div class="job-card">
                 <div class="job-card-body">
                     <div class="row align-items-center">
                         <div class="col-md-7 col-lg-8">
-                            <h5 class="job-title mb-0">Marketing Manager</h5>
-                            <span class="mode-of-work">Pablo Borbon (Main I)</span>
+                            <h5 class="job-title mb-0">{{ job.title }}</h5>
+                            <span class="mode-of-work">{{ job.campus }}</span>
                             <p class="job-location mb-md-0">
-                                ₱50K-₱60K / month | Marketing
+                                ₱{{ job.budget }} | {{ job.category }}
                             </p>
                         </div>
                         <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
@@ -486,98 +497,14 @@
                     </div>
                 </div>
             </div>
-
-            <div class="job-card">
-                <div class="job-card-body">
-                    <div class="row align-items-center">
-                        <div class="col-md-7 col-lg-8">
-                            <h5 class="job-title mb-0">Technical Support Specialist</h5>
-                            <span class="mode-of-work">Alangilan (Main II)</span>
-                            <p class="job-location mb-md-0">
-                                ₱30K-₱35K | Programming & IT
-                            </p>
-                        </div>
-                        <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
-                            <button class="btn btn-heart me-4 saved" onclick="toggleheart(this)">
-                                <i class="bi bi-heart"></i>
-                                <i class="bi bi-heart-fill"></i>
-                            </button>
-                            <a href="#" class="btn-apply-now">
-                                Apply Now <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
+            {% empty %}
+                <div class="text-center py-5">
+                    <i class="bi bi-search fs-1 text-muted"></i>
+                    <h5 class="mt-3 text-muted">No jobs found. Check back later!</h5>
                 </div>
+            {% endfor %}
             </div>
 
-            <div class="job-card">
-                <div class="job-card-body">
-                    <div class="row align-items-center">
-                        <div class="col-md-7 col-lg-8">
-                            <h5 class="job-title mb-0">Visual Designer</h5>
-                            <span class="mode-of-work">ARASOF-Nasugbu</span>
-                            <p class="job-location mb-md-0">
-                                ₱15K-₱20K | Multimedia Arts
-                            </p>
-                        </div>
-                        <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
-                            <button class="btn btn-heart me-4" onclick="toggleheart(this)">
-                                <i class="bi bi-heart"></i>
-                                <i class="bi bi-heart-fill"></i>
-                            </button>
-                            <a href="#" class="btn-apply-now">
-                                Apply Now <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="job-card">
-                <div class="job-card-body">
-                    <div class="row align-items-center">
-                        <div class="col-md-7 col-lg-8">
-                            <h5 class="job-title mb-0">Marketing Officer</h5>
-                            <span class="mode-of-work">Lipa</span>
-                            <p class="job-location mb-md-0">
-                                ₱20K-₱25K | Marketing
-                            </p>
-                        </div>
-                        <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
-                            <button class="btn btn-heart me-4" onclick="toggleheart(this)">
-                                <i class="bi bi-heart"></i>
-                                <i class="bi bi-heart-fill"></i>
-                            </button>
-                            <a href="#" class="btn-apply-now">
-                                Apply Now <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="job-card">
-                <div class="job-card-body">
-                    <div class="row align-items-center">
-                        <div class="col-md-7 col-lg-8">
-                            <h5 class="job-title mb-0">Senior UX Designer</h5>
-                            <span class="mode-of-work">Malvar (JPLPC)</span>
-                            <p class="job-location mb-md-0">
-                                ₱50K-₱60K / month | Design
-                            </p>
-                        </div>
-                        <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
-                            <button class="btn btn-heart me-4" onclick="toggleheart(this)">
-                                <i class="bi bi-heart"></i>
-                                <i class="bi bi-heart-fill"></i>
-                            </button>
-                            <a href="#" class="btn-apply-now">
-                                Apply Now <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <nav class="pagination-wrapper" aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
@@ -630,7 +557,9 @@
                         <button type="button" class="btn text-primary fw-medium" data-bs-dismiss="modal" style="color: var(--brand-purple)!important;">
                             Advance Filter <i class="bi bi-chevron-up ms-1"></i>
                         </button>
-                        <button class="btn btn-brand-primary" style="padding: 0.5rem 2rem;">Find Job</button>
+                        <button class="btn btn-brand-primary" style="padding: 0.5rem 2rem;" type="submit" form="searchForm">
+                            Find Job
+                        </button>
                     </div>
                 </div>
 
@@ -640,108 +569,149 @@
                         <h5 class="filter-category-title">Campus / Institution</h5>
 
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="location" id="loc_pb">
+                            <input class="form-check-input" type="checkbox" name="campus" value="BatStateU - Pablo Borbon (Main I)" id="loc_pb" form="searchForm" 
+                            {% if "BatStateU - Pablo Borbon (Main I)" in selected_campuses %}checked{% endif %}>
                             <label class="form-check-label" for="loc_pb">Pablo Borbon (Main I)</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="location" id="loc_alangilan">
+                            <input class="form-check-input" type="checkbox" name="campus" value="BatStateU - Alangilan (Main II)" id="loc_alangilan" form="searchForm"
+                            {% if "BatStateU - Alangilan (Main II)" in selected_campuses %}checked{% endif %}>
                             <label class="form-check-label" for="loc_alangilan">Alangilan (Main II)</label>
                         </div>
+                        
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="location" id="loc_nasugbu">
-                            <label class="form-check-label" for="loc_nasugbu">ARASOF-Nasugbu</label>
+                            <input class="form-check-input" type="checkbox" name="campus" value="BatStateU - ARASOF Nasugbu" id="loc_nasugbu" form="searchForm" 
+                            {% if "BatStateU - ARASOF Nasugbu" in selected_campuses %}checked{% endif %}>
+                            <label class="form-check-label" for="loc_nasugbu">BatStateU - ARASOF Nasugbu</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="location" id="loc_lipa">
-                            <label class="form-check-label" for="loc_lipa">Lipa</label>
+                            <input class="form-check-input" type="checkbox" name="campus" value="BatStateU - Lipa" id="loc_lipa" form="searchForm"
+                            {% if "BatStateU - Lipa" in selected_campuses %}checked{% endif %}>
+                            <label class="form-check-label" for="loc_lipa">BatStateU - Lipa</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="location" id="loc_malvar">
-                            <label class="form-check-label" for="loc_malvar">Malvar (JPLPC)</label>
+                            <input class="form-check-input" type="checkbox" name="campus" value="BatStateU - Malvar (JPLPC)" id="loc_malvar" form="searchForm" 
+                            {% if "BatStateU - Malvar (JPLPC)" in selected_campuses %}checked{% endif %}>
+                            <label class="form-check-label" for="loc_malvar">BatStateU - Malvar (JPLPC)</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="location" id="loc_balayan">
-                            <label class="form-check-label" for="loc_balayan">Balayan</label>
+                            <input class="form-check-input" type="checkbox" name="campus" value="BatStateU - Balayan" id="loc_balayan" form="searchForm"
+                            {% if "BatStateU - Balayan" in selected_campuses %}checked{% endif %}>
+                            <label class="form-check-label" for="loc_balayan">BatStateU - Balayan</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="location" id="loc_lemery">
-                            <label class="form-check-label" for="loc_lemery">Lemery</label>
+                            <input class="form-check-input" type="checkbox" name="campus" value="BatStateU - Lemery" id="loc_lemery" form="searchForm" 
+                            {% if "BatStateU - Lemery" in selected_campuses %}checked{% endif %}>
+                            <label class="form-check-label" for="loc_lemery">BatStateU - Lemery</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="location" id="loc_rosario">
-                            <label class="form-check-label" for="loc_rosario">Rosario</label>
+                            <input class="form-check-input" type="checkbox" name="campus" value="BatStateU - Rosario" id="loc_rosario" form="searchForm"
+                            {% if "BatStateU - Rosario" in selected_campuses %}checked{% endif %}>
+                            <label class="form-check-label" for="loc_rosario">BatStateU - Rosario</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="location" id="loc_sanjuan">
-                            <label class="form-check-label" for="loc_sanjuan">San Juan</label>
+                            <input class="form-check-input" type="checkbox" name="campus" value="BatStateU - San Juan" id="loc_sanjuan" form="searchForm" 
+                            {% if "BatStateU - San Juan" in selected_campuses %}checked{% endif %}>
+                            <label class="form-check-label" for="loc_sanjuan">BatStateU - San Juan</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="location" id="loc_lobo">
-                            <label class="form-check-label" for="loc_lobo">Lobo</label>
+                            <input class="form-check-input" type="checkbox" name="campus" value="BatStateU - Lobo" id="loc_lobo" form="searchForm"
+                            {% if "BatStateU - Lobo" in selected_campuses %}checked{% endif %}>
+                            <label class="form-check-label" for="loc_lobo">BatStateU - Lobo</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="location" id="loc_mabini">
-                            <label class="form-check-label" for="loc_mabini">Mabini</label>
+                            <input class="form-check-input" type="checkbox" name="campus" value="BatStateU - Mabini" id="loc_mabini" form="searchForm" 
+                            {% if "BatStateU - Mabini" in selected_campuses %}checked{% endif %}>
+                            <label class="form-check-label" for="loc_mabini">BatStateU - Mabini</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="location" id="loc_lima">
-                            <label class="form-check-label" for="loc_lima">Lima</label>
+                            <input class="form-check-input" type="checkbox" name="campus" value="BatStateU - Lima" id="loc_lima" form="searchForm"
+                            {% if "BatStateU - Lima" in selected_campuses %}checked{% endif %}>
+                            <label class="form-check-label" for="loc_lima">BatStateU - Lima</label>
                         </div>
 
                     </div>
 
                     <div class="col-md-4 filter-column">
                         <h5 class="filter-category-title">Budget Range (PHP)</h5>
+                        
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="budgetRange" id="budget1">
-                            <label class="form-check-label" for="budget1">₱100 - ₱500 <span class="text-muted small"></span></label>
+                            <input class="form-check-input" type="radio" name="budget_range" value="100-500" id="budget1" form="searchForm"
+                            {% if selected_budget == '100-500' %}checked{% endif %}>
+                            <label class="form-check-label" for="budget1">₱100 - ₱500</label>
                         </div>
+                        
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="budgetRange" id="budget2">
-                            <label class="form-check-label" for="budget2">₱500 - ₱1,500 <span class="text-muted small"></span></label>
+                            <input class="form-check-input" type="radio" name="budget_range" value="500-1500" id="budget2" form="searchForm"
+                            {% if selected_budget == '500-1500' %}checked{% endif %}>
+                            <label class="form-check-label" for="budget2">₱500 - ₱1,500</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="budgetRange" id="budget3" checked>
-                            <label class="form-check-label" for="budget2">₱1,500 - ₱3,000 <span class="text-muted small"></span></label>
+                            <input class="form-check-input" type="radio" name="budget_range" value="1500-3000" id="budget3" form="searchForm"
+                            {% if selected_budget == '1500-3000' %}checked{% endif %}>
+                            <label class="form-check-label" for="budget3">₱1,500 - ₱3,000</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="budgetRange" id="budget4">
-                            <label class="form-check-label" for="budget4">₱3,000 - ₱5,000 <span class="text-muted small"></span></label>
+                            <input class="form-check-input" type="radio" name="budget_range" value="3000-5000" id="budget4" form="searchForm"
+                            {% if selected_budget == '3000-5000' %}checked{% endif %}>
+                            <label class="form-check-label" for="budget4">₱3,000 - ₱5,000</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="budgetRange" id="budget5">
-                            <label class="form-check-label" for="budget5">₱5,000+ <span class="text-muted small"></span></label>
+                            <input class="form-check-input" type="radio" name="budget_range" value="5000+" id="budget5" form="searchForm"
+                            {% if selected_budget == '5000+' %}checked{% endif %}>
+                            <label class="form-check-label" for="budget5">₱5,000+</label>
                         </div>
                     </div>
 
                     <div class="col-md-4 filter-column">
                         <h5 class="filter-category-title">Category</h5>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="category" value="academic" id="cat1">
-                            <label class="form-check-label" for="cat1">Academic Writing</label>
+                            <input class="form-check-input" type="checkbox" name="category" value="Academic Assistance" id="cat1" form="searchForm"
+                            {% if "Academic Assistance" in selected_categories %}checked{% endif %}>
+                            <label class="form-check-label" for="cat1">Academic Assistance</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="category" value="creative" id="cat2">
+                            <input class="form-check-input" type="checkbox" name="category" value="Creative Writing" id="cat2" form="searchForm"
+                            {% if "Creative Writing" in selected_categories %}checked{% endif %}>
                             <label class="form-check-label" for="cat2">Creative Writing</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="category" value="programming" id="cat3" checked>
-                            <label class="form-check-label" for="cat2">Programming & IT</label>
+                            <input class="form-check-input" type="checkbox" name="category" value="Programming" id="cat3" form="searchForm"
+                            {% if "Programming" in selected_categories %}checked{% endif %}>
+                            <label class="form-check-label" for="cat3">Programming & IT</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="category" value="multimedia" id="cat4">
-                            <label class="form-check-label" for="cat4">Multimedia Arts</label>
+                            <input class="form-check-input" type="checkbox" name="category" value="Video Editing" id="cat4" form="searchForm"
+                            {% if "Video Editing" in selected_categories %}checked{% endif %}>
+                            <label class="form-check-label" for="cat4">Video Editing / Multimedia</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="category" value="data" id="cat5">
-                            <label class="form-check-label" for="cat5">Data Analysis</label>
+                            <input class="form-check-input" type="checkbox" name="category" value="Graphic Design" id="cat5" form="searchForm"
+                            {% if "Graphic Design" in selected_categories %}checked{% endif %}>
+                            <label class="form-check-label" for="cat5">Graphic Design</label>
                         </div>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="category" value="tutoring" id="cat6">
-                            <label class="form-check-label" for="cat6">Tutoring</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="category" value="others" id="cat7">
+                            <input class="form-check-input" type="checkbox" name="category" value="Others" id="cat7" form="searchForm"
+                            {% if "Others" in selected_categories %}checked{% endif %}>
                             <label class="form-check-label" for="cat7">Others</label>
                         </div>
                     </div>

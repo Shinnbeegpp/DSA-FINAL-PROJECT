@@ -8,7 +8,7 @@ from django.contrib import messages
 from .models import UserProfile, UserResume, Job
 from .forms import UserUpdateForm, ProfileUpdateForm, ResumeForm
 from django.shortcuts import get_object_or_404
-
+from django.db.models import Q
 # Create your views here.
 
 def homepage(request):
@@ -137,7 +137,52 @@ def myprofile_commissionee(request):
 #@never_cache      
 #@login_required   
 def find_job_candidate(request):
-    return render(request,'find_job_candidate.html')
+    # 1. Fetch all Open/Active jobs, ordered by newest first
+    # Exclude Cancelled/Expired jobs if you want
+    jobs = Job.objects.filter(status__in=['Open', 'Active']).order_by('-created_at')
+    
+
+    # 2. Search Bar (Title or Description)
+    query = request.GET.get('q')
+    if query:
+        jobs = jobs.filter(
+            Q(title__icontains=query) | 
+            Q(description__icontains=query)
+        )
+
+    # 3. Filter by Campus (Checkboxes)
+    campuses = request.GET.getlist('campus') # Returns a list like ['BatStateU - Lipa', '...']
+    if campuses:
+        jobs = jobs.filter(campus__in=campuses)
+
+    # 4. Filter by Category (Checkboxes)
+    categories = request.GET.getlist('category')
+    if categories:
+        jobs = jobs.filter(category__in=categories)
+
+    # 5. Filter by Budget (Radio)
+    budget_range = request.GET.get('budget_range')
+    if budget_range:
+        if budget_range == '100-500':
+            jobs = jobs.filter(budget__gte=100, budget__lte=500)
+        elif budget_range == '500-1500':
+            jobs = jobs.filter(budget__gte=500, budget__lte=1500)
+        elif budget_range == '1500-3000':
+            jobs = jobs.filter(budget__gte=1500, budget__lte=3000)
+        elif budget_range == '3000-5000':
+            jobs = jobs.filter(budget__gte=3000, budget__lte=5000)
+        elif budget_range == '5000+':
+            jobs = jobs.filter(budget__gte=5000)
+
+    context = {
+        'jobs': jobs,
+        # Pass selections back to template so checkboxes stay checked
+        'selected_campuses': campuses,
+        'selected_categories': categories,
+        'selected_budget': budget_range,
+        'query': query,
+    }
+    return render(request, 'find_job_candidate.html', context)
 
       
 #@never_cache       <---  @never_cache   
