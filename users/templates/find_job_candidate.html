@@ -123,6 +123,13 @@
             object-fit: cover;
             border: 2px solid var(--brand-purple); /* Optional: Highlight profile pic */
         }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
         /* Logged-In User UI (Mobile - within collapse menu) */
         .mobile-user-info {
             display: flex;
@@ -388,22 +395,19 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-white d-none d-lg-block" id="navbar-top">
             <div class="container">
                 <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo" style="max-height: 50px;">
-
                 <div class="user-profile">
                     <span class="user-name d-none d-md-block">
                         {{ user.first_name|default:user.username }} {{ user.last_name }}
                     </span>
-
                     {% if user.userprofile.profile_picture %}
-                        <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar"
-                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        <a href = "{% url 'myprofile_commissionee' %}"><img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar"
+                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"></a>
                     {% else %}
-                        <img src="{% static 'images/default_pfp.jpg' %}" 
-                            alt="Default Profile"
+                        <a href = "{% url 'myprofile_commissionee' %}">
+                            <img src="{% static 'images/default_pfp.jpg' %}" 
+                            alt="Default Profile" class="user-avatar"
                             style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
                     {% endif %}
-
-
                 </div>
             </div>
         </nav>
