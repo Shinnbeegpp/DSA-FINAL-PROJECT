@@ -125,3 +125,28 @@ class Job(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class JobApplication(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
+
+    applicant = models.ForeignKey(User, on_delete=models.CASCADE, related_name='my_applications')
+    
+
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Accepted', 'Accepted'),
+        ('Rejected', 'Rejected'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    
+    date_applied = models.DateTimeField(auto_now_add=True)
+
+
+    cover_letter = models.TextField(blank=True, null=True)
+
+    class Meta:
+        unique_together = ('job', 'applicant') 
+
+    def __str__(self):
+        return f"{self.applicant.username} -> {self.job.title}"

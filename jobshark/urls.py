@@ -30,7 +30,7 @@ from users.views import commissionee_settings, commissioner_settings, post_job
 from users.views import applied_jobs, favorite_jobs, myprofile_commissioner
 from users.views import myprofile_commissionee, manage_account_commissionee
 from users.views import view_details, saved_candidates, manage_account_commissioner
-from users.views import myprofile_commissionee, upload_resume, delete_resume, saved_candidates, update_job_status, view_commissionee
+from users.views import myprofile_commissionee, upload_resume, delete_resume, saved_candidates, update_job_status, view_commissionee, apply_for_job
 
 urlpatterns = [
     path('', homepage, name="homepage"),
@@ -48,17 +48,18 @@ urlpatterns = [
     path('my_profile/commissioner/', myprofile_commissioner, name="myprofile_commissioner"),
     path('my_profile/commissionee/', myprofile_commissionee, name="myprofile_commissionee"),
     path('manage_account/commissionee/', manage_account_commissionee, name="manage_account_commissionee"),
-    path('applied_jobs/view_details/', view_details, name="view_details"),
+    path('job/<int:job_id>/details/', view_details, name="view_details"),
     path('manage_account/commissioner/', manage_account_commissioner, name="manage_account_commissioner"),
     path('resume/upload/', upload_resume, name='upload_resume'),
     path('resume/delete/<int:pk>/', delete_resume, name='delete_resume'),
     path('saved_candidates', saved_candidates, name='saved_candidates'),
     path('job/update_status/', update_job_status, name='update_job_status'),
-    path('view_commissionee', view_commissionee, name='view_commissionee'),
+    path('job/<int:job_id>/applicants/', view_commissionee, name='view_commissionee'),
 
     path('job/delete/<int:job_id>/', views.delete_job, name='delete_job'),
 
 
+    path('job/<int:job_id>/apply/', apply_for_job, name='apply_for_job'),
     
     path('logout/', auth_views.LogoutView.as_view(next_page="homepage"), name='logout'),
 ]

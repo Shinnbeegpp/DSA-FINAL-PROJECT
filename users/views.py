@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib import messages
-from .models import UserProfile, UserResume, Job
+from .models import UserProfile, UserResume, Job, JobApplication
 from .forms import UserUpdateForm, ProfileUpdateForm, ResumeForm
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
@@ -294,6 +294,10 @@ def myjobs(request):
     if status_filter and status_filter != 'All Applications':
         jobs = jobs.filter(status=status_filter)
 
+    paginator = Paginator(jobs, 5) # Show 5 jobs per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     # 3. Pass data to HTML
     context = {
         'jobs': jobs,
@@ -373,7 +377,18 @@ def post_job(request):
 #@never_cache       
 #@login_required    
 def applied_jobs(request):
-    return render(request,'applied_jobs.html')
+
+    apps_list = JobApplication.objects.filter(applicant=request.user).select_related('job').order_by('-date_applied')
+
+    paginator = Paginator(apps_list, 5) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'applications': page_obj
+    }
+    return render(request, 'applied_jobs.html', context)
+
 
 #@never_cache      
 #@login_required 
@@ -390,8 +405,24 @@ def manage_account_commissionee(request):
 def manage_account_commissioner(request):
     return render(request,'commissioner_settings.html')
 
-def view_details(request):
-    return render(request,'view_details.html')
+@login_required
+def view_details(request, job_id): # Added job_id here
+    # 1. Fetch the specific job from the database
+    job = get_object_or_404(Job, id=job_id)
+    
+    # 2. Fetch user's resumes for the modal dropdown
+    my_resumes = UserResume.objects.filter(user=request.user)
+    
+    # 3. Check if already applied (to disable the button if needed)
+    has_applied = JobApplication.objects.filter(job=job, applicant=request.user).exists()
+
+    context = {
+        'job': job,
+        'resumes': my_resumes,
+        'has_applied': has_applied,
+        'commissioner': job.commissioner 
+    }
+    return render(request, 'view_details.html', context)
 
 @login_required
 def post_job(request):
@@ -448,5 +479,31 @@ def delete_job(request, job_id):
     return redirect('myjobs')
 
 @login_required
-def view_commissionee(request):
+def view_commissionee(request, job_id):
     return render(request,'view_commissionee.html')
+
+
+
+@login_required
+def apply_for_job(request, job_id):
+    if request.method == 'POST':
+        job = get_object_or_404(Job, id=job_id)
+        
+        # 1. Check if already applied
+        if JobApplication.objects.filter(job=job, applicant=request.user).exists():
+            messages.warning(request, "You have already applied for this job.")
+            return redirect('view_job_details', job_id=job.id)
+
+        # 2. Save Application
+        JobApplication.objects.create(
+            job=job,
+            applicant=request.user,
+            status='Pending',
+            # If you want to save the cover letter text:
+            cover_letter=request.POST.get('cover_letter') 
+        )
+        
+        messages.success(request, "Application submitted successfully!")
+        return redirect('applied_jobs')
+
+    return redirect('view_job_details', job_id=job_id)
