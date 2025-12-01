@@ -399,12 +399,6 @@ def saved_candidates(request):
     return render(request,'saved_candidates.html')
 
 
-def manage_account_commissionee(request):
-    return render(request,'commissionee_settings.html')
-
-def manage_account_commissioner(request):
-    return render(request,'commissioner_settings.html')
-
 @login_required
 def view_details(request, job_id): # Added job_id here
     # 1. Fetch the specific job from the database
@@ -480,9 +474,20 @@ def delete_job(request, job_id):
 
 @login_required
 def view_commissionee(request, job_id):
-    return render(request,'view_commissionee.html')
+    # 1. Get the specific job (and ensure the logged-in user is the owner)
+    job = get_object_or_404(Job, id=job_id, commissioner=request.user)
+    
+    # 2. Get all applications for this specific job
+    # select_related speeds it up by grabbing the applicant's profile data in one go
+    applications = job.applications.select_related('applicant__userprofile').all().order_by('-date_applied')
 
-
+    # 3. Pass the data to the template
+    context = {
+        'job': job,  # So you can show "For Job: Python Debugging"
+        'applications': applications, # So the loop {% for app in applications %} works
+        'total_applicants': applications.count() # So the count (5) appears in the header
+    }
+    return render(request, 'view_commissionee.html', context)
 
 @login_required
 def apply_for_job(request, job_id):
@@ -507,3 +512,22 @@ def apply_for_job(request, job_id):
         return redirect('applied_jobs')
 
     return redirect('view_job_details', job_id=job_id)
+
+@login_required
+def update_application_status(request, application_id, new_status):
+    # 1. Get the application
+    application = get_object_or_404(JobApplication, id=application_id)
+    
+    # 2. Security Check: Ensure the current user is the OWNER of the job
+    if application.job.commissioner != request.user:
+        messages.error(request, "You are not authorized to update this application.")
+        return redirect('myjobs')
+
+    # 3. Update Status
+    if new_status in ['Hired', 'Rejected']:
+        application.status = new_status
+        application.save()
+        messages.success(request, f"Applicant has been {new_status}.")
+    
+    # 4. Redirect back to the applicants list
+    return redirect('view_commissionee', job_id=application.job.id)
