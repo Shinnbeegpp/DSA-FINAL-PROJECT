@@ -290,7 +290,14 @@
             padding: 0;
             transition: color 0.2s;
         }
-
+        .btn-heart {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            background: none;
+            border: none;
+            padding: 0;
+            transition: color 0.2s;
+        }
         /* Hide the filled icon by default */
         .btn-heart .bi-heart-fill {
             display: none;
@@ -411,34 +418,6 @@
                 </div>
             </div>
         </nav>
-
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-white d-lg-none" id="navbar-mobile">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo" style="max-height: 50px;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNavCollapse" aria-controls="mobileNavCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mobileNavCollapse">
-                <ul class="navbar-nav mt-3">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Find Job</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <div class="mobile-user-info">
-                            <img src="https://placehold.co/40x40/6c63ff/ffffff?text=EH" alt="User Profile Picture" class="user-profile-img">
-                            <p class="user-profile-name mb-0">Esther Howard</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
     </header>
 
