@@ -127,18 +127,17 @@ def commissioner_settings(request):
 
     return render(request, 'commissioner_settings.html', context)
 
+@login_required
 def myprofile_commissioner(request):
     return render(request,'myprofile_commissioner.html')
 
+
+@login_required
 def myprofile_commissionee(request):
     return render(request,'myprofile_commissionee.html')
 
-#@never_cache      
-#@login_required   
-from django.db.models import Q # <--- IMPORT THIS at the top
-from .models import Job
-
-@login_required
+ 
+@login_required   
 def find_job_candidate(request):
     # 1. Start with all Open/Active jobs
     jobs = Job.objects.filter(status__in=['Open', 'Active']).order_by('-created_at')
@@ -281,8 +280,7 @@ def find_job_notsigned(request):
     }
     return render(request, 'find_job_notsigned.html', context)
 
-
-#@never_cache       <---  @never_cache   
+  
 @login_required
 def myjobs(request):
     # 1. Fetch only jobs posted by this user
@@ -309,6 +307,8 @@ def myjobs(request):
     }
     return render(request, 'myjobs.html', context)
 
+  
+@login_required 
 def update_job_status(request):
     if request.method == 'POST':
         job_id = request.POST.get('job_id')
@@ -318,7 +318,7 @@ def update_job_status(request):
         job.save()
         return redirect('myjobs')
 
-#@never_cache      
+
 @login_required    
 def commissionee_settings(request):
     if request.method == 'POST':
@@ -346,7 +346,8 @@ def commissionee_settings(request):
 
     return render(request,'commissionee_settings.html', context)
 
-@login_required
+  
+@login_required  
 def upload_resume(request):
     if request.method == 'POST':
         form = ResumeForm(request.POST, request.FILES)
@@ -364,7 +365,8 @@ def upload_resume(request):
     
     return redirect('commissionee_settings')
 
-@login_required
+    
+@login_required  
 def delete_resume(request, pk):
 
     resume = get_object_or_404(UserResume, pk=pk, user=request.user)
@@ -372,13 +374,9 @@ def delete_resume(request, pk):
     messages.success(request, "Resume deleted.")
     return redirect('commissionee_settings')
 
-#@never_cache      
-#@login_required    
-def post_job(request):
-    return render(request,'post_job.html')
 
-#@never_cache       
-#@login_required    
+    
+@login_required    
 def applied_jobs(request):
 
     apps_list = JobApplication.objects.filter(applicant=request.user).select_related('job').order_by('-date_applied')
@@ -402,13 +400,8 @@ def applied_jobs(request):
     }
     return render(request, 'applied_jobs.html', context)
 
-
-#@never_cache      
-#@login_required 
-def favorite_jobs(request):
-    return render(request,'favorite_jobs.html')
-
-@login_required
+    
+@login_required  
 def view_details(request, job_id): # Added job_id here
     # 1. Fetch the specific job from the database
     job = get_object_or_404(Job, id=job_id)
@@ -426,8 +419,8 @@ def view_details(request, job_id): # Added job_id here
         'commissioner': job.commissioner 
     }
     return render(request, 'view_details.html', context)
-
-@login_required
+    
+@login_required  
 def post_job(request):
     if request.method == 'POST':
         # 1. Get basic data
@@ -467,8 +460,8 @@ def post_job(request):
         return redirect('post_job') # Stay on page to show modal
 
     return render(request, 'post_job.html')
-
-@login_required
+     
+@login_required  
 def delete_job(request, job_id):
     # 1. Get the job, but ONLY if it belongs to the current user
     # This prevents users from deleting other people's jobs by guessing the ID
@@ -480,8 +473,8 @@ def delete_job(request, job_id):
     # 3. Message and Redirect
     messages.success(request, "Job deleted successfully.")
     return redirect('myjobs')
-
-@login_required
+    
+@login_required  
 def view_commissionee(request, job_id):
     # 1. Get the specific job (and ensure the logged-in user is the owner)
     job = get_object_or_404(Job, id=job_id, commissioner=request.user)
@@ -497,8 +490,8 @@ def view_commissionee(request, job_id):
         'total_applicants': applications.count() # So the count (5) appears in the header
     }
     return render(request, 'view_commissionee.html', context)
-
-@login_required
+      
+@login_required  
 def apply_for_job(request, job_id):
     if request.method == 'POST':
         job = get_object_or_404(Job, id=job_id)
@@ -522,8 +515,8 @@ def apply_for_job(request, job_id):
 
     return redirect('view_details', job_id=job_id)
 
-    
-@login_required
+         
+@login_required  
 def active_commissionees(request):
     # 1. Fetch applications for jobs posted by the current user
     # 2. Filter for statuses that represent an "Active" or "Past" engagement (Accepted, Done, Cancelled)
@@ -539,8 +532,8 @@ def active_commissionees(request):
     return render(request, 'active_commissionees.html', context)
 
 # Add this to views.py
-
-@login_required
+      
+@login_required  
 def update_application_status(request, application_id, new_status):
     # 1. Get the application
     application = get_object_or_404(JobApplication, id=application_id)
@@ -578,8 +571,8 @@ def update_application_status(request, application_id, new_status):
         return redirect('active_commissionees')
 
     return redirect('myjobs')
-
-@login_required
+      
+@login_required  
 def active_commissions(request): 
     # 1. Fetch applications where the user was ACCEPTED
     active_apps = JobApplication.objects.filter(
@@ -597,7 +590,8 @@ def active_commissions(request):
     }
     # Make sure this matches your HTML file name
     return render(request, 'active_commissions.html', context)
-
+      
+@login_required  
 def recommend_jobs(request):
     user = request.user
     

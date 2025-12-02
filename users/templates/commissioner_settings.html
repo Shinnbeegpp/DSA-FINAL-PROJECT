@@ -585,11 +585,11 @@
                                 
                                 <div class="modal-body text-center">
                                     <input type="file" 
-                                           name="profile_picture" 
-                                           id="real_file_input" 
-                                           style="display: none;" 
-                                           accept="image/*"
-                                           onchange="previewImage(event)">
+                                        name="profile_picture" 
+                                        id="real_file_input" 
+                                        style="display: none;" 
+                                        accept="image/*"
+                                        onchange="previewImage(event)">
 
                                     <img id="modal_preview" src="#" alt="Preview" style="display: none; max-width: 100%; max-height: 300px; margin-bottom: 20px; border-radius: 10px;">
 
@@ -617,6 +617,27 @@
         </footer>
     </div>
 
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 text-center">
+                <div class="modal-header border-0 p-0">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3 text-muted"><i class="fa-solid fa-arrow-right-from-bracket fa-3x"></i></div>
+                    <h4 class="fw-bold mb-2">Log Out?</h4>
+                    <p class="text-muted">Are you sure you want to end your session?</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center gap-2">
+                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
+                    <form action="{% url 'logout' %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger px-4 text-white">Yes, Log Out</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
