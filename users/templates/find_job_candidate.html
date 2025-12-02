@@ -290,34 +290,6 @@
             padding: 0;
             transition: color 0.2s;
         }
-        .btn-heart {
-            font-size: 1.5rem;
-            color: var(--text-dark);
-            background: none;
-            border: none;
-            padding: 0;
-            transition: color 0.2s;
-        }
-        /* Hide the filled icon by default */
-        .btn-heart .bi-heart-fill {
-            display: none;
-        }
-
-        /* Show the filled icon and hide the outlined icon when 'saved' class is present */
-        .btn-heart.saved .bi-heart {
-            display: none;
-        }
-        
-        .btn-heart.saved .bi-heart-fill {
-            display: inline-block; /* Show the filled icon */
-            color: var(--brand-purple); /* Make it purple/filled color */
-        }
-        
-        /* Ensure the hover effect still works on the outline icon */
-        .btn-heart:hover {
-            color: var(--brand-purple);
-        }
-
         .btn-apply-now {
             background-color: var(--btn-apply-primary);
             border: 2px solid var(--btn-apply-primary);
@@ -471,10 +443,6 @@
                         </div>
                         <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
     
-                            <button class="btn btn-heart me-4" onclick="toggleheart(this)">
-                                <i class="bi bi-heart"></i>
-                                <i class="bi bi-heart-fill"></i>
-                            </button>
 
                             <a href="{% url 'view_details' job.id %}" class="btn-apply-now text-decoration-none">
                                 Apply Now <i class="bi bi-arrow-right ms-1"></i>
@@ -743,18 +711,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>
-        function toggleheart(buttonElement) {
-            // Toggles the 'saved' class on the button
-            buttonElement.classList.toggle('saved');
-            
-            // In a real application, you would send an AJAX request here 
-            // to save/unsave the job in the database.
-            if (buttonElement.classList.contains('saved')) {
-                console.log('Project Saved!');
-            } else {
-                console.log('Project Unsaved!');
-            }
-        }
         function clearAllFilters() {
         // 1. Get the Modal Container
         var modal = document.getElementById('advanceFilterModal');
