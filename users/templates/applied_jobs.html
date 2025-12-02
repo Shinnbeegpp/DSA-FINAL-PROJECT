@@ -54,7 +54,7 @@
         .main-header {
             padding: 1rem 0;
             background-color: #fff;
-            border-bottom: 1px solid rgba(0,0,0,0);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
             position: relative;
             z-index: 20;
         }
@@ -89,7 +89,7 @@
             border-radius: 0 0 12px 12px; 
             min-height: calc(100vh - 130px);
             height: 100%;
-            border-right: 1px solid rgba(0,0,0,0);
+            border-right: 1px solid rgba(0,0,0,0.03);
         }
 
         .sidebar-title {
@@ -274,7 +274,7 @@
         <div class="container">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{%url 'find_job_candidate'%}">Find Job</a> 
+                    <a class="nav-link" href="#">Find Job</a> 
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">Dashboard</a> 
@@ -346,12 +346,14 @@
                     
                     <div class="d-flex align-items-center gap-2">
                         <span style="font-size: 0.9rem; font-weight: 500; color: #475569;">Application Status</span>
-                        <select class="form-select form-select-sm" style="width: auto;">
-                            <option>All Applications</option>
-                            <option>Accepted</option>
-                            <option>Rejected</option>
-                            <option>Pending</option>
-                        </select>
+                        <form method="GET" id="filterForm">
+                            <select name="status" class="form-select form-select-sm" style="width: auto;" onchange="document.getElementById('filterForm').submit()">
+                                <option value="All Applications" {% if current_filter == 'All Applications' %}selected{% endif %}>All Applications</option>
+                                <option value="Accepted" {% if current_filter == 'Accepted' %}selected{% endif %}>Accepted</option>
+                                <option value="Rejected" {% if current_filter == 'Rejected' %}selected{% endif %}>Rejected</option>
+                                <option value="Pending" {% if current_filter == 'Pending' %}selected{% endif %}>Pending</option>
+                            </select>
+                        </form>
                     </div>
                 </div>
 
@@ -454,6 +456,7 @@
             <p class="mb-0">&copy; 2024 JobShark - Job Portal. All rights Reserved</p>
         </footer>
     </div>
+
     <!-- Logout Confirmation Modal -->
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

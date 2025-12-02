@@ -31,12 +31,12 @@ from users.views import applied_jobs, active_commissions, myprofile_commissioner
 from users.views import myprofile_commissionee, view_details, active_commissionees
 from users.views import myprofile_commissionee, upload_resume, delete_resume
 from users.views import update_application_status, update_job_status
-from users.views import view_commissionee, apply_for_job
+from users.views import view_commissionee, apply_for_job, recommend_jobs
 
 urlpatterns = [
     # General URLs
     path('', homepage, name="homepage"),
-    path('find_job/', find_job_notsigned, name='find_job_notsigned'),
+    path('findjob/', find_job_notsigned, name='find_job_notsigned'),
     path('admin/', admin.site.urls),
     path('sign_in/', sign_in, name="sign_in"),
     path('registration/', registration, name="registration"),
@@ -57,12 +57,13 @@ urlpatterns = [
     path('application/<int:application_id>/update/<str:new_status>/', update_application_status, name='update_application_status'),
     
     # Commissionee URLs
-    path('find_job_candidate/', find_job_candidate, name="find_job_candidate"),
+    path('find_job/', find_job_candidate, name="find_job_candidate"),
     path('settings/commissionee/', commissionee_settings, name="commissionee_settings"),
     path('applied_jobs/', applied_jobs, name="applied_jobs"),
     path('my_profile/commissionee/', myprofile_commissionee, name="myprofile_commissionee"), 
     path('job/<int:job_id>/details/', view_details, name="view_details"),
     path('active_commissions/', active_commissions, name='active_commissions'),    
+    path('recommendations/', recommend_jobs, name='recommend_jobs'),
 ]
 
 if settings.DEBUG:

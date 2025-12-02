@@ -397,6 +397,16 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
                 <h2 class="h3 mb-2 mb-md-0">Find Project</h2>
+                <div class="d-flex justify-content-center mb-4">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item">
+                            <a class="nav-link {% if not is_recommendation %}active{% endif %}" href="{% url 'find_job_candidate' %}">All Jobs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if is_recommendation %}active{% endif %}" href="{% url 'recommend_jobs' %}">Recommended for You</a>
+                        </li>
+                    </ul>
+                </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 bg-transparent p-0">
                         <li class="breadcrumb-item"><a href="#">Find Project</a></li>

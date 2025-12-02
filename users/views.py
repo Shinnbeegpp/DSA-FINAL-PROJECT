@@ -9,6 +9,7 @@ from .models import UserProfile, UserResume, Job, JobApplication
 from .forms import UserUpdateForm, ProfileUpdateForm, ResumeForm
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django.db.models import Count, Avg
 from django.core.paginator import Paginator
 # Create your views here.
 
@@ -382,6 +383,11 @@ def applied_jobs(request):
 
     apps_list = JobApplication.objects.filter(applicant=request.user).select_related('job').order_by('-date_applied')
 
+    # 2. Handle Status Filter (from the dropdown)
+    status_filter = request.GET.get('status') # Get from URL ?status=Active
+    if status_filter and status_filter != 'All Applications':
+        apps_list = apps_list.filter(status=status_filter)
+        
     # 3. GET THE TOTAL COUNT (After filtering, before pagination)
     total_apps_list_count = apps_list.count()
     
@@ -392,6 +398,7 @@ def applied_jobs(request):
     context = {
         'applications': page_obj,
         'total_apps': apps_list.count(),
+        'current_filter': status_filter or 'All Applications'
     }
     return render(request, 'applied_jobs.html', context)
 
@@ -590,3 +597,61 @@ def active_commissions(request):
     }
     # Make sure this matches your HTML file name
     return render(request, 'active_commissions.html', context)
+
+def recommend_jobs(request):
+    user = request.user
+    
+    # 1. Get User's Application History
+    user_apps = JobApplication.objects.filter(applicant=user)
+    
+    if not user_apps.exists():
+        # Fallback: If new user, just show latest jobs
+        recommended_jobs = Job.objects.filter(status='Active').order_by('-created_at')[:10]
+        return render(request, 'find_job_candidate.html', {'jobs': recommended_jobs, 'is_recommendation': True})
+
+    # 2. Analyze Preferences
+    # Get most frequent categories
+    top_categories = user_apps.values_list('job__category', flat=True)
+    # Get most frequent campuses
+    top_campuses = user_apps.values_list('job__campus', flat=True)
+    # Get average budget (optional, for range filtering)
+    avg_budget = user_apps.aggregate(Avg('job__budget'))['job__budget__avg'] or 0
+
+    # 3. Filter & Score Jobs
+    # Start with all active jobs the user HASN'T applied to yet
+    applied_job_ids = user_apps.values_list('job_id', flat=True)
+    candidate_jobs = Job.objects.filter(status='Active').exclude(id__in=applied_job_ids)
+
+    # We can use Python to sort them because the logic is a bit complex for pure SQL
+    # Create a list of (job, score) tuples
+    scored_jobs = []
+    
+    for job in candidate_jobs:
+        score = 0
+        
+        # Category Match (High Weight)
+        if job.category in top_categories:
+            score += 10
+        
+        # Campus Match (Medium Weight)
+        if job.campus in top_campuses:
+            score += 5
+            
+        # Budget Match (Low Weight)
+        # Check if job budget is within 20% of their average
+        if avg_budget > 0 and (0.8 * float(avg_budget) <= float(job.budget) <= 1.2 * float(avg_budget)):
+            score += 3
+            
+        scored_jobs.append((job, score))
+
+    # 4. Sort by Score (Highest first)
+    scored_jobs.sort(key=lambda x: x[1], reverse=True)
+    
+    # Extract just the job objects
+    final_recommendations = [item[0] for item in scored_jobs]
+
+    context = {
+        'jobs': final_recommendations,
+        'is_recommendation': True # Flag to show a special header in HTML
+    }
+    return render(request, 'find_job_candidate.html', context)
