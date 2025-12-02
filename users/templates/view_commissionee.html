@@ -708,8 +708,10 @@
                                 <li>Status: 
                                     {% if app.status == 'Pending' %}
                                         <span class="badge bg-warning text-dark">Pending</span>
-                                    {% elif app.status == 'Hired' %}
-                                        <span class="badge bg-success">Hired</span>
+
+                                    {% elif app.status == 'Accepted' or app.status == 'Hired' %} 
+                                        <span class="badge bg-success">Accepted</span>
+
                                     {% else %}
                                         <span class="badge bg-danger">Rejected</span>
                                     {% endif %}
@@ -933,7 +935,7 @@
             var rejectBtn = document.getElementById('btn_reject');
 
             // Using Django URL pattern structure: /application/ID/update/STATUS/
-            hireBtn.href = "/application/" + appId + "/update/Hired/";
+            hireBtn.href = "/application/" + appId + "/update/Accepted/";
             rejectBtn.href = "/application/" + appId + "/update/Rejected/";
         }
 

@@ -365,38 +365,40 @@
 
                     {% for app in applications %}
                     <div class="job-row">
-                        <div style="">
+                        <div>
                             <div class="job-title">{{ app.job.title }}</div>
-                            <div class="job-meta">{{ app.job.category }} &bull; ₱{{ app.job.budget }}</div>
+                            <div class="job-meta">{{ app.job.category }} &bull; ₱{{ app.job.budget }}</div> 
                         </div>
-
+                        
                         <div class="text-muted small">
                             {{ app.date_applied|date:"m/d/Y" }}
                         </div>
+                        
                         <div>
-                            {% if app.job.status == 'Active' %}
-                                <span class="status-pill status-active"><i class="fa-solid fa-check me-1"></i> ACTIVE</span>
-                            
-                            {% elif app.job.status == 'Ongoing' %}
-                                <span class="status-pill" style="color: #3B82F6; background-color: #EFF6FF; padding: 4px 12px; border-radius: 20px;">
-                                    <i class="fa-solid fa-spinner me-1"></i> ONGOING
+                            {% if app.status == 'Pending' %}
+                                <span class="status-pill" style="color: #d97706; padding: 5px 0px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">
+                                    <i class="fa-regular fa-clock me-1"></i> PENDING
                                 </span>
-
-                            {% elif app.job.status == 'Done' %}
-                                <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap me-1"></i> DONE</span>
-
+                            {% elif app.status == 'Accepted' %}
+                                <span class="status-pill status-active">
+                                    <i class="fa-solid fa-check me-1"></i> ACCEPTED
+                                </span>
+                            {% elif app.status == 'Rejected' %}
+                                <span class="status-pill status-expired">
+                                    <i class="fa-regular fa-circle-xmark me-1"></i> REJECTED
+                                </span>
                             {% else %}
-                                <span class="status-pill status-expired"><i class="fa-solid fa-ban me-1"></i> CANCELLED</span>
+                                <span class="badge bg-secondary">{{ app.status|upper }}</span>
                             {% endif %}
                         </div>
-
+                        
                         <div class="d-flex justify-content-end align-items-center gap-2">
                             <a href="{% url 'view_details' app.job.id %}" class="btn-view text-decoration-none">
                                 View Details
                             </a>
                         </div>
-
                     </div>
+
                     {% empty %}
                         <div class="p-5 text-center text-muted">
                             <i class="fa-solid fa-folder-open fa-3x mb-3"></i>
@@ -404,7 +406,7 @@
                             <a href="{% url 'find_job_candidate' %}" class="btn btn-primary-custom mt-2" style="background-color: #6930C3; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none;">Find a Job</a>
                         </div>
                     {% endfor %}
-                </div>
+                    </div>
                     
             
 

@@ -311,41 +311,41 @@
                             <div class="dropdown">
                                 
                                 <button class="btn btn-status-dropdown dropdown-toggle 
-                                    {% if c.status == 'Accepted' %}status-active
-                                    {% elif c.status == 'Done' %}status-done
-                                    {% elif c.status == 'Cancelled' %}status-cancelled{% endif %}" 
+                                    {% if c.job.status == 'Ongoing' %}status-active
+                                    {% elif c.job.status == 'Done' %}status-done
+                                    {% elif c.job.status == 'Cancelled' %}status-cancelled
+                                    {% else %}status-active{% endif %}" 
                                     type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     
-                                    {% if c.status == 'Accepted' %}
+                                    {% if c.job.status == 'Ongoing' %}
                                         <i class="fa-solid fa-circle-check"></i> Active
-                                    {% elif c.status == 'Done' %}
+                                    {% elif c.job.status == 'Done' %}
                                         <i class="fa-solid fa-check-double"></i> Done
-                                    {% elif c.status == 'Cancelled' %}
+                                    {% elif c.job.status == 'Cancelled' %}
                                         <i class="fa-solid fa-ban"></i> Cancelled
+                                    {% else %}
+                                        <i class="fa-solid fa-circle-check"></i> Active
                                     {% endif %}
                                 </button>
                                 
                                 <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                                    
                                     <li>
-                                        <a class="dropdown-item" href="{% url 'update_application_status' c.id 'Accepted' %}">
-                                            <i class="fa-solid fa-circle-check text-success me-2"></i> Active
+                                        <a class="dropdown-item" href="{% url 'update_application_status' c.id 'Ongoing' %}">
+                                            <i class="fa-solid fa-circle-check text-success me-2"></i> Active (Ongoing)
                                         </a>
                                     </li>
-                                    
                                     <li>
                                         <a class="dropdown-item" href="{% url 'update_application_status' c.id 'Done' %}">
                                             <i class="fa-solid fa-check-double text-primary me-2"></i> Done
                                         </a>
                                     </li>
-                                    
                                     <li>
                                         <a class="dropdown-item" href="{% url 'update_application_status' c.id 'Cancelled' %}">
                                             <i class="fa-solid fa-ban text-secondary me-2"></i> Cancelled
                                         </a>
                                     </li>
-
                                 </ul>
+
                             </div>
                         </div>
                     </div>

@@ -532,34 +532,6 @@ def update_application_status(request, application_id, new_status):
     # 4. Redirect back to the applicants list
     return redirect('view_commissionee', job_id=application.job.id)
 
-@login_required
-def update_application_status(request, application_id, new_status):
-    application = get_object_or_404(JobApplication, id=application_id)
-    
-    # Security Check
-    if application.job.commissioner != request.user:
-        messages.error(request, "You are not authorized.")
-        return redirect('myjobs')
-
-    if new_status in ['Accepted', 'Rejected']:
-        # 1. Update Application Status
-        application.status = new_status
-        application.save()
-        
-        # 2. AUTOMATIC JOB UPDATE LOGIC
-        if new_status == 'Accepted':
-            job = application.job
-            job.status = 'Ongoing'  # <--- Automatically set Job to Ongoing
-            job.save()
-            
-            messages.success(request, f"Applicant accepted! Job marked as 'Ongoing'.")
-            return redirect('saved_candidates') 
-        else:
-            messages.success(request, "Applicant rejected.")
-            return redirect('view_commissionee', job_id=application.job.id)
-    
-    return redirect('myjobs')
-    #return redirect('view_commissionee', job_id=application.job.id)
     
 @login_required
 def saved_candidates(request):
@@ -576,21 +548,43 @@ def saved_candidates(request):
     }
     return render(request, 'saved_candidates.html', context)
 
+# Add this to views.py
+
 @login_required
 def update_application_status(request, application_id, new_status):
+    # 1. Get the application
     application = get_object_or_404(JobApplication, id=application_id)
-    
-    # Security: Ensure user owns the job
-    if application.job.commissioner != request.user:
+    job = application.job # Get the related job
+
+    # 2. Security Check
+    if job.commissioner != request.user:
+        messages.error(request, "Unauthorized.")
         return redirect('myjobs')
 
-    # Update the status in the database
-    if new_status in ['Accepted', 'Done', 'Cancelled', 'Rejected']:
+    # --- LOGIC SPLIT ---
+
+    # CASE A: Managing the Candidate (Accept/Reject)
+    if new_status in ['Accepted', 'Rejected']:
         application.status = new_status
         application.save()
-        messages.success(request, f"Status updated to {new_status}")
 
-    # REDIRECT LOGIC:
-    # If the user is on the 'saved_candidates' page, keep them there.
-    # request.META.get('HTTP_REFERER') checks where the user clicked the button from.
-    return redirect(request.META.get('HTTP_REFERER', 'saved_candidates'))
+        if new_status == 'Accepted':
+            # Automatically mark Job as Ongoing when someone is hired
+            job.status = 'Ongoing'
+            job.save()
+            messages.success(request, "Applicant Accepted! Job set to 'Ongoing'.")
+            return redirect('saved_candidates')
+        else:
+            messages.success(request, "Applicant Rejected.")
+            return redirect('view_commissionee', job_id=job.id)
+
+    # CASE B: Managing the Job Progress (Active/Done/Cancelled)
+    elif new_status in ['Ongoing', 'Done', 'Cancelled']:
+        # Update the JOB status, not the application
+        job.status = new_status
+        job.save()
+        messages.success(request, f"Job marked as {new_status}.")
+        # Stay on the Saved Candidates page
+        return redirect('saved_candidates')
+
+    return redirect('myjobs')

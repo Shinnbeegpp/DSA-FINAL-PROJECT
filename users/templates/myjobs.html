@@ -136,9 +136,6 @@
         .status-done { 
             color: #F97316; /* Orange: Application Complete (Hired/Rejected) */
         }
-        .status-expired { 
-            color: #EF4444; /* Red: Client deleted job OR Application Rejected */
-        }
         
         /* UPDATED: Pushed logout to bottom of the extended sidebar */
         .logout-link {
@@ -419,7 +416,7 @@
                                 <option value="All Applications" {% if current_filter == 'All Applications' %}selected{% endif %}>All Applications</option>
                                 <option value="Active" {% if current_filter == 'Active' %}selected{% endif %}>Active</option>
                                 <option value="Done" {% if current_filter == 'Done' %}selected{% endif %}>Done</option>
-                                <option value="Expired" {% if current_filter == 'Expired' %}selected{% endif %}>Expired</option>
+                                <option value="Ongoing" {% if current_filter == 'Expired' %}selected{% endif %}>Expired</option>
                             </select>
                         </form>
                     </div>
@@ -448,8 +445,8 @@
                                 </span>
 
                             {% elif job.status == 'Ongoing' %}
-                                <span class="status-pill" style="color: #3B82F6; background-color: #EFF6FF; padding: 4px 12px; border-radius: 20px;">
-                                    <i class="fa-solid fa-spinner fa-spin-pulse me-1"></i> ONGOING
+                                <span class="status-pill" style="color: #3B82F6;">
+                                    <i class="fa-solid fa-clock"></i> ONGOING
                                 </span>
 
                             {% elif job.status == 'Done' %}

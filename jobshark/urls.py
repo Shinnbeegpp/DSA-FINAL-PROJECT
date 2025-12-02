@@ -49,7 +49,7 @@ urlpatterns = [
     path('my_profile/commissioner/', myprofile_commissioner, name="myprofile_commissioner"),
     path('resume/upload/', upload_resume, name='upload_resume'),
     path('resume/delete/<int:pk>/', delete_resume, name='delete_resume'),
-    path('active_commissionees', saved_candidates, name='saved_candidates'), # saved_candidates.html
+    path('active_commissionees', saved_candidates, name='saved_candidates'), # Active Commissionees
     path('job/update_status/', update_job_status, name='update_job_status'),
     path('job/<int:job_id>/applicants/', view_commissionee, name='view_commissionee'),
     path('job/delete/<int:job_id>/', views.delete_job, name='delete_job'),
@@ -60,7 +60,7 @@ urlpatterns = [
     path('find_job_candidate/', find_job_candidate, name="find_job_candidate"),
     path('settings/commissionee/', commissionee_settings, name="commissionee_settings"),
     path('applied_jobs/', applied_jobs, name="applied_jobs"),
-    path('favorite_jobs/', favorite_jobs, name="favorite_jobs"),
+    path('favorite_jobs/', favorite_jobs, name="favorite_jobs"), # Active Commissions
     path('my_profile/commissionee/', myprofile_commissionee, name="myprofile_commissionee"), 
     path('job/<int:job_id>/details/', view_details, name="view_details"),    
 ]
