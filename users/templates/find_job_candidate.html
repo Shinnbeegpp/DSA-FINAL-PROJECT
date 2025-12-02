@@ -380,17 +380,16 @@
                     </span>
                     {% if user.userprofile.profile_picture %}
                         <a href = "{% url 'myprofile_commissionee' %}"><img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar"
-                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"></a>
+                        style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;"></a>
                     {% else %}
                         <a href = "{% url 'myprofile_commissionee' %}">
                             <img src="{% static 'images/default_pfp.jpg' %}" 
                             alt="Default Profile" class="user-avatar"
-                            style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+                            style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;"></a>
                     {% endif %}
                 </div>
             </div>
         </nav>
-
     </header>
 
     <header class="search-header">

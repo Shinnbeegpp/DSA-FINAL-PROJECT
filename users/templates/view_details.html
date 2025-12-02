@@ -104,8 +104,8 @@
             <div style="background-color: #6a3bb8;">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-center space-x-6 text-white text-sm font-medium py-2">
-                        <a href="{%url 'find_job_candidate' %}" class="hover:text-secondary-purple transition duration-150">Find Job</a>
-                        <a href="#" class="hover:text-secondary-purple transition duration-150">Dashboard</a>
+                        <a href="{% url 'find_job_candidate'%}" class="hover:text-secondary-purple transition duration-150">Find Job</a>
+                        <a href="{%  url 'myprofile_commissionee'%}" class="hover:text-secondary-purple transition duration-150">Dashboard</a>
                     </div>
                 </div>
             </div>
@@ -115,17 +115,25 @@
         <nav class="bg-white shadow-sm hidden lg:block">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
                 <!-- Logo -->
-                <a class="flex items-center space-x-2" href="#">
+                <p class="flex items-center space-x-2" href="#">
                     <!-- Placeholder for Logo/Site Name -->
                     <img src={% static "images/logo_name.png" %} alt="JobShark Logo" style="width: 150px;" 
                         onerror="this.src='https://placehold.co/150x40/6c63ff/ffffff?text=JobShark&font=inter'; this.onerror=null;">
-                </a>
+                </p>
 
                 <!-- User Profile -->
                 <div class="flex items-center space-x-3">
-                    <span class="text-gray-700 font-medium">Esther Howard</span>
-                    <!-- Placeholder for User Avatar -->
-                    <img src="https://placehold.co/40x40/6A3BB8/FFFFFF?text=EH" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-primary-purple">
+                    <span class="text-gray-700 font-medium">
+                        {{ user.first_name|default:user.username }} {{ user.last_name }}</span>
+                    {% if user.userprofile.profile_picture %}
+                        <img src="{{ user.userprofile.profile_picture.url }}" 
+                        alt="User Avatar" style="width: 40px; height: 40px; object-fit: cover; 
+                        border-radius: 8px;">
+                    {% else %}
+                        <img src="{% static 'images/default_pfp.jpg' %}" alt="User Avatar" 
+                        style="width: 40px; height: 40px; object-fit: cover; 
+                        border-radius: 8px;">
+                    {% endif %}
                 </div>
             </div>
         </nav>

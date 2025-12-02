@@ -377,19 +377,19 @@
 
         <nav class="navbar navbar-expand-lg navbar-light bg-white d-lg-none" id="navbar-mobile">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
+            <p class="navbar-brand d-flex align-items-center" href="#">
                 <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo" style="max-height: 50px;">
-            </a>
+            </p>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNavCollapse" aria-controls="mobileNavCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mobileNavCollapse">
                 <ul class="navbar-nav mt-3">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{% url 'homaepage'%}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Find Job</a>
+                        <p class="nav-link" href="#">Find Job</p>
                     </li>
                     <li class="nav-item">
                         <li class="nav-item">
