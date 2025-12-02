@@ -401,10 +401,6 @@ def applied_jobs(request):
 def favorite_jobs(request):
     return render(request,'favorite_jobs.html')
 
-def saved_candidates(request):
-    return render(request,'saved_candidates.html')
-
-
 @login_required
 def view_details(request, job_id): # Added job_id here
     # 1. Fetch the specific job from the database
@@ -519,28 +515,9 @@ def apply_for_job(request, job_id):
 
     return redirect('view_job_details', job_id=job_id)
 
-@login_required
-def update_application_status(request, application_id, new_status):
-    # 1. Get the application
-    application = get_object_or_404(JobApplication, id=application_id)
-    
-    # 2. Security Check: Ensure the current user is the OWNER of the job
-    if application.job.commissioner != request.user:
-        messages.error(request, "You are not authorized to update this application.")
-        return redirect('myjobs')
-
-    # 3. Update Status
-    if new_status in ['Hired', 'Rejected']:
-        application.status = new_status
-        application.save()
-        messages.success(request, f"Applicant has been {new_status}.")
-    
-    # 4. Redirect back to the applicants list
-    return redirect('view_commissionee', job_id=application.job.id)
-
     
 @login_required
-def saved_candidates(request):
+def active_commissionees(request):
     # 1. Fetch applications for jobs posted by the current user
     # 2. Filter for statuses that represent an "Active" or "Past" engagement (Accepted, Done, Cancelled)
     # 3. Exclude 'Pending' and 'Rejected'
@@ -552,7 +529,7 @@ def saved_candidates(request):
     context = {
         'commissionees': commissionees
     }
-    return render(request, 'saved_candidates.html', context)
+    return render(request, 'active_commissionees.html', context)
 
 # Add this to views.py
 
@@ -579,7 +556,7 @@ def update_application_status(request, application_id, new_status):
             job.status = 'Ongoing'
             job.save()
             messages.success(request, "Applicant Accepted! Job set to 'Ongoing'.")
-            return redirect('saved_candidates')
+            return redirect('active_commissionees')
         else:
             messages.success(request, "Applicant Rejected.")
             return redirect('view_commissionee', job_id=job.id)
@@ -591,12 +568,12 @@ def update_application_status(request, application_id, new_status):
         job.save()
         messages.success(request, f"Job marked as {new_status}.")
         # Stay on the Saved Candidates page
-        return redirect('saved_candidates')
+        return redirect('active_commissionees')
 
     return redirect('myjobs')
 
 @login_required
-def active_commissions(request): # Or whatever your URL points to (e.g. saved_candidates)
+def active_commissions(request): 
     # 1. Fetch applications where the user was ACCEPTED
     active_apps = JobApplication.objects.filter(
         applicant=request.user,
