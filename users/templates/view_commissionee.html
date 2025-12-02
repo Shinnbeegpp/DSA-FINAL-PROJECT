@@ -757,11 +757,13 @@
                             <i class="fa-regular fa-envelope me-2"></i> Send Email
                         </a>
 
-                        <a href="#" id="btn_reject" class="btn btn-danger text-white d-flex align-items-center px-3 py-2 rounded text-decoration-none" onclick="return confirm('Are you sure you want to REJECT this applicant?')">
+                        <a href="#" id="btn_reject" class="btn btn-danger text-white d-flex align-items-center px-3 py-2 rounded text-decoration-none" 
+                        onclick="openConfirmation(event, 'reject')">
                             <i class="fa-solid fa-xmark me-2"></i> Reject
                         </a>
 
-                        <a href="#" id="btn_hire" class="btn btn-success text-white d-flex align-items-center px-3 py-2 rounded text-decoration-none" onclick="return confirm('Are you sure you want to ACCEPT this applicant?')">
+                        <a href="#" id="btn_hire" class="btn btn-success text-white d-flex align-items-center px-3 py-2 rounded text-decoration-none" 
+                        onclick="openConfirmation(event, 'accept')">
                             <i class="fa-solid fa-check me-2"></i> Accept
                         </a>
                     </div>
@@ -853,6 +855,32 @@
         </div>
     </div>
 
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-hidden="true" style="z-index: 1060;"> <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 text-center">
+                
+                <div class="modal-header border-0 p-0">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3" id="conf_icon"></div>
+                    
+                    <h4 class="fw-bold mb-2" id="conf_title">Confirm Action</h4>
+                    <p class="text-muted" id="conf_message">Are you sure?</p>
+                </div>
+
+                <div class="modal-footer border-0 justify-content-center gap-2 pt-0">
+                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
+                    
+                    <a href="#" id="btn_confirm_action" class="btn px-4 text-white">
+                        Yes, Proceed
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -907,6 +935,46 @@
             // Using Django URL pattern structure: /application/ID/update/STATUS/
             hireBtn.href = "/application/" + appId + "/update/Hired/";
             rejectBtn.href = "/application/" + appId + "/update/Rejected/";
+        }
+
+        // --- New Function for Confirmation Modal ---
+        function openConfirmation(event, type) {
+            event.preventDefault(); // Stop the link from going immediately
+            
+            // Get the URL intended for the action (the href of the button clicked)
+            var targetUrl = event.currentTarget.href;
+            
+            // Get Modal Elements
+            var modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+            var title = document.getElementById('conf_title');
+            var msg = document.getElementById('conf_message');
+            var icon = document.getElementById('conf_icon');
+            var confirmBtn = document.getElementById('btn_confirm_action');
+
+            // Reset Classes
+            confirmBtn.className = "btn px-4 text-white"; 
+
+            if (type === 'accept') {
+                // Green / Accept Style
+                icon.innerHTML = '<i class="fa-solid fa-circle-check text-success fa-3x"></i>';
+                title.innerText = "Accept Applicant?";
+                msg.innerText = "Are you sure you want to hire this applicant? They will be moved to your Active Commissionees list.";
+                confirmBtn.classList.add('btn-success'); // Bootstrap Green
+                confirmBtn.innerText = "Yes, Accept";
+            } else {
+                // Red / Reject Style
+                icon.innerHTML = '<i class="fa-solid fa-circle-xmark text-danger fa-3x"></i>';
+                title.innerText = "Reject Applicant?";
+                msg.innerText = "Are you sure you want to reject this application? This action cannot be undone.";
+                confirmBtn.classList.add('btn-danger'); // Bootstrap Red
+                confirmBtn.innerText = "Yes, Reject";
+            }
+
+            // Set the 'Yes' button to go to the correct URL
+            confirmBtn.href = targetUrl;
+
+            // Show the modal
+            modal.show();
         }
     </script>
 </body>

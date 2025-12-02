@@ -29,7 +29,9 @@ from users.views import registration, myjobs, find_job_candidate
 from users.views import commissionee_settings, commissioner_settings, post_job
 from users.views import applied_jobs, favorite_jobs, myprofile_commissioner
 from users.views import myprofile_commissionee, view_details, saved_candidates
-from users.views import myprofile_commissionee, upload_resume, delete_resume, saved_candidates, update_job_status, view_commissionee, apply_for_job
+from users.views import myprofile_commissionee, upload_resume, delete_resume
+from users.views import update_application_status, saved_candidates, update_job_status
+from users.views import view_commissionee, apply_for_job
 
 urlpatterns = [
     # General URLs
@@ -47,18 +49,19 @@ urlpatterns = [
     path('my_profile/commissioner/', myprofile_commissioner, name="myprofile_commissioner"),
     path('resume/upload/', upload_resume, name='upload_resume'),
     path('resume/delete/<int:pk>/', delete_resume, name='delete_resume'),
-    path('saved_candidates', saved_candidates, name='saved_candidates'),
+    path('active_commissionees', saved_candidates, name='saved_candidates'), # saved_candidates.html
     path('job/update_status/', update_job_status, name='update_job_status'),
     path('job/<int:job_id>/applicants/', view_commissionee, name='view_commissionee'),
     path('job/delete/<int:job_id>/', views.delete_job, name='delete_job'),
     path('job/<int:job_id>/apply/', apply_for_job, name='apply_for_job'),
+    path('application/<int:application_id>/update/<str:new_status>/', update_application_status, name='update_application_status'),
     
     # Commissionee URLs
     path('find_job_candidate/', find_job_candidate, name="find_job_candidate"),
     path('settings/commissionee/', commissionee_settings, name="commissionee_settings"),
     path('applied_jobs/', applied_jobs, name="applied_jobs"),
     path('favorite_jobs/', favorite_jobs, name="favorite_jobs"),
-    path('my_profile/commissionee/', myprofile_commissionee, name="myprofile_commissionee"),
+    path('my_profile/commissionee/', myprofile_commissionee, name="myprofile_commissionee"), 
     path('job/<int:job_id>/details/', view_details, name="view_details"),    
 ]
 

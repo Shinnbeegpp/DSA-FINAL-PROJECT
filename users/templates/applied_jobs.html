@@ -374,12 +374,19 @@
                             {{ app.date_applied|date:"m/d/Y" }}
                         </div>
                         <div>
-                            {% if app.job.status == 'Active' or app.job.status == 'Open' %}
-                                <span class="status-pill status-active"><i class="fa-solid fa-check"></i> ACTIVE</span>
-                            {% elif app.job.status == 'Done' or app.job.status == 'Completed' %}
-                                <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap"></i> DONE</span>
+                            {% if app.job.status == 'Active' %}
+                                <span class="status-pill status-active"><i class="fa-solid fa-check me-1"></i> ACTIVE</span>
+                            
+                            {% elif app.job.status == 'Ongoing' %}
+                                <span class="status-pill" style="color: #3B82F6; background-color: #EFF6FF; padding: 4px 12px; border-radius: 20px;">
+                                    <i class="fa-solid fa-spinner me-1"></i> ONGOING
+                                </span>
+
+                            {% elif app.job.status == 'Done' %}
+                                <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap me-1"></i> DONE</span>
+
                             {% else %}
-                                <span class="status-pill status-expired"><i class="fa-regular fa-circle-xmark"></i> EXPIRED</span>
+                                <span class="status-pill status-expired"><i class="fa-solid fa-ban me-1"></i> CANCELLED</span>
                             {% endif %}
                         </div>
 

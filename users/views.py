@@ -531,3 +531,66 @@ def update_application_status(request, application_id, new_status):
     
     # 4. Redirect back to the applicants list
     return redirect('view_commissionee', job_id=application.job.id)
+
+@login_required
+def update_application_status(request, application_id, new_status):
+    application = get_object_or_404(JobApplication, id=application_id)
+    
+    # Security Check
+    if application.job.commissioner != request.user:
+        messages.error(request, "You are not authorized.")
+        return redirect('myjobs')
+
+    if new_status in ['Accepted', 'Rejected']:
+        # 1. Update Application Status
+        application.status = new_status
+        application.save()
+        
+        # 2. AUTOMATIC JOB UPDATE LOGIC
+        if new_status == 'Accepted':
+            job = application.job
+            job.status = 'Ongoing'  # <--- Automatically set Job to Ongoing
+            job.save()
+            
+            messages.success(request, f"Applicant accepted! Job marked as 'Ongoing'.")
+            return redirect('saved_candidates') 
+        else:
+            messages.success(request, "Applicant rejected.")
+            return redirect('view_commissionee', job_id=application.job.id)
+    
+    return redirect('myjobs')
+    #return redirect('view_commissionee', job_id=application.job.id)
+    
+@login_required
+def saved_candidates(request):
+    # 1. Fetch applications for jobs posted by the current user
+    # 2. Filter for statuses that represent an "Active" or "Past" engagement (Accepted, Done, Cancelled)
+    # 3. Exclude 'Pending' and 'Rejected'
+    commissionees = JobApplication.objects.filter(
+        job__commissioner=request.user,
+        status__in=['Accepted', 'Done', 'Cancelled']
+    ).select_related('applicant__userprofile', 'job').order_by('-date_applied')
+
+    context = {
+        'commissionees': commissionees
+    }
+    return render(request, 'saved_candidates.html', context)
+
+@login_required
+def update_application_status(request, application_id, new_status):
+    application = get_object_or_404(JobApplication, id=application_id)
+    
+    # Security: Ensure user owns the job
+    if application.job.commissioner != request.user:
+        return redirect('myjobs')
+
+    # Update the status in the database
+    if new_status in ['Accepted', 'Done', 'Cancelled', 'Rejected']:
+        application.status = new_status
+        application.save()
+        messages.success(request, f"Status updated to {new_status}")
+
+    # REDIRECT LOGIC:
+    # If the user is on the 'saved_candidates' page, keep them there.
+    # request.META.get('HTTP_REFERER') checks where the user clicked the button from.
+    return redirect(request.META.get('HTTP_REFERER', 'saved_candidates'))

@@ -116,9 +116,10 @@ class Job(models.Model):
     
     # System fields
     STATUS_CHOICES = [
-        ('Active', 'Active'),
-        ('Done', 'Done'),
-        ('Expired', 'Expired'),
+        ('Active', 'Active'),       # Job is open for applications
+        ('Ongoing', 'Ongoing'),     # Applicant accepted, work in progress
+        ('Done', 'Done'),           # Work completed
+        ('Cancelled', 'Cancelled'), # Job cancelled by commissioner
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Active')
     created_at = models.DateTimeField(auto_now_add=True)

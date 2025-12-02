@@ -62,8 +62,11 @@
             color: var(--primary-color);
         }
 
-        /* --- SIDEBAR --- */
-        .dashboard-container { margin-top: 0; padding-bottom: 4rem; }
+                /* Layout */
+        .dashboard-container {
+            margin-top: 2rem;
+            padding-bottom: 4rem;
+        }
 
         .sidebar-container {
             background: #fff;
@@ -210,7 +213,7 @@
         <div class="container">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
-                    <p class="nav-link active" aria-current="page" href="#">Dashboard</p> 
+                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a> 
                 </li>
             </ul>
         </div>
@@ -283,119 +286,76 @@
                 </div>
 
                 <div class="candidate-list">
-
+                    {% for c in commissionees %}
                     <div class="candidate-card">
+                        
                         <div class="c-person-section">
-                            <img src="https://i.pravatar.cc/150?img=33" class="c-avatar" alt="User">
+                            {% if c.applicant.userprofile.profile_picture %}
+                                <img src="{{ c.applicant.userprofile.profile_picture.url }}" class="c-avatar" alt="User">
+                            {% else %}
+                                <img src="{% static 'images/default_pfp.jpg' %}" class="c-avatar" alt="User">
+                            {% endif %}
+                            
                             <div>
-                                <h5 class="c-name">Guy Hawkins</h5>
-                                <div class="c-role">BatStateU - Alangilan</div>
+                                <h5 class="c-name">{{ c.applicant.first_name }} {{ c.applicant.last_name }}</h5>
+                                <div class="c-role">{{ c.applicant.userprofile.campus_institution }}</div>
                             </div>
                         </div>
                         
                         <div class="c-job-section">
                             <span class="job-label">Hired For</span>
-                            <div class="job-title">UI/UX Designer for App</div>
+                            <div class="job-title">{{ c.job.title }}</div>
                         </div>
 
                         <div class="c-status-section">
                             <div class="dropdown">
-                                <button class="btn btn-status-dropdown status-active dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-circle-check"></i> Active
+                                
+                                <button class="btn btn-status-dropdown dropdown-toggle 
+                                    {% if c.status == 'Accepted' %}status-active
+                                    {% elif c.status == 'Done' %}status-done
+                                    {% elif c.status == 'Cancelled' %}status-cancelled{% endif %}" 
+                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    
+                                    {% if c.status == 'Accepted' %}
+                                        <i class="fa-solid fa-circle-check"></i> Active
+                                    {% elif c.status == 'Done' %}
+                                        <i class="fa-solid fa-check-double"></i> Done
+                                    {% elif c.status == 'Cancelled' %}
+                                        <i class="fa-solid fa-ban"></i> Cancelled
+                                    {% endif %}
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="#" onclick="updateStatus(this, 'active')"><i class="fa-solid fa-circle-check text-success me-2"></i> Active</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="updateStatus(this, 'done')"><i class="fa-solid fa-check-double text-primary me-2"></i> Done</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="updateStatus(this, 'cancelled')"><i class="fa-solid fa-ban text-secondary me-2"></i> Cancelled</a></li>
+                                
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                    
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'update_application_status' c.id 'Accepted' %}">
+                                            <i class="fa-solid fa-circle-check text-success me-2"></i> Active
+                                        </a>
+                                    </li>
+                                    
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'update_application_status' c.id 'Done' %}">
+                                            <i class="fa-solid fa-check-double text-primary me-2"></i> Done
+                                        </a>
+                                    </li>
+                                    
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'update_application_status' c.id 'Cancelled' %}">
+                                            <i class="fa-solid fa-ban text-secondary me-2"></i> Cancelled
+                                        </a>
+                                    </li>
+
                                 </ul>
                             </div>
                         </div>
                     </div>
-
-                    <div class="candidate-card">
-                        <div class="c-person-section">
-                            <img src="https://i.pravatar.cc/150?img=53" class="c-avatar" alt="User">
-                            <div>
-                                <h5 class="c-name">Jacob Jones</h5>
-                                <div class="c-role">BatStateU - Main</div>
-                            </div>
-                        </div>
-                        
-                        <div class="c-job-section">
-                            <span class="job-label">Hired For</span>
-                            <div class="job-title">Backend API Integration</div>
-                        </div>
-
-                        <div class="c-status-section">
-                            <div class="dropdown">
-                                <button class="btn btn-status-dropdown status-active dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-circle-check"></i> Active
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="#" onclick="updateStatus(this, 'active')"><i class="fa-solid fa-circle-check text-success me-2"></i> Active</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="updateStatus(this, 'done')"><i class="fa-solid fa-check-double text-primary me-2"></i> Done</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="updateStatus(this, 'cancelled')"><i class="fa-solid fa-ban text-secondary me-2"></i> Cancelled</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                    
+                    {% empty %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="fa-solid fa-users-slash fa-3x mb-3"></i>
+                        <p>No active commissionees found.</p>
                     </div>
-
-                    <div class="candidate-card">
-                        <div class="c-person-section">
-                            <img src="https://i.pravatar.cc/150?img=68" class="c-avatar" alt="User">
-                            <div>
-                                <h5 class="c-name">Cameron Williamson</h5>
-                                <div class="c-role">BatStateU - Alangilan</div>
-                            </div>
-                        </div>
-                        
-                        <div class="c-job-section">
-                            <span class="job-label">Hired For</span>
-                            <div class="job-title">Logo Redesign</div>
-                        </div>
-
-                        <div class="c-status-section">
-                            <div class="dropdown">
-                                <button class="btn btn-status-dropdown status-done dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-check-double"></i> Done
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="#" onclick="updateStatus(this, 'active')"><i class="fa-solid fa-circle-check text-success me-2"></i> Active</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="updateStatus(this, 'done')"><i class="fa-solid fa-check-double text-primary me-2"></i> Done</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="updateStatus(this, 'cancelled')"><i class="fa-solid fa-ban text-secondary me-2"></i> Cancelled</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="candidate-card">
-                        <div class="c-person-section">
-                            <img src="https://i.pravatar.cc/150?img=12" class="c-avatar" alt="User">
-                            <div>
-                                <h5 class="c-name">Jane Cooper</h5>
-                                <div class="c-role">LPU - Batangas</div>
-                            </div>
-                        </div>
-                        
-                        <div class="c-job-section">
-                            <span class="job-label">Hired For</span>
-                            <div class="job-title">Digital Marketing Asset</div>
-                        </div>
-
-                        <div class="c-status-section">
-                            <div class="dropdown">
-                                <button class="btn btn-status-dropdown status-cancelled dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-ban"></i> Cancelled
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="#" onclick="updateStatus(this, 'active')"><i class="fa-solid fa-circle-check text-success me-2"></i> Active</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="updateStatus(this, 'done')"><i class="fa-solid fa-check-double text-primary me-2"></i> Done</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="updateStatus(this, 'cancelled')"><i class="fa-solid fa-ban text-secondary me-2"></i> Cancelled</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
+                    {% endfor %}
                 </div>
             </div>
         </div>
