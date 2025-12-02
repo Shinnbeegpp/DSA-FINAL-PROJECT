@@ -126,13 +126,13 @@
                     <span class="text-gray-700 font-medium">
                         {{ user.first_name|default:user.username }} {{ user.last_name }}</span>
                     {% if user.userprofile.profile_picture %}
-                        <img src="{{ user.userprofile.profile_picture.url }}" 
+                        <a href = "{% url 'myprofile_commissionee' %}"><img src="{{ user.userprofile.profile_picture.url }}" 
                         alt="User Avatar" style="width: 40px; height: 40px; object-fit: cover; 
-                        border-radius: 8px;">
+                        border-radius: 8px;"></a>
                     {% else %}
-                        <img src="{% static 'images/default_pfp.jpg' %}" alt="User Avatar" 
+                        <a href = "{% url 'myprofile_commissionee' %}"><img src="{% static 'images/default_pfp.jpg' %}" alt="User Avatar" 
                         style="width: 40px; height: 40px; object-fit: cover; 
-                        border-radius: 8px;">
+                        border-radius: 8px;"></a>
                     {% endif %}
                 </div>
             </div>

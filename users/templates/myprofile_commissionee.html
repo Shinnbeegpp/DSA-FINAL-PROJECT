@@ -321,7 +321,7 @@
                     <a class="nav-link" href="{% url 'find_job_candidate' %}">Find Job</a> 
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a> 
+                    <a class="nav-link active" aria-current="page">Dashboard</a> 
                 </li>
             </ul>
         </div>
@@ -348,7 +348,7 @@
                         {% else %}
                             <img src="{% static 'images/default_pfp.jpg' %}" 
                                 alt="Default Profile"
-                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;">
                         {% endif %}
                     </div>
                 </div>
@@ -364,7 +364,7 @@
                 <div class="sidebar-title">Commissionee Dashboard</div>
                 <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
                     <!-- MY PROFILE: ACTIVE -->
-                    <p class="nav-link active" href="#" role="tab">
+                    <p class="nav-link active" role="tab">
                         <i class="fa-solid fa-user"></i> My Profile
                     </p>
                     <a class="nav-link" href="{%url 'applied_jobs'%}" role="tab">
@@ -378,7 +378,7 @@
                         <i class="fa-solid fa-gear"></i> Manage Account
                     </a>
                     <!-- LOGOUT LINK WITH MODAL TRIGGER -->
-                    <a class="nav-link" href="#" role="tab"  class="logout-link" 
+                    <a class="nav-link" role="tab"  class="logout-link" 
                         data-bs-toggle="modal" data-bs-target="#logoutModal">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
                     </a>

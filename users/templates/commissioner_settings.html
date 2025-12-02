@@ -359,15 +359,14 @@
                         <span class="user-name d-none d-md-block">
                             {{ user.first_name|default:user.username }} {{ user.last_name }}
                         </span>
-
                         {% if user.userprofile.profile_picture %}
-                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar"
-                            style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                            <img src="{{ user.userprofile.profile_picture.url }}" 
+                            alt="User Avatar" style="width: 40px; height: 40px; object-fit: cover; 
+                            border-radius: 8px;">
                         {% else %}
-                            <div class="user-avatar d-flex align-items-center justify-content-center bg-light text-secondary rounded-circle" 
-                                style="width: 40px; height: 40px;">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
+                            <img src="{% static 'images/default_pfp.jpg' %}" alt="User Avatar" 
+                            style="width: 40px; height: 40px; object-fit: cover; 
+                            border-radius: 8px;">
                         {% endif %}
                     </div>
                 </div>
