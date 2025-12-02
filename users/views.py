@@ -499,7 +499,7 @@ def apply_for_job(request, job_id):
         # 1. Check if already applied
         if JobApplication.objects.filter(job=job, applicant=request.user).exists():
             messages.warning(request, "You have already applied for this job.")
-            return redirect('view_job_details', job_id=job.id)
+            return redirect('view_details', job_id=job.id)
 
         # 2. Save Application
         JobApplication.objects.create(
@@ -513,7 +513,7 @@ def apply_for_job(request, job_id):
         messages.success(request, "Application submitted successfully!")
         return redirect('applied_jobs')
 
-    return redirect('view_job_details', job_id=job_id)
+    return redirect('view_details', job_id=job_id)
 
     
 @login_required

@@ -57,7 +57,7 @@
         .main-header {
             padding: 1rem 0;
             background-color: #fff;
-            border-bottom: 1px solid rgba(0,0,0,0.05); /* Added subtle separator */
+            border-bottom: 1px solid rgba(0,0,0,0); /* Added subtle separator */
             position: relative;
             z-index: 20; /* Ensure header sits above content if needed */
         }
@@ -81,8 +81,8 @@
 
         /* Layout */
         .dashboard-container {
-            margin-top: 2rem;
-            padding-bottom: 4rem;
+        margin-top: 0; /* Changed from 2rem to 0 */
+        padding-bottom: 4rem;
         }
 
         /* Sidebar Styling */
@@ -93,7 +93,7 @@
             border-radius: 0 0 12px 12px; 
             min-height: calc(100vh - 130px); /* Make it extend down */
             height: 100%;
-            border-right: 1px solid rgba(0,0,0,0.03); /* Subtle border */
+            border-right: 1px solid rgba(0,0,0,0); /* Subtle border */
         }
         
         .sidebar-title {
@@ -416,7 +416,7 @@
                                 <option value="All Applications" {% if current_filter == 'All Applications' %}selected{% endif %}>All Applications</option>
                                 <option value="Active" {% if current_filter == 'Active' %}selected{% endif %}>Active</option>
                                 <option value="Done" {% if current_filter == 'Done' %}selected{% endif %}>Done</option>
-                                <option value="Ongoing" {% if current_filter == 'Expired' %}selected{% endif %}>Expired</option>
+                                <option value="Ongoing" {% if current_filter == 'Ongoing' %}selected{% endif %}>Ongoing</option>
                             </select>
                         </form>
                     </div>
@@ -669,7 +669,7 @@
                             <option value="" selected disabled>Choose status...</option>
                             <option value="Active">Active</option>
                             <option value="Done">Done</option>
-                            <option value="Expired">Expired</option>
+                            <option value="Ongoing">On-going</option>
                         </select>
                     </div>
 
