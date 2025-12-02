@@ -16,8 +16,6 @@ def homepage(request):
     return render(request,'homepage.html')
 
 
-
-
 def registration(request):
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
@@ -294,13 +292,17 @@ def myjobs(request):
     if status_filter and status_filter != 'All Applications':
         jobs = jobs.filter(status=status_filter)
 
-    paginator = Paginator(jobs, 5) # Show 5 jobs per page
+    # 3. GET THE TOTAL COUNT (After filtering, before pagination)
+    total_jobs_count = jobs.count()
+    
+    # 4. PAGINATION LOGIC (5 Jobs per page)
+    paginator = Paginator(jobs, 5) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    # 3. Pass data to HTML
+    # 5. Pass data to HTML
     context = {
-        'jobs': jobs,
+        'jobs': page_obj,
         'total_jobs': jobs.count(),
         'current_filter': status_filter or 'All Applications'
     }
@@ -380,12 +382,16 @@ def applied_jobs(request):
 
     apps_list = JobApplication.objects.filter(applicant=request.user).select_related('job').order_by('-date_applied')
 
+    # 3. GET THE TOTAL COUNT (After filtering, before pagination)
+    total_apps_list_count = apps_list.count()
+    
     paginator = Paginator(apps_list, 5) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     context = {
-        'applications': page_obj
+        'applications': page_obj,
+        'total_apps': apps_list.count(),
     }
     return render(request, 'applied_jobs.html', context)
 
@@ -588,3 +594,22 @@ def update_application_status(request, application_id, new_status):
         return redirect('saved_candidates')
 
     return redirect('myjobs')
+
+@login_required
+def active_commissions(request): # Or whatever your URL points to (e.g. saved_candidates)
+    # 1. Fetch applications where the user was ACCEPTED
+    active_apps = JobApplication.objects.filter(
+        applicant=request.user,
+        status='Accepted'
+    ).select_related('job', 'job__commissioner').order_by('-date_applied')
+
+    # 2. Pagination (5 per page)
+    paginator = Paginator(active_apps, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'applications': page_obj,
+    }
+    # Make sure this matches your HTML file name
+    return render(request, 'active_commissions.html', context)

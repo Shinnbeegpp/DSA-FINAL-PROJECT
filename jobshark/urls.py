@@ -27,11 +27,11 @@ from users import views
 from users.views import homepage, sign_in, find_job_notsigned
 from users.views import registration, myjobs, find_job_candidate
 from users.views import commissionee_settings, commissioner_settings, post_job
-from users.views import applied_jobs, favorite_jobs, myprofile_commissioner
+from users.views import applied_jobs, active_commissions, myprofile_commissioner
 from users.views import myprofile_commissionee, view_details, saved_candidates
 from users.views import myprofile_commissionee, upload_resume, delete_resume
 from users.views import update_application_status, saved_candidates, update_job_status
-from users.views import view_commissionee, apply_for_job
+from users.views import view_commissionee, apply_for_job, favorite_jobs
 
 urlpatterns = [
     # General URLs

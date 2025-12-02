@@ -241,78 +241,87 @@
                         <div class="text-end">Status</div>
                     </div>
 
+                    {% for app in applications %}
                     <div class="job-row">
+                        
                         <div>
-                            <div class="job-title">Front-End Developer for Landing Page</div>
+                            <div class="job-title">{{ app.job.title }}</div>
                             <div class="commissioner-info">
                                 <span>Hired by:</span>
-                                <span class="commissioner-name">Ryuuji Takasu</span>
+                                <span class="commissioner-name">
+                                    {{ app.job.commissioner.first_name }} {{ app.job.commissioner.last_name }}
+                                </span>
                             </div>
                         </div>
+                        
                         <div>
-                            <span class="category-tag">Web Development</span>
+                            <span class="category-tag">{{ app.job.category }}</span>
                         </div>
+                        
                         <div class="text-end text-end-desktop">
-                            <span class="status-badge status-ongoing">
-                                <i class="fa-solid fa-circle-notch fa-spin"></i> On Going
-                            </span>
+                            {% if app.job.status == 'Ongoing' %}
+                                <span class="status-badge status-ongoing">
+                                    <i class="fa-solid fa-circle-notch fa-spin"></i> On Going
+                                </span>
+                            {% elif app.job.status == 'Done' %}
+                                <span class="status-badge status-done">
+                                    <i class="fa-solid fa-check-double"></i> Done
+                                </span>
+                            {% elif app.job.status == 'Cancelled' %}
+                                <span class="status-badge status-cancelled">
+                                    <i class="fa-solid fa-ban"></i> Cancelled
+                                </span>
+                            {% else %}
+                                <span class="status-badge status-ongoing">
+                                    <i class="fa-solid fa-check"></i> Accepted
+                                </span>
+                            {% endif %}
                         </div>
-                    </div>
 
-                    <div class="job-row">
-                        <div>
-                            <div class="job-title">Logo Design for Milk Tea Shop</div>
-                            <div class="commissioner-info">
-                                <span>Hired by:</span>
-                                <span class="commissioner-name">Shinn Asuka</span>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="category-tag">Graphic Design</span>
-                        </div>
-                        <div class="text-end text-end-desktop">
-                            <span class="status-badge status-done">
-                                <i class="fa-solid fa-check-double"></i> Done
-                            </span>
-                        </div>
                     </div>
+                    {% empty %}
+                        <div class="text-center py-5 text-muted">
+                            <i class="fa-solid fa-file-signature fa-3x mb-3"></i>
+                            <p>You have no active commissions yet.</p>
+                            <a href="{% url 'find_job_candidate' %}" class="btn btn-sm btn-outline-primary">Find a Job</a>
+                        </div>
+                    {% endfor %}
 
-                    <div class="job-row">
-                        <div>
-                            <div class="job-title">Statistical Analysis (SPSS)</div>
-                            <div class="commissioner-info">
-                                <span>Hired by:</span>
-                                <span class="commissioner-name">Esther Howard</span>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="category-tag">Academic Assistance</span>
-                        </div>
-                        <div class="text-end text-end-desktop">
-                            <span class="status-badge status-cancelled">
-                                <i class="fa-solid fa-ban"></i> Cancelled
-                            </span>
-                        </div>
-                    </div>
+                    {% if applications.has_other_pages %}
+                    <div class="d-flex justify-content-center mt-4 gap-2">
+                        
+                        {% if applications.has_previous %}
+                            <a href="?page={{ applications.previous_page_number }}" class="btn btn-sm text-muted rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 32px; height: 32px; border: 1px solid #eee;">
+                                <i class="fa-solid fa-arrow-left"></i>
+                            </a>
+                        {% else %}
+                            <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;" disabled><i class="fa-solid fa-arrow-left"></i></button>
+                        {% endif %}
 
-                    <div class="job-row">
-                        <div>
-                            <div class="job-title">AutoCAD Floor Plan 2-Storey</div>
-                            <div class="commissioner-info">
-                                <span>Hired by:</span>
-                                <span class="commissioner-name">Jenny Wilson</span>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="category-tag">Engineering & CAD</span>
-                        </div>
-                        <div class="text-end text-end-desktop">
-                            <span class="status-badge status-ongoing">
-                                <i class="fa-solid fa-circle-notch fa-spin"></i> On Going
-                            </span>
-                        </div>
+                        {% for num in applications.paginator.page_range %}
+                            {% if applications.number == num %}
+                                <span class="btn btn-sm rounded-circle text-white fw-bold shadow-sm d-flex align-items-center justify-content-center" 
+                                    style="width: 32px; height: 32px; background-color: var(--primary-color); cursor: default;">
+                                    {{ num }}
+                                </span>
+                            {% else %}
+                                <a href="?page={{ num }}" class="btn btn-sm text-muted rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 32px; height: 32px; border: 1px solid #eee;">
+                                    {{ num }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if applications.has_next %}
+                            <a href="?page={{ applications.next_page_number }}" class="btn btn-sm rounded-circle fw-bold d-flex align-items-center justify-content-center text-decoration-none" style="width: 32px; height: 32px; color: var(--primary-color); background: #f3f0ff;">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        {% else %}
+                            <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;" disabled><i class="fa-solid fa-arrow-right"></i></button>
+                        {% endif %}
+
                     </div>
-                    
+                    {% endif %}
+
                 </div>
             </div>
         </div>
