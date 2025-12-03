@@ -43,7 +43,7 @@ def registration(request):
             context['error_username'] = "This username is already taken."
             return render(request, 'registration.html', context)
         
- 
+
         if User.objects.filter(email=email).exists():
             context['error_email'] = "This email is already registered."
             return render(request, 'registration.html', context)
@@ -72,7 +72,7 @@ def sign_in(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-      
+
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -86,7 +86,7 @@ def sign_in(request):
                     return redirect('find_job_candidate') 
                 
                 elif profile.account_type == 'commissioner':
- 
+
                     return redirect('myprofile_commissioner')
                 
                 else:
@@ -116,7 +116,7 @@ def commissioner_settings(request):
             return redirect('commissioner_settings') 
 
     else:
-     
+
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.userprofile)
 
@@ -136,7 +136,7 @@ def myprofile_commissioner(request):
 def myprofile_commissionee(request):
     return render(request,'myprofile_commissionee.html')
 
- 
+
 @login_required   
 def find_job_candidate(request):
     # 1. Start with all Open/Active jobs
@@ -179,7 +179,7 @@ def find_job_candidate(request):
     # 5. Category Filter (Multi-select + Smart "Others")
     selected_categories = request.GET.getlist('category')
     if selected_categories:
-        # List of your "Standard" categories defined in HTML
+        
         standard_list = [
             "Academic Assistance", "Graphic Design", "Programming", 
             "Video Editing", "Multimedia Arts", "Data Analysis", "Tutoring"
@@ -187,7 +187,6 @@ def find_job_candidate(request):
 
         category_query = Q()
 
-        # Add the specific categories checked by user (e.g., Programming)
         category_query |= Q(category__in=[c for c in selected_categories if c != 'Others'])
 
         # If "Others" is checked, include ANY category that is NOT in the standard list
@@ -280,7 +279,7 @@ def find_job_notsigned(request):
     }
     return render(request, 'find_job_notsigned.html', context)
 
-  
+
 @login_required
 def myjobs(request):
     # 1. Fetch only jobs posted by this user
@@ -307,7 +306,7 @@ def myjobs(request):
     }
     return render(request, 'myjobs.html', context)
 
-  
+
 @login_required 
 def update_job_status(request):
     if request.method == 'POST':
@@ -332,7 +331,7 @@ def commissionee_settings(request):
             return redirect('commissionee_settings') 
 
     else:
-     
+
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.userprofile)
 
@@ -346,7 +345,7 @@ def commissionee_settings(request):
 
     return render(request,'commissionee_settings.html', context)
 
-  
+
 @login_required  
 def upload_resume(request):
     if request.method == 'POST':
@@ -460,7 +459,7 @@ def post_job(request):
         return redirect('post_job') # Stay on page to show modal
 
     return render(request, 'post_job.html')
-     
+
 @login_required  
 def delete_job(request, job_id):
     # 1. Get the job, but ONLY if it belongs to the current user
@@ -490,7 +489,7 @@ def view_commissionee(request, job_id):
         'total_applicants': applications.count() # So the count (5) appears in the header
     }
     return render(request, 'view_commissionee.html', context)
-      
+
 @login_required  
 def apply_for_job(request, job_id):
     if request.method == 'POST':
@@ -515,7 +514,7 @@ def apply_for_job(request, job_id):
 
     return redirect('view_details', job_id=job_id)
 
-         
+
 @login_required  
 def active_commissionees(request):
     # 1. Fetch applications for jobs posted by the current user
@@ -532,7 +531,7 @@ def active_commissionees(request):
     return render(request, 'active_commissionees.html', context)
 
 # Add this to views.py
-      
+
 @login_required  
 def update_application_status(request, application_id, new_status):
     # 1. Get the application
@@ -571,7 +570,7 @@ def update_application_status(request, application_id, new_status):
         return redirect('active_commissionees')
 
     return redirect('myjobs')
-      
+
 @login_required  
 def active_commissions(request): 
     # 1. Fetch applications where the user was ACCEPTED
@@ -590,7 +589,7 @@ def active_commissions(request):
     }
     # Make sure this matches your HTML file name
     return render(request, 'active_commissions.html', context)
-      
+
 @login_required  
 def recommend_jobs(request):
     user = request.user
