@@ -619,16 +619,22 @@
         }
     </script>
 
+    <!-- ADD THIS NEAR THE TOP OF YOUR BODY TAG -->
     {% if messages %}
-        {# VITAL: This loop consumes the messages so they don't appear again on reload #}
         {% for message in messages %}
-            {% endfor %}
+            <!-- Hidden trigger div to detect success -->
+            <div id="success-trigger" data-message="{{ message }}"></div>
+        {% endfor %}
 
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                // successModal is the ID of your modal
-                var myModal = new bootstrap.Modal(document.getElementById('successModal'));
-                myModal.show();
+                // Check if we have a success message
+                var trigger = document.getElementById('success-trigger');
+                if (trigger && trigger.getAttribute('data-message') === "Job posted successfully!") {
+                    // Show the modal
+                    var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+                    myModal.show();
+                }
             });
         </script>
     {% endif %}
