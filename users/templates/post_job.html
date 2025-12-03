@@ -398,7 +398,7 @@
                     <!-- Category with 'Others' Toggle -->
                     <div class="mb-4">
                         <label class="form-label">Category</label>
-                        <select class="form-select" name="category" id="categorySelect" onchange="toggleInput('categorySelect', 'otherCategoryInput')">
+                        <select class="form-select" name="category" id="categorySelect" required onchange="toggleInput('categorySelect', 'otherCategoryInput')">
                             <option selected disabled>Select...</option>
                             <option value="Academic Assistance">Academic Assistance</option>
                             <option value="Graphic Design">Graphic Design</option>
@@ -407,7 +407,7 @@
                             <option value="Video Editing">Video Editing</option>
                             <option value="Others">Others</option>
                         </select>
-                        <input type="text" name="category_other" class="form-control mt-2" id="otherCategoryInput" placeholder="Please specify category..." style="display: none;">
+                        <input type="text" name="category_other" class="form-control mt-2" id="otherCategoryInput" required placeholder="Please specify category..." style="display: none;">
                     </div>
 
                     <!-- Service Rate -->
@@ -427,7 +427,7 @@
                     <div class="row g-4 mb-4">
                         <div class="col-md-4">
                             <label class="form-label">Campus / Institution</label>
-                            <select class="form-select" name="campus" id="campusSelect" onchange="toggleInput('campusSelect')">
+                            <select class="form-select" name="campus" id="campusSelect" required onchange="toggleInput('campusSelect')">
                                 <option selected disabled>Select Campus...</option>
                                 
                                 <!-- BatStateU Campuses -->
@@ -448,7 +448,7 @@
 
                         <div class="col-md-4">
                             <label class="form-label">Department / Major</label>
-                            <select class="form-select" name="department" id="deptSelect" onchange="toggleInput('deptSelect', 'otherDeptInput')">
+                            <select class="form-select" name="department" id="deptSelect" required onchange="toggleInput('deptSelect', 'otherDeptInput')">
                                 <option selected disabled>Select College / Department...</option>
                                 <option value="College of Informatics & Computing Sciences (CICS)">College of Informatics & Computing Sciences (CICS)</option>
                                 <option value="College of Engineering, Architecture & Fine Arts (CEAFA)">College of Engineering, Architecture & Fine Arts (CEAFA)</option>
@@ -460,7 +460,7 @@
                                 <option value="College of Agriculture & Forestry">College of Agriculture & Forestry</option>
                                 <option value="Others / Not Listed">Others / Not Listed</option>
                             </select>
-                            <input type="text" name="department_other" class="form-control mt-2" id="otherDeptInput" placeholder="Specify Department..." style="display: none;">
+                            <input type="text" name="department_other" class="form-control mt-2" id="otherDeptInput" required placeholder="Specify Department..." style="display: none;">
                         </div>
 
                         <div class="col-md-4">
@@ -508,7 +508,7 @@
                     <div class="mb-4">
                         <label class="form-label">Required Deliverables</label>
                         <div class="rich-editor-box">
-                            <textarea class="rich-textarea" name="deliverables" rows="3" placeholder="What exactly do you need submitted? (e.g., A .docx file, a working link, a source code file)."></textarea>
+                            <textarea class="rich-textarea" name="deliverables" rows="3" required placeholder="What exactly do you need submitted? (e.g., A .docx file, a working link, a source code file)."></textarea>
                             <div class="editor-toolbar">
                                 <i class="fa-solid fa-bold"></i>
                                 <i class="fa-solid fa-italic"></i>
