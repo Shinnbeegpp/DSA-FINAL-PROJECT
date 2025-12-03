@@ -274,7 +274,7 @@
         <div class="container">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Find Job</a> 
+                    <a class="nav-link" href="{% url 'find_job_candidate' %}">Find Job</a> 
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">Dashboard</a> 
@@ -286,10 +286,10 @@
     <header class="main-header">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <a class="navbar-brand d-flex align-items-center" href="#">
+                <p class="navbar-brand d-flex align-items-center" href="#">
                     <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo" 
                     onerror="this.src='https://placehold.co/150x40/6930C3/ffffff?text=JobShark&font=inter'; this.onerror=null;">
-                </a>
+                </p>
 
                 <div class="d-flex align-items-center gap-4">
                     <div class="user-profile">
@@ -303,7 +303,7 @@
                         {% else %}
                             <img src="{% static 'images/default_pfp.jpg' %}" 
                                 alt="Default Profile"
-                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;">
                         {% endif %}
 
 
@@ -326,8 +326,8 @@
                         <p class="nav-link active" role="tab">
                             <i class="fa-solid fa-briefcase"></i> Applied Jobs
                         </p>
-                        <a class="nav-link" href="{%url 'favorite_jobs'%}" role="tab">
-                            <i class="fa-solid fa-heart"></i> Favorite Jobs
+                        <a class="nav-link" href="{%url 'active_commissions'%}" role="tab">
+                            <i class="fa-solid fa-file-signature"></i> Active Commissions
                         </a>
                         <a class="nav-link" href="{%url 'commissionee_settings'%}" role="tab">
                             <i class="fa-solid fa-gear"></i> Manage Account
@@ -342,16 +342,18 @@
 
             <div class="col-lg-9 col-content">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="page-title">Applied Jobs <span style="color: #94a3b8; font-weight: 400; font-size: 1.2rem;">(7)</span></h2>
+                    <h2 class="page-title">Applied Jobs <span style="color: #94a3b8; font-weight: 400; font-size: 1.2rem;">({{ total_apps }})</span></h2>
                     
                     <div class="d-flex align-items-center gap-2">
                         <span style="font-size: 0.9rem; font-weight: 500; color: #475569;">Application Status</span>
-                        <select class="form-select form-select-sm" style="width: auto;">
-                            <option>All Applications</option>
-                            <option>Active</option>
-                            <option>Done</option>
-                            <option>Expired</option>
-                        </select>
+                        <form method="GET" id="filterForm">
+                            <select name="status" class="form-select form-select-sm" style="width: auto;" onchange="document.getElementById('filterForm').submit()">
+                                <option value="All Applications" {% if current_filter == 'All Applications' %}selected{% endif %}>All Applications</option>
+                                <option value="Accepted" {% if current_filter == 'Accepted' %}selected{% endif %}>Accepted</option>
+                                <option value="Rejected" {% if current_filter == 'Rejected' %}selected{% endif %}>Rejected</option>
+                                <option value="Pending" {% if current_filter == 'Pending' %}selected{% endif %}>Pending</option>
+                            </select>
+                        </form>
                     </div>
                 </div>
 
@@ -363,128 +365,89 @@
                         <div class="text-end">Details</div>
                     </div>
 
+                    {% for app in applications %}
                     <div class="job-row">
-                        <div style="">
-                            <div class="job-title">Thesis Help: Chapter 2 Research</div>
-                            <div class="job-meta">Academic Assistance &bull; ₱1,500</div> 
+                        <div>
+                            <div class="job-title">{{ app.job.title }}</div>
+                            <div class="job-meta">{{ app.job.category }} &bull; ₱{{ app.job.budget }}</div> 
                         </div>
+                        
                         <div class="text-muted small">
-                            05/20/2025
+                            {{ app.date_applied|date:"m/d/Y" }}
                         </div>
+                        
                         <div>
-                            <span class="status-pill status-expired"><i class="fa-regular fa-circle-xmark"></i> EXPIRED</span>
+                            {% if app.status == 'Pending' %}
+                                <span class="status-pill" style="color: #d97706; padding: 5px 0px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">
+                                    <i class="fa-regular fa-clock me-1"></i> PENDING
+                                </span>
+                            {% elif app.status == 'Accepted' %}
+                                <span class="status-pill status-active">
+                                    <i class="fa-solid fa-check me-1"></i> ACCEPTED
+                                </span>
+                            {% elif app.status == 'Rejected' %}
+                                <span class="status-pill status-expired">
+                                    <i class="fa-regular fa-circle-xmark me-1"></i> REJECTED
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ app.status|upper }}</span>
+                            {% endif %}
                         </div>
+                        
                         <div class="d-flex justify-content-end align-items-center gap-2">
-                            <button class="btn-view">View Details</button>
+                            <a href="{% url 'view_details' app.job.id %}" class="btn-view text-decoration-none">
+                                View Details
+                            </a>
                         </div>
                     </div>
 
-                    <div class="job-row active-card">
-                        <div>
-                            <div class="job-title">Logo Design for Milk Tea Shop</div>
-                            <div class="job-meta">Graphic Design &bull; ₱800</div> 
+                    {% empty %}
+                        <div class="p-5 text-center text-muted">
+                            <i class="fa-solid fa-folder-open fa-3x mb-3"></i>
+                            <p>You haven't applied to any jobs yet.</p>
+                            <a href="{% url 'find_job_candidate' %}" class="btn btn-primary-custom mt-2" style="background-color: #6930C3; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none;">Find a Job</a>
                         </div>
-                        <div class="text-dark small fw-bold">
-                            05/15/2025
-                        </div>
-                        <div>
-                            <span class="status-pill status-active"><i class="fa-solid fa-check"></i> ACTIVE</span>
-                        </div>
-                        <div class="d-flex justify-content-end align-items-center gap-2">
-                            <a href="{% url 'view_details' %}" class="btn-view">View Details</a>
-                        </div>
+                    {% endfor %}
                     </div>
+                    
+            
 
-                    <div class="job-row">
-                        <div>
-                            <div class="job-title">Python Debugging: Inventory System</div>
-                            <div class="job-meta">Programming &bull; ₱2,000</div> 
-                        </div>
-                        <div class="text-muted small">
-                            05/10/2025
-                        </div>
-                        <div>
-                            <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap"></i> DONE</span>
-                        </div>
-                        <div class="d-flex justify-content-end align-items-center gap-2">
-                            <button class="btn-view">View Details</button>
-                        </div>
-                    </div>
-
-                    <div class="job-row">
-                        <div style="">
-                            <div class="job-title">Video Edit for Vlog (5 mins)</div>
-                            <div class="job-meta">Video Editing &bull; ₱1,200</div> 
-                        </div>
-                        <div class="text-muted small" style="">
-                            04/28/2025
-                        </div>
-                        <div>
-                             <span class="status-pill status-expired"><i class="fa-solid fa-trash"></i> EXPIRED</span>
-                        </div>
-                        <div class="d-flex justify-content-end align-items-center gap-2">
-                            <button class="btn-view">View Details</button>
-                        </div>
-                    </div>
-
-                    <div class="job-row">
-                        <div>
-                            <div class="job-title">Essay: Economic Impact of AI</div>
-                            <div class="job-meta">Academic Assistance &bull; ₱500</div> 
-                        </div>
-                        <div class="text-muted small">
-                            04/15/2025
-                        </div>
-                        <div>
-                            <span class="status-pill status-active"><i class="fa-solid fa-check"></i> ACTIVE</span>
-                        </div>
-                        <div class="d-flex justify-content-end align-items-center gap-2 position-relative">
-                            <button class="btn-view">View Details</button>
-                        </div>
-                    </div>
-
-                    <div class="job-row">
-                        <div>
-                            <div class="job-title">AutoCAD Floor Plan for 2-Storey House</div>
-                            <div class="job-meta">Engineering & CAD &bull; ₱3,000</div> 
-                        </div>
-                        <div class="text-muted small">
-                            04/01/2025
-                        </div>
-                        <div>
-                            <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap"></i> DONE</span>
-                        </div>
-                        <div class="d-flex justify-content-end align-items-center gap-2">
-                            <button class="btn-view">View Details</button>
-                        </div>
-                    </div>
-
-                    <div class="job-row">
-                        <div style="">
-                            <div class="job-title">Statistical Analysis (SPSS) for Psych Thesis</div>
-                            <div class="job-meta">Academic Assistance &bull; ₱2,500</div> 
-                        </div>
-                        <div class="text-muted small" style="opacity: 0.6;">
-                            03/25/2025
-                        </div>
-                        <div>
-                            <span class="status-pill status-expired"><i class="fa-regular fa-circle-xmark"></i> EXPIRED</span>
-                        </div>
-                        <div class="d-flex justify-content-end align-items-center gap-2">
-                            <button class="btn-view">View Details</button>
-                        </div>
-                    </div>
-                </div>
-
+                {% if applications.has_other_pages %}
                 <div class="d-flex justify-content-center mt-4 gap-2">
-                    <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;"><i class="fa-solid fa-arrow-left"></i></button>
-                    <button class="btn btn-sm rounded-circle text-white fw-bold shadow-sm" style="width: 32px; height: 32px; background-color: var(--primary-color);">01</button>
-                    <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;">02</button>
-                    <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;">03</button>
-                    <button class="btn btn-sm rounded-circle fw-bold" style="width: 32px; height: 32px; color: var(--primary-color); background: #f3f0ff;">04</button>
-                    <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;">05</button>
-                    <button class="btn btn-sm rounded-circle fw-bold" style="width: 32px; height: 32px; color: var(--primary-color); background: #f3f0ff;"><i class="fa-solid fa-arrow-right"></i></button>
+                    
+                    {% if applications.has_previous %}
+                        <a href="?page={{ applications.previous_page_number }}" class="btn btn-sm text-muted rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 32px; height: 32px; border: 1px solid #eee;">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </a>
+                    {% else %}
+                        <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;" disabled><i class="fa-solid fa-arrow-left"></i></button>
+                    {% endif %}
+
+                    {% for num in applications.paginator.page_range %}
+                        {% if applications.number == num %}
+                            <span class="btn btn-sm rounded-circle text-white fw-bold shadow-sm d-flex align-items-center justify-content-center" 
+                                style="width: 32px; height: 32px; background-color: var(--primary-color); cursor: default;">
+                                {{ num }}
+                            </span>
+                        {% else %}
+                            <a href="?page={{ num }}" 
+                            class="btn btn-sm text-muted rounded-circle d-flex align-items-center justify-content-center text-decoration-none" 
+                            style="width: 32px; height: 32px; border: 1px solid #eee;">
+                                {{ num }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if applications.has_next %}
+                        <a href="?page={{ applications.next_page_number }}" class="btn btn-sm rounded-circle fw-bold d-flex align-items-center justify-content-center text-decoration-none" style="width: 32px; height: 32px; color: var(--primary-color); background: #f3f0ff;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    {% else %}
+                        <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;" disabled><i class="fa-solid fa-arrow-right"></i></button>
+                    {% endif %}
+
                 </div>
+                {% endif %}
 
             </div>
         </div>
@@ -493,6 +456,7 @@
             <p class="mb-0">&copy; 2024 JobShark - Job Portal. All rights Reserved</p>
         </footer>
     </div>
+
     <!-- Logout Confirmation Modal -->
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

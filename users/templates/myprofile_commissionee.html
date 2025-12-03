@@ -321,7 +321,7 @@
                     <a class="nav-link" href="{% url 'find_job_candidate' %}">Find Job</a> 
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a> 
+                    <a class="nav-link active" aria-current="page">Dashboard</a> 
                 </li>
             </ul>
         </div>
@@ -339,15 +339,16 @@
 
                 <div class="d-flex align-items-center gap-4">
                     <div class="user-profile">
-                        <!-- Use Django template tags for user info -->
                         <span class="user-name d-none d-md-block">
-                            {{ user.username }}
+                            {{ user.first_name|default:user.username }} {{ user.last_name }}
                         </span>
-
                         {% if user.userprofile.profile_picture %}
-                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar">
+                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar"
+                            style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                         {% else %}
-                            <img src="{% static "images/default_pfp.jpg"%}" alt="Profile" class="user-avatar">
+                            <img src="{% static 'images/default_pfp.jpg' %}" 
+                                alt="Default Profile"
+                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;">
                         {% endif %}
                     </div>
                 </div>
@@ -363,21 +364,21 @@
                 <div class="sidebar-title">Commissionee Dashboard</div>
                 <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
                     <!-- MY PROFILE: ACTIVE -->
-                    <p class="nav-link active" href="#" role="tab">
+                    <p class="nav-link active" role="tab">
                         <i class="fa-solid fa-user"></i> My Profile
                     </p>
                     <a class="nav-link" href="{%url 'applied_jobs'%}" role="tab">
                         <i class="fa-solid fa-briefcase"></i> Applied Jobs
                     </a>
-                    <a class="nav-link" href="{%url 'favorite_jobs'%}" role="tab">
-                        <i class="fa-solid fa-heart"></i> Favorite Jobs
+                    <a class="nav-link" href="{%url 'active_commissions'%}" role="tab">
+                        <i class="fa-solid fa-file-signature"></i> Active Commissions
                     </a>
                     <!-- MANAGE ACCOUNT: INACTIVE (Redirects to Edit Page) -->
                     <a class="nav-link" href="{%url 'commissionee_settings'%}" role="tab">
                         <i class="fa-solid fa-gear"></i> Manage Account
                     </a>
                     <!-- LOGOUT LINK WITH MODAL TRIGGER -->
-                    <a class="nav-link" href="#" role="tab"  class="logout-link" 
+                    <a class="nav-link" role="tab"  class="logout-link" 
                         data-bs-toggle="modal" data-bs-target="#logoutModal">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> Log-out
                     </a>

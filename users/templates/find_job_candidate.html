@@ -123,6 +123,13 @@
             object-fit: cover;
             border: 2px solid var(--brand-purple); /* Optional: Highlight profile pic */
         }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
         /* Logged-In User UI (Mobile - within collapse menu) */
         .mobile-user-info {
             display: flex;
@@ -283,34 +290,6 @@
             padding: 0;
             transition: color 0.2s;
         }
-        .btn-heart {
-            font-size: 1.5rem;
-            color: var(--text-dark);
-            background: none;
-            border: none;
-            padding: 0;
-            transition: color 0.2s;
-        }
-        /* Hide the filled icon by default */
-        .btn-heart .bi-heart-fill {
-            display: none;
-        }
-
-        /* Show the filled icon and hide the outlined icon when 'saved' class is present */
-        .btn-heart.saved .bi-heart {
-            display: none;
-        }
-        
-        .btn-heart.saved .bi-heart-fill {
-            display: inline-block; /* Show the filled icon */
-            color: var(--brand-purple); /* Make it purple/filled color */
-        }
-        
-        /* Ensure the hover effect still works on the outline icon */
-        .btn-heart:hover {
-            color: var(--brand-purple);
-        }
-
         .btn-apply-now {
             background-color: var(--btn-apply-primary);
             border: 2px solid var(--btn-apply-primary);
@@ -395,32 +374,38 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-white d-none d-lg-block" id="navbar-top">
             <div class="container">
                 <img src="{% static 'images/logo_name.png' %}" alt="JobShark Logo" style="max-height: 50px;">
-
                 <div class="user-profile">
                     <span class="user-name d-none d-md-block">
                         {{ user.first_name|default:user.username }} {{ user.last_name }}
                     </span>
-
                     {% if user.userprofile.profile_picture %}
-                        <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar"
-                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        <a href = "{% url 'myprofile_commissionee' %}"><img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar"
+                        style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;"></a>
                     {% else %}
-                        <img src="{% static 'images/default_pfp.jpg' %}" 
-                            alt="Default Profile"
-                            style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+                        <a href = "{% url 'myprofile_commissionee' %}">
+                            <img src="{% static 'images/default_pfp.jpg' %}" 
+                            alt="Default Profile" class="user-avatar"
+                            style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;"></a>
                     {% endif %}
-
-
                 </div>
             </div>
         </nav>
-
     </header>
 
     <header class="search-header">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
                 <h2 class="h3 mb-2 mb-md-0">Find Project</h2>
+                <div class="d-flex justify-content-center mb-4">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item">
+                            <a class="nav-link {% if not is_recommendation %}active{% endif %}" href="{% url 'find_job_candidate' %}">All Jobs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if is_recommendation %}active{% endif %}" href="{% url 'recommend_jobs' %}">Recommended for You</a>
+                        </li>
+                    </ul>
+                </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 bg-transparent p-0">
                         <li class="breadcrumb-item"><a href="#">Find Project</a></li>
@@ -466,13 +451,12 @@
                             </p>
                         </div>
                         <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
-                            <button class="btn btn-heart me-4" onclick="toggleheart(this)">
-                                <i class="bi bi-heart"></i>
-                                <i class="bi bi-heart-fill"></i>
-                            </button>
-                            <a href="#" class="btn-apply-now">
-                                Apply Now <i class="bi bi-arrow-right"></i>
+    
+
+                            <a href="{% url 'view_details' job.id %}" class="btn-apply-now text-decoration-none">
+                                Apply Now <i class="bi bi-arrow-right ms-1"></i>
                             </a>
+
                         </div>
                     </div>
                 </div>
@@ -736,18 +720,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>
-        function toggleheart(buttonElement) {
-            // Toggles the 'saved' class on the button
-            buttonElement.classList.toggle('saved');
-            
-            // In a real application, you would send an AJAX request here 
-            // to save/unsave the job in the database.
-            if (buttonElement.classList.contains('saved')) {
-                console.log('Project Saved!');
-            } else {
-                console.log('Project Unsaved!');
-            }
-        }
         function clearAllFilters() {
         // 1. Get the Modal Container
         var modal = document.getElementById('advanceFilterModal');

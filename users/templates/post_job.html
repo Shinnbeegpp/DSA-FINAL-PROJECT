@@ -325,10 +325,10 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <!-- Logo -->
-                <a class="navbar-brand d-flex align-items-center" href="#">
+                <p class="navbar-brand d-flex align-items-center" href="#">
                     <img src={% static "images/logo_name.png" %} alt="JobShark Logo" 
                     onerror="this.src='https://placehold.co/150x40/6930C3/ffffff?text=JobShark&font=inter'; this.onerror=null;">
-                </a>
+                </p>
 
                 <div class="d-flex align-items-center gap-4">
                     <div class="user-profile">
@@ -342,7 +342,7 @@
                         {% else %}
                             <img src="{% static 'images/default_pfp.jpg' %}" 
                                 alt="Default Profile"
-                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;">
                         {% endif %}
                     </div>
                 </div>
@@ -367,8 +367,8 @@
                     <a class="nav-link" href="{% url 'myjobs' %}" role="tab">
                         <i class="fa-solid fa-briefcase"></i> My Jobs
                     </a>
-                    <a class="nav-link" href="{% url 'saved_candidates' %}" role="tab">
-                        <i class="fa-solid fa-bookmark"></i> Saved Candidate
+                    <a class="nav-link" href="{% url 'active_commissionees' %}" role="tab">
+                        <i class="fa-solid fa-users-viewfinder"></i> Active Commissionees
                     </a>
                     <!-- MANAGE ACCOUNT (Edit Page) - Links to a mock edit URL -->
                     <a class="nav-link" href="{% url 'commissioner_settings' %}" role="tab">
@@ -525,9 +525,11 @@
 
                     <!-- Submit Button -->
                     <!-- Changed to type button to prevent submission for demo, triggers JS -->
-                    <button type="submit" class="btn-post-job">
-                        Post Job <i class="fa-solid fa-arrow-right"></i>
-                    </button>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn-post-job">
+                            Post Job <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
 
                 </form>
             </div>
@@ -617,16 +619,22 @@
         }
     </script>
 
+    <!-- ADD THIS NEAR THE TOP OF YOUR BODY TAG -->
     {% if messages %}
-        {# VITAL: This loop consumes the messages so they don't appear again on reload #}
         {% for message in messages %}
-            {% endfor %}
+            <!-- Hidden trigger div to detect success -->
+            <div id="success-trigger" data-message="{{ message }}"></div>
+        {% endfor %}
 
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                // successModal is the ID of your modal
-                var myModal = new bootstrap.Modal(document.getElementById('successModal'));
-                myModal.show();
+                // Check if we have a success message
+                var trigger = document.getElementById('success-trigger');
+                if (trigger && trigger.getAttribute('data-message') === "Job posted successfully!") {
+                    // Show the modal
+                    var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+                    myModal.show();
+                }
             });
         </script>
     {% endif %}

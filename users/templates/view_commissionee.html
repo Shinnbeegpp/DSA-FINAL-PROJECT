@@ -55,7 +55,7 @@
         .main-header {
             padding: 1rem 0;
             background-color: #fff;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(0,0,0,0);
             position: relative;
             z-index: 20;
         }
@@ -89,7 +89,7 @@
             border-radius: 0 0 12px 12px;
             height: 100%;
             min-height: calc(100vh - 130px);
-            border-right: 1px solid rgba(0,0,0,0.03);
+            border-right: 1px solid rgba(0,0,0,0);
         }
         .sidebar-title {
             font-size: 0.75rem;
@@ -511,6 +511,16 @@
         }
         .btn-close-modal:hover { background: #e5e7eb; }
 
+        .btn-primary-custom {
+            background-color: #6930C3;
+            color: white;
+            border: none;
+        }
+        .btn-primary-custom:hover {
+            background-color: #5626a3; /* Darker Purple */
+            color: white;
+        }
+
         .modal-content {
     position: relative;
 }
@@ -554,15 +564,25 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <!-- Logo -->
-                <a class="navbar-brand d-flex align-items-center" href="#">
+                <p class="navbar-brand d-flex align-items-center" href="#">
                     <img src={% static "images/logo_name.png" %} alt="JobShark Logo" 
                     onerror="this.src='https://placehold.co/150x40/6930C3/ffffff?text=JobShark&font=inter'; this.onerror=null;">
-                </a>
+                </p>
 
                 <div class="d-flex align-items-center gap-4">
                     <div class="user-profile">
-                        <span class="user-name d-none d-md-block">Esther Howard</span>
-                        <img src={% static "images/cris.jpg" %} alt="Profile" class="user-avatar">
+                        <span class="user-name d-none d-md-block">
+                            {{ user.first_name|default:user.username }} {{ user.last_name }}
+                        </span>
+
+                        {% if user.userprofile.profile_picture %}
+                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" class="user-avatar"
+                            style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'images/default_pfp.jpg' %}" 
+                                alt="Default Profile"
+                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;">
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -583,11 +603,11 @@
                     <a class="nav-link" href="{% url 'post_job' %}" role="tab">
                         <i class="fa-solid fa-circle-plus"></i> Post a Job
                     </a>
-                    <p class="nav-link active" href="{% url 'myjobs' %}" role="tab">
+                    <a class="nav-link active" href="{% url 'myjobs' %}" role="tab">
                         <i class="fa-solid fa-briefcase"></i> My Jobs
-                    </p>
-                    <a class="nav-link" href="{% url 'saved_candidates' %}" role="tab">
-                        <i class="fa-solid fa-bookmark"></i> Saved Candidate
+                    </a>
+                    <a class="nav-link" href="{% url 'active_commissionees' %}" role="tab">
+                        <i class="fa-solid fa-users-viewfinder"></i> Active Commissionees
                     </a>
                     <!-- MANAGE ACCOUNT (Edit Page) - Links to a mock edit URL -->
                     <a class="nav-link" href="{% url 'commissioner_settings' %}" role="tab">
@@ -615,12 +635,18 @@
                     
                     <!-- Title & Filter Row -->
                     <div class="d-flex justify-content-between align-items-start mb-4">
-                        <h2 class="page-title mb-0">Job Applications (213)</h2>
-                        
-                        <div class="d-flex align-items-center gap-2">
+                        <div>
+                            <h2 class="page-title mb-0">
+                                Job Applications <span style="color: #94a3b8; font-weight: 400; font-size: 1.2rem;">({{ total_applicants }})</span>
+                            </h2>
+                            <p class="text-muted mb-0 mt-1">
+                                For Job: <span class="fw-bold text-primary">{{ job.title }}</span>
+                            </p>
+                        </div>
+                    
+                    <!--<div class="d-flex align-items-center gap-2">
                             <span class="text-muted small fw-bold">Filter</span>
                             
-                            <!-- Sort Dropdown -->
                             <div class="dropdown">
                                 <button class="btn-sort dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Sort
@@ -637,264 +663,225 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
+                        
                     </div>
 
                     <!-- Applications Grid -->
                     <div class="applications-grid">
-                        
-                        <!-- Card 1 - Added data-bs-toggle to open modal -->
-                        <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
+                        {% for app in applications %}
+                        <div class="app-card" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#candidateModal"
+                            style="cursor: pointer;"
+                            onclick="loadCandidateData(
+                                '{{ app.applicant.first_name }} {{ app.applicant.last_name }}',
+                                '{{ app.applicant.userprofile.campus_institution }}',
+                                '{% if app.applicant.userprofile.profile_picture %}{{ app.applicant.userprofile.profile_picture.url }}{% else %}https://placehold.co/150?text=User{% endif %}',
+                                '{{ app.applicant.email }}',
+                                '{{ app.applicant.userprofile.phone_number|default:"N/A" }}',
+                                '{{ app.applicant.userprofile.social_link|default:"#" }}',
+                                '{{ app.applicant.userprofile.biography|escapejs }}',
+                                '{{ app.cover_letter|escapejs }}',
+                                '{{ app.applicant.userprofile.date_of_birth|date:"M d, Y" }}',
+                                '{{ app.applicant.userprofile.student_classification }}',
+                                '{{ app.applicant.userprofile.gender }}',
+                                '{{ app.applicant.userprofile.experience_level }}',
+                                '{{ app.applicant.userprofile.education }}',
+                                '{% if app.resume %}{{ app.resume.file.url }}{% else %}#{% endif %}',
+                                '{{ app.id }}' 
+                            )">
+                            
                             <div class="app-header">
-                                <img src={% static "images/cris.jpg" %} alt="User" class="app-avatar">
+                                {% if app.applicant.userprofile.profile_picture %}
+                                    <img src="{{ app.applicant.userprofile.profile_picture.url }}" class="app-avatar">
+                                {% else %}
+                                    <img src="{% static 'images/default_pfp.jpg' %}" class="app-avatar">
+                                {% endif %}
                                 <div>
-                                    <h5 class="app-name">Jane Cooper</h5>
-                                    <span class="app-campus">BatStateU - Alangilan</span>
+                                    <h5 class="app-name">{{ app.applicant.first_name }} {{ app.applicant.last_name }}</h5>
+                                    <span class="app-campus">{{ app.applicant.userprofile.campus_institution }}</span>
                                 </div>
                             </div>
                             <ul class="app-details-list">
-                                <li>Experience Level: Beginner</li>
-                                <li>Education: Bachelor's Degree</li>
-                                <li>Student Classification: Regular</li>
-                                <li id="date-applied-display">Date Applied: Loading...</li>
+                                <li>Experience: <strong>{{ app.applicant.userprofile.experience_level }}</strong></li>
+                                <li>Education: <strong>{{ app.applicant.userprofile.education }}</strong></li>
+                                <li>Status: 
+                                    {% if app.status == 'Pending' %}
+                                        <span class="badge bg-warning text-dark">Pending</span>
+
+                                    {% elif app.status == 'Accepted' or app.status == 'Hired' %} 
+                                        <span class="badge bg-success">Accepted</span>
+
+                                    {% else %}
+                                        <span class="badge bg-danger">Rejected</span>
+                                    {% endif %}
+                                </li>
+                                <li>Date Applied: {{ app.date_applied|timesince }} ago</li>
                             </ul>
                         </div>
-
-                        <!-- Card 2 -->
-                        <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
-                            <div class="app-header">
-                                <img src={% static "images/cris.jpg" %} alt="User" class="app-avatar">
-                                <div>
-                                    <h5 class="app-name">Wade Warren</h5>
-                                    <span class="app-campus">BatStateU - Alangilan</span>
-                                </div>
-                            </div>
-                            <ul class="app-details-list">
-                                <li>Experience Level: Academic Projects</li>
-                                <li>Education: Bachelor's Degree</li>
-                                <li>Student Classification: Graduating</li>
-                                <li id="date-applied-display">Date Applied: Loading...</li>
-                            </ul>
+                        {% empty %}
+                        <div class="col-12 text-center text-muted py-5">
+                            <i class="fa-solid fa-user-slash fa-3x mb-3"></i>
+                            <p>No applicants yet for this job.</p>
                         </div>
-
-                        <!-- Card 3 -->
-                        <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
-                            <div class="app-header">
-                                <img src={% static "images/cris.jpg" %} alt="User" class="app-avatar">
-                                <div>
-                                    <h5 class="app-name">Esther Howard</h5>
-                                    <span class="app-campus">BatStateU - Pablo Borbon</span>
-                                </div>
-                            </div>
-                            <ul class="app-details-list">
-                                <li>Experience Level: Freelance</li>
-                                <li>Education: Bachelor's Degree</li>
-                                <li>Student Classification: Irregular</li>
-                                <li id="date-applied-display">Date Applied: Loading...</li>
-                            </ul>
-                        </div>
-
-                        <!-- Card 4 -->
-                        <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
-                            <div class="app-header">
-                                <img src={% static "images/cris.jpg" %} alt="User" class="app-avatar">
-                                <div>
-                                    <h5 class="app-name">Cameron Williamson</h5>
-                                    <span class="app-campus">BatStateU - Alangilan</span>
-                                </div>
-                            </div>
-                            <ul class="app-details-list">
-                                <li>Experience Level: Beginner</li>
-                                <li>Education: Senior High School</li>
-                                <li>Student Classification: Regular</li>
-                                <li id="date-applied-display">Date Applied: Loading...</li>
-                            </ul>
-                        </div>
-
-                        <!-- Card 5 -->
-                        <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
-                            <div class="app-header">
-                                <img src={% static "images/cris.jpg" %} alt="User" class="app-avatar">
-                                <div>
-                                    <h5 class="app-name">Brooklyn Simmons</h5>
-                                    <span class="app-campus">BatStateU - Alangilan</span>
-                                </div>
-                            </div>
-                            <ul class="app-details-list">
-                                <li>Experience Level: Internship</li>
-                                <li>Education: Bachelor's Degree</li>
-                                <li>Student Classification: Working</li>
-                                <li id="date-applied-display">Date Applied: Loading...</li>
-                            </ul>
-                        </div>
-
-                        <!-- Card 6 -->
-                        <div class="app-card" data-bs-toggle="modal" data-bs-target="#candidateModal">
-                            <div class="app-header">
-                                <img src={% static "images/cris.jpg" %} alt="User" class="app-avatar">
-                                <div>
-                                    <h5 class="app-name">Leslie Alexander</h5>
-                                    <span class="app-campus">BatStateU - Nasugbu</span>
-                                </div>
-                            </div>
-                            <ul class="app-details-list">
-                                <li>Experience Level: Academic Projects</li>
-                                <li>Education: Bachelor's Degree</li>
-                                <li>Student Classification: Regular</li>
-                                <li id="date-applied-display">Date Applied: Loading...</li>
-                            </ul>
-                        </div>
-
+                        {% endfor %}
                     </div>
                 </div>
-
             </div>
         </div>
 
         <!-- Footer -->
         <footer class="main-footer">
-            <p class="mb-0">&copy; 2024 MyJob - Job Portal. All rights Reserved</p>
+            <p class="mb-0">&copy; 2024 JobShark - Job Portal. All rights Reserved</p>
         </footer>
     </div>
 
-    <!-- === CANDIDATE DETAILS MODAL === -->
     <div class="modal fade" id="candidateModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content modal-candidate-content">
-          
-          <button type="button" class="btn-close-modal" data-bs-dismiss="modal" aria-label="Close">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-
-          <div class="modal-body p-0">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             
-            <!-- Header Section -->
-            <div class="modal-candidate-header">
-                <div class="candidate-profile-header">
-                    <img src="https://i.pravatar.cc/150?img=59" alt="Esther" class="candidate-modal-avatar">
-                    <div>
-                        <h4 class="fw-bold mb-1" style="color: #1F2937;">Esther Howard</h4>
-                        <span class="candidate-role">BatStateU - Alangilan</span>
-                    </div>
-                </div>
-                <div class="d-flex gap-3">
-                    <button class="btn-icon-square">
-                        <i class="fa-regular fa-bookmark icon-bookmark"></i>
-                    </button>
-                    <!-- MAILTO LINK -->
-                    <a href="mailto:esther.howard@gmail.com" class="btn-send-mail">
-                        <i class="fa-regular fa-envelope"></i> Send Mail
-                    </a>
-                </div>
-            </div>
-
-            <hr class="m-0" style="border-color: #E5E7EB;">
-
-            <!-- Layout Grid -->
-            <div class="row g-0">
+            <div class="modal-content modal-candidate-content">
                 
-                <!-- Left Column: Bio & Cover Letter -->
-                <div class="col-lg-8 p-4" style="border-right: 1px solid #E5E7EB;">
-                    <div class="mb-5">
-                        <h6 class="section-header-line">BIOGRAPHY</h6>
-                        <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6;">
-                            I've been passionate about graphic design and digital art from an early age with a keen interest in Website and Mobile Application User Interfaces. I can create high-quality and aesthetically pleasing designs in a quick turnaround time. Check out the portfolio section of my profile to see samples of my work and feel free to discuss your designing needs. I mostly use Adobe Photoshop, Illustrator, XD and Figma. *Website User Experience and Interface (UI/UX) Design - for all kinds of Professional and Personal websites. *Mobile Application User Experience and Interface Design - for all kinds of IOS/Android and Hybrid Mobile Applications. *Wireframe Designs.
-                        </p>
-                    </div>
+                <button type="button" class="btn-close-modal" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
 
-                    <div class="mb-4">
-                        <h6 class="section-header-line">COVER LETTER</h6>
-                        <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6;">
-                            Dear Sir,<br><br>
-                            I am writing to express my interest in the fourth grade instructional position that is currently available in the Fort Wayne Community School System. I learned of the opening through a notice posted on JobZone, IPFW's job database. I am confident that my academic background and curriculum development skills would be successfully utilized in this teaching position.<br><br>
-                            I have just completed my Bachelor of Science degree in Elementary Education and have successfully completed Praxis I and Praxis II. During my student teaching experience, I developed and initiated a three-week curriculum sequence on animal species and earth resources.<br><br>
-                            Sincerely,<br><br>
-                            Esther Howard
-                        </p>
+                <div class="modal-candidate-header">
+                    <div class="candidate-profile-header">
+                        <img src="" alt="User" class="candidate-modal-avatar" id="modal_avatar" style="background-color: #eee;">
+                        <div>
+                            <h4 class="fw-bold mb-1" style="color: #1F2937;" id="modal_name"></h4>
+                            <span class="candidate-role" id="modal_campus"></span>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Right Column: Stats, Resume, Contact -->
-                <div class="col-lg-4 p-4 bg-light">
                     
-                    <!-- Stats Grid -->
-                    <div class="info-grid-box">
+                    <div class="d-flex gap-2 align-items-center pe-4 mt-4">
+                        <a href="#" id="btn_email" class="btn btn-primary-custom text-white d-flex align-items-center px-3 py-2 rounded text-decoration-none">
+                            <i class="fa-regular fa-envelope me-2"></i> Send Email
+                        </a>
 
-                    <div class="info-item">
-                        <span class="info-label">DATE OF BIRTH</span>
-                        <div class="info-value">14 June, 2021</div>
+                        <a href="#" id="btn_reject" class="btn btn-danger text-white d-flex align-items-center px-3 py-2 rounded text-decoration-none" 
+                        onclick="openConfirmation(event, 'reject')">
+                            <i class="fa-solid fa-xmark me-2"></i> Reject
+                        </a>
+
+                        <a href="#" id="btn_hire" class="btn btn-success text-white d-flex align-items-center px-3 py-2 rounded text-decoration-none" 
+                        onclick="openConfirmation(event, 'accept')">
+                            <i class="fa-solid fa-check me-2"></i> Accept
+                        </a>
                     </div>
-
-                    <div class="info-item">
-                        <span class="info-label">Student Classification</span>
-                        <div class="info-value">Regular Student (Full Load)</div>
-                    </div>
-
-                    <div class="info-item">
-                        <span class="info-label">GENDER</span>
-                        <div class="info-value">Male</div>
-                    </div>
-
-                    <div class="info-item">
-                        <span class="info-label">EXPERIENCE</span>
-                        <div class="info-value">Beginner (No paid experience)</div>
-                    </div>
-
-                    <div class="info-item">
-                        <span class="info-label">EDUCATION</span>
-                        <div class="info-value">1st Year</div>
-                    </div>
-
                 </div>
 
-                    <!-- Download Resume -->
-                    <div class="info-grid-box">
-                        <h6 class="section-header-line mb-3">Download My Resume</h6>
-                        <div class="resume-download-box">
-                            <div class="resume-icon-box">
-                                <i class="fa-regular fa-file-lines"></i>
-                            </div>
-                            <div>
-                                <div class="text-muted" style="font-size: 0.75rem;">Esther Howard</div>
-                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">PDF</div>
-                            </div>
-                            <a href="#" class="btn-download-icon">
-                                <i class="fa-solid fa-download"></i>
-                            </a>
+                <hr class="m-0" style="border-color: #E5E7EB;">
+
+                <div class="row g-0">
+                    
+                    <div class="col-lg-8 p-4" style="border-right: 1px solid #E5E7EB;">
+                        <div class="mb-5">
+                            <h6 class="section-header-line">BIOGRAPHY</h6>
+                            <p class="text-muted bg-light p-3 rounded" style="font-size: 0.9rem; line-height: 1.6;" id="modal_bio"></p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h6 class="section-header-line">COVER LETTER</h6>
+                            <p class="text-muted bg-light p-3 rounded" style="font-size: 0.9rem; line-height: 1.6;" id="modal_cover_letter"></p>
                         </div>
                     </div>
 
-                    <!-- Contact Info -->
-                    <div class="info-grid-box">
-                        <h6 class="section-header-line mb-3">Contact Information</h6>
-                        <ul class="contact-list">
-                            <li class="contact-li">
-                                <div>
-                                    <span class="contact-label">SOCIAL LINK</span>
-                                    <div class="contact-value">www.estherhoward.com</div>
-                                </div>
-                            </li>
-                            <li class="contact-li">
-                                <div>
-                                    <span class="contact-label">CONTACT NUMBER</span>
-                                    <div class="contact-value">+1-202-555-0141</div>
-                                </div>
-                            </li>
-                            <li class="contact-li">
-                                <div>
-                                    <span class="contact-label">EMAIL ADDRESS</span>
-                                    <div class="contact-value">esther.howard@gmail.com</div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <div class="col-lg-4 p-4 bg-light">
+                        
+                        <div class="info-grid-box">
+                            <div class="info-item">
+                                <span class="info-label">DATE OF BIRTH</span>
+                                <div class="info-value" id="modal_dob"></div>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Student Classification</span>
+                                <div class="info-value" id="modal_class"></div>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">GENDER</span>
+                                <div class="info-value" id="modal_gender"></div>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">EXPERIENCE</span>
+                                <div class="info-value" id="modal_experience"></div>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">EDUCATION</span>
+                                <div class="info-value" id="modal_education"></div>
+                            </div>
+                        </div>
 
+                        <div class="info-grid-box" id="resume_section" style="display: none;">
+                            <h6 class="section-header-line mb-3">Download Resume</h6>
+                            <div class="resume-download-box">
+                                <div class="resume-icon-box">
+                                    <i class="fa-regular fa-file-lines"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Applicant's File</div>
+                                    <div class="fw-bold text-dark" style="font-size: 0.9rem;">PDF/DOC</div>
+                                </div>
+                                <a href="#" id="modal_resume_link" target="_blank" class="btn-download-icon">
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="info-grid-box">
+                            <h6 class="section-header-line mb-3">Contact Information</h6>
+                            <ul class="contact-list">
+                                <li class="contact-li">
+                                    <div>
+                                        <span class="contact-label">SOCIAL LINK</span>
+                                        <div class="contact-value"><a href="#" id="modal_social" target="_blank" class="text-decoration-none">Link</a></div>
+                                    </div>
+                                </li>
+                                <li class="contact-li">
+                                    <div>
+                                        <span class="contact-label">CONTACT NUMBER</span>
+                                        <div class="contact-value" id="modal_phone"></div>
+                                    </div>
+                                </li>
+                                <li class="contact-li">
+                                    <div>
+                                        <span class="contact-label">EMAIL ADDRESS</span>
+                                        <div class="contact-value" id="modal_email"></div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-hidden="true" style="z-index: 1060;"> <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 text-center">
+                
+                <div class="modal-header border-0 p-0">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3" id="conf_icon"></div>
+                    
+                    <h4 class="fw-bold mb-2" id="conf_title">Confirm Action</h4>
+                    <p class="text-muted" id="conf_message">Are you sure?</p>
+                </div>
+
+                <div class="modal-footer border-0 justify-content-center gap-2 pt-0">
+                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
+                    
+                    <a href="#" id="btn_confirm_action" class="btn px-4 text-white">
+                        Yes, Proceed
+                    </a>
                 </div>
             </div>
-
-          </div>
         </div>
-      </div>
     </div>
 
     <!-- Bootstrap JS Bundle -->
@@ -909,6 +896,89 @@
                 });
             });
         });
+
+        function loadCandidateData(name, campus, avatar, email, phone, social, bio, 
+        cover, dob, classification, gender, experience, education, resumeUrl, appId) {
+        
+            // 1. Fill Text Data
+            document.getElementById('modal_name').innerText = name;
+            document.getElementById('modal_campus').innerText = campus;
+            document.getElementById('modal_avatar').src = avatar;
+            document.getElementById('modal_email').innerText = email;
+            document.getElementById('modal_phone').innerText = phone;
+            document.getElementById('modal_social').href = social;
+            
+            // 2. Fill Bio & Cover Letter
+            document.getElementById('modal_bio').innerText = bio ? bio : "No biography provided.";
+            document.getElementById('modal_cover_letter').innerText = cover ? cover : "No cover letter provided.";
+
+            // 3. Fill Stats
+            document.getElementById('modal_dob').innerText = dob;
+            document.getElementById('modal_class').innerText = classification;
+            document.getElementById('modal_gender').innerText = gender;
+            document.getElementById('modal_experience').innerText = experience;
+            document.getElementById('modal_education').innerText = education;
+
+            // 4. Handle Resume Link
+            var resumeSection = document.getElementById('resume_section');
+            var resumeLink = document.getElementById('modal_resume_link');
+            if (resumeUrl && resumeUrl !== '#') {
+                resumeSection.style.display = 'block';
+                resumeLink.href = resumeUrl;
+            } else {
+                resumeSection.style.display = 'none';
+            }
+
+            // 5. Update Hire/Reject Buttons
+            // We construct the URL dynamically using the Application ID (appId)
+            // Note: You need to ensure 'update_application_status' URL pattern exists in urls.py
+            var hireBtn = document.getElementById('btn_hire');
+            var rejectBtn = document.getElementById('btn_reject');
+
+            // Using Django URL pattern structure: /application/ID/update/STATUS/
+            hireBtn.href = "/application/" + appId + "/update/Accepted/";
+            rejectBtn.href = "/application/" + appId + "/update/Rejected/";
+        }
+
+        // --- New Function for Confirmation Modal ---
+        function openConfirmation(event, type) {
+            event.preventDefault(); // Stop the link from going immediately
+            
+            // Get the URL intended for the action (the href of the button clicked)
+            var targetUrl = event.currentTarget.href;
+            
+            // Get Modal Elements
+            var modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+            var title = document.getElementById('conf_title');
+            var msg = document.getElementById('conf_message');
+            var icon = document.getElementById('conf_icon');
+            var confirmBtn = document.getElementById('btn_confirm_action');
+
+            // Reset Classes
+            confirmBtn.className = "btn px-4 text-white"; 
+
+            if (type === 'accept') {
+                // Green / Accept Style
+                icon.innerHTML = '<i class="fa-solid fa-circle-check text-success fa-3x"></i>';
+                title.innerText = "Accept Applicant?";
+                msg.innerText = "Are you sure you want to hire this applicant? They will be moved to your Active Commissionees list.";
+                confirmBtn.classList.add('btn-success'); // Bootstrap Green
+                confirmBtn.innerText = "Yes, Accept";
+            } else {
+                // Red / Reject Style
+                icon.innerHTML = '<i class="fa-solid fa-circle-xmark text-danger fa-3x"></i>';
+                title.innerText = "Reject Applicant?";
+                msg.innerText = "Are you sure you want to reject this application? This action cannot be undone.";
+                confirmBtn.classList.add('btn-danger'); // Bootstrap Red
+                confirmBtn.innerText = "Yes, Reject";
+            }
+
+            // Set the 'Yes' button to go to the correct URL
+            confirmBtn.href = targetUrl;
+
+            // Show the modal
+            modal.show();
+        }
     </script>
 </body>
 </html>

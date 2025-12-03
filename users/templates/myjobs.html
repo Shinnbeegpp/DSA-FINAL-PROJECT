@@ -57,7 +57,7 @@
         .main-header {
             padding: 1rem 0;
             background-color: #fff;
-            border-bottom: 1px solid rgba(0,0,0,0.05); /* Added subtle separator */
+            border-bottom: 1px solid rgba(0,0,0,0); /* Added subtle separator */
             position: relative;
             z-index: 20; /* Ensure header sits above content if needed */
         }
@@ -81,8 +81,8 @@
 
         /* Layout */
         .dashboard-container {
-            margin-top: 0; /* UPDATED: Removed top margin to connect to header */
-            padding-bottom: 4rem;
+        margin-top: 0; /* Changed from 2rem to 0 */
+        padding-bottom: 4rem;
         }
 
         /* Sidebar Styling */
@@ -93,9 +93,9 @@
             border-radius: 0 0 12px 12px; 
             min-height: calc(100vh - 130px); /* Make it extend down */
             height: 100%;
-            border-right: 1px solid rgba(0,0,0,0.03); /* Subtle border */
+            border-right: 1px solid rgba(0,0,0,0); /* Subtle border */
         }
-
+        
         .sidebar-title {
             font-size: 0.75rem;
             text-transform: uppercase;
@@ -135,9 +135,6 @@
         } 
         .status-done { 
             color: #F97316; /* Orange: Application Complete (Hired/Rejected) */
-        }
-        .status-expired { 
-            color: #EF4444; /* Red: Client deleted job OR Application Rejected */
         }
         
         /* UPDATED: Pushed logout to bottom of the extended sidebar */
@@ -348,10 +345,10 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <!-- Logo -->
-                <a class="navbar-brand d-flex align-items-center" href="#">
+                <p class="navbar-brand d-flex align-items-center" href="#">
                     <img src={% static "images/logo_name.png" %} alt="JobShark Logo" 
                     onerror="this.src='https://placehold.co/150x40/6930C3/ffffff?text=JobShark&font=inter'; this.onerror=null;">
-                </a>
+                </p>
 
                 <div class="d-flex align-items-center gap-4">
                     <!-- User Profile -->
@@ -366,7 +363,7 @@
                         {% else %}
                             <img src="{% static 'images/default_pfp.jpg' %}" 
                                 alt="Default Profile"
-                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;">
                         {% endif %}
                     </div>
                 </div>
@@ -391,8 +388,8 @@
                     <p class="nav-link active" href="{% url 'myjobs' %}" role="tab">
                         <i class="fa-solid fa-briefcase"></i> My Jobs
                     </p>
-                    <a class="nav-link" href="{% url 'saved_candidates' %}" role="tab">
-                        <i class="fa-solid fa-bookmark"></i> Saved Candidate
+                    <a class="nav-link" href="{% url 'active_commissionees' %}" role="tab">
+                        <i class="fa-solid fa-users-viewfinder"></i> Active Commissionees
                     </a>
                     <!-- MANAGE ACCOUNT (Edit Page) - Links to a mock edit URL -->
                     <a class="nav-link" href="{% url 'commissioner_settings' %}" role="tab">
@@ -410,7 +407,7 @@
             <div class="col-lg-9 col-content">
                 <!-- Content Header -->
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="page-title">My Jobs <span style="color: #94a3b8; font-weight: 400; font-size: 1.2rem;">(589)</span></h2>
+                    <h2 class="page-title">My Jobs <span style="color: #94a3b8; font-weight: 400; font-size: 1.2rem;">({{ total_jobs }})</span></h2>
                     
                     <div class="d-flex align-items-center gap-2">
                         <span style="font-size: 0.9rem; font-weight: 500; color: #475569;">Job status</span>
@@ -419,7 +416,7 @@
                                 <option value="All Applications" {% if current_filter == 'All Applications' %}selected{% endif %}>All Applications</option>
                                 <option value="Active" {% if current_filter == 'Active' %}selected{% endif %}>Active</option>
                                 <option value="Done" {% if current_filter == 'Done' %}selected{% endif %}>Done</option>
-                                <option value="Expired" {% if current_filter == 'Expired' %}selected{% endif %}>Expired</option>
+                                <option value="Ongoing" {% if current_filter == 'Ongoing' %}selected{% endif %}>Ongoing</option>
                             </select>
                         </form>
                     </div>
@@ -442,21 +439,35 @@
                         </div>
 
                         <div>
-                            {% if job.status == 'Active' or job.status == 'Open' %}
-                                <span class="status-pill status-active"><i class="fa-solid fa-check"></i> ACTIVE</span>
-                            {% elif job.status == 'Done' or job.status == 'Completed' %}
-                                <span class="status-pill status-done"><i class="fa-solid fa-graduation-cap"></i> DONE</span>
-                            {% else %}
-                                <span class="status-pill status-expired"><i class="fa-solid fa-trash"></i> {{ job.status|upper }}</span>
+                            {% if job.status == 'Active' %}
+                                <span class="status-pill status-active">
+                                    <i class="fa-solid fa-circle-check"></i> ACTIVE
+                                </span>
+
+                            {% elif job.status == 'Ongoing' %}
+                                <span class="status-pill" style="color: #3B82F6;">
+                                    <i class="fa-solid fa-clock"></i> ONGOING
+                                </span>
+
+                            {% elif job.status == 'Done' %}
+                                <span class="status-pill status-done">
+                                    <i class="fa-solid fa-graduation-cap"></i> DONE
+                                </span>
+
+                            {% elif job.status == 'Cancelled' %}
+                                <span class="status-pill status-expired">
+                                    <i class="fa-solid fa-ban"></i> CANCELLED
+                                </span>
                             {% endif %}
                         </div>
 
                         <div class="text-muted small">
-                            <i class="fa-regular fa-user"></i> 0 Applications
+                            <i class="fa-regular fa-user"></i> {{ job.applications.count }} Applications
                         </div>
+                        
 
                         <div class="d-flex justify-content-end align-items-center gap-2 position-relative">
-                            <a href="{% url 'view_commissionee' %}" class="btn-view text-decoration-none">View Applications</a>
+                            <a href="{% url 'view_commissionee' job.id %}" class="btn-view text-decoration-none">View Applications</a>
                             
                             <div class="dropdown">
                                 <i class="fa-solid fa-ellipsis-vertical text-muted ms-2" role="button" data-bs-toggle="dropdown"></i>
@@ -484,6 +495,7 @@
                                 </ul>
                             </div>
                         </div>
+                        
                     </div>
                     <div class="modal fade" id="viewJobModal-{{ job.id }}" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -589,20 +601,41 @@
                         <a href="{% url 'post_job' %}" class="btn btn-primary-custom mt-2">Post a Job Now</a>
                     </div>
                     {% endfor %}
-
                 </div>
-
-                <!-- Pagination -->
+                {% if jobs.has_other_pages %}
                 <div class="d-flex justify-content-center mt-4 gap-2">
-                    <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;"><i class="fa-solid fa-arrow-left"></i></button>
-                    <button class="btn btn-sm rounded-circle text-white fw-bold shadow-sm" style="width: 32px; height: 32px; background-color: var(--primary-color);">01</button>
-                    <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;">02</button>
-                    <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;">03</button>
-                    <button class="btn btn-sm rounded-circle fw-bold" style="width: 32px; height: 32px; color: var(--primary-color); background: #f3f0ff;">04</button>
-                    <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;">05</button>
-                    <button class="btn btn-sm rounded-circle fw-bold" style="width: 32px; height: 32px; color: var(--primary-color); background: #f3f0ff;"><i class="fa-solid fa-arrow-right"></i></button>
-                </div>
+                    {% if jobs.has_previous %}
+                        <a href="?page={{ jobs.previous_page_number }}&status={{ current_filter }}" class="btn btn-sm text-muted rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 32px; height: 32px; border: 1px solid #eee;">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </a>
+                    {% else %}
+                        <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;" disabled><i class="fa-solid fa-arrow-left"></i></button>
+                    {% endif %}
 
+                    {% for num in jobs.paginator.page_range %}
+                        {% if jobs.number == num %}
+                            <span class="btn btn-sm rounded-circle text-white fw-bold shadow-sm d-flex align-items-center justify-content-center" 
+                                style="width: 32px; height: 32px; background-color: var(--primary-color); cursor: default;">
+                                {{ num }}
+                            </span>
+                        {% else %}
+                            <a href="?page={{ num }}&status={{ current_filter }}" 
+                            class="btn btn-sm text-muted rounded-circle d-flex align-items-center justify-content-center text-decoration-none" 
+                            style="width: 32px; height: 32px; border: 1px solid #eee;">
+                                {{ num }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if jobs.has_next %}
+                        <a href="?page={{ jobs.next_page_number }}&status={{ current_filter }}" class="btn btn-sm rounded-circle fw-bold d-flex align-items-center justify-content-center text-decoration-none" style="width: 32px; height: 32px; color: var(--primary-color); background: #f3f0ff;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    {% else %}
+                        <button class="btn btn-sm text-muted rounded-circle" style="width: 32px; height: 32px;" disabled><i class="fa-solid fa-arrow-right"></i></button>
+                    {% endif %}
+                </div>
+                {% endif %}
             </div>
         </div>
 
@@ -636,7 +669,7 @@
                             <option value="" selected disabled>Choose status...</option>
                             <option value="Active">Active</option>
                             <option value="Done">Done</option>
-                            <option value="Expired">Expired</option>
+                            <option value="Ongoing">On-going</option>
                         </select>
                     </div>
 
@@ -681,7 +714,7 @@
         </div>
     </div>
 
-    <!-- Logout Confirmation Modal -->
+    <!-- Delete Modal -->
     <div class="modal fade" id="deleteJobModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content p-3 text-center border-0 shadow-lg">
