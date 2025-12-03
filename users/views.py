@@ -554,7 +554,7 @@ def update_application_status(request, application_id, new_status):
             # Automatically mark Job as Ongoing when someone is hired
             job.status = 'Ongoing'
             job.save()
-            messages.success(request, "Applicant Accepted! Job set to 'Ongoing'.")
+            messages.success(request, "Applicant Accepted!")
             return redirect('active_commissionees')
         else:
             messages.success(request, "Applicant Rejected.")
