@@ -307,7 +307,7 @@
                 <div class="w-full md:w-2/3">
                     <div class="flex items-center space-x-4 mb-6">
                         <!-- Placeholder for Profile Picture -->
-                         {% if job.commissioner.userprofile.profile_picture %}
+                        {% if job.commissioner.userprofile.profile_picture %}
                         <img src="{{ job.commissioner.userprofile.profile_picture.url }}" alt="Profile Picture" class="w-20 h-20 rounded-full border-4 border-secondary-purple">
                         {% else %}
                             <img src="{% static 'images/default_pfp.jpg' %}" alt="Profile Picture" class="w-20 h-20 rounded-full border-4 border-secondary-purple">
@@ -316,10 +316,10 @@
                             <h3 class="text-2xl font-bold">
                                 {{ job.commissioner.first_name }} {{ job.commissioner.last_name }}
                             </h3>
-                            <p class="text-gray-500">{{ job.commissioner.userprofile.student_classification }}</p>
+                            <!-- <p class="text-gray-500">{{ job.commissioner.userprofile.student_classification }}</p> -->
                         </div>
                         <div class="ml-auto flex space-x-2">
-                             <!-- Action Buttons Placeholder -->
+                            <!-- Action Buttons Placeholder -->
                             
                         <!--<button class="btn-primary flex items-center px-4 py-2 text-sm">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
